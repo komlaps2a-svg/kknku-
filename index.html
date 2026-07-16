@@ -1,0 +1,2120 @@
+<!DOCTYPE html>
+<html lang="id" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    
+    <!-- Meta Tags & PWA Integration -->
+    <title>KKNKU - Sekretariat Pro</title>
+    <meta name="title" content="KKNKU - Sekretariat Pro">
+    <meta name="description" content="Sistem Informasi Sekretariat Mahasiswa KKN Terintegrasi. Mengelola administrasi, persuratan, tugas, absensi, dan buku kas secara profesional.">
+    
+    <!-- Open Graph / Facebook / WhatsApp -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://kknku-app.web.app/">
+    <meta property="og:title" content="KKNKU - Sekretariat Pro">
+    <meta property="og:description" content="Sistem Informasi Sekretariat Mahasiswa KKN Terintegrasi. Mengelola administrasi, persuratan, tugas, absensi, dan buku kas secara profesional.">
+    <meta property="og:image" content="https://kknku-app.web.app/icon-512.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://kknku-app.web.app/">
+    <meta property="twitter:title" content="KKNKU - Sekretariat Pro">
+    <meta property="twitter:description" content="Sistem Informasi Sekretariat Mahasiswa KKN Terintegrasi. Mengelola administrasi, persuratan, tugas, absensi, dan buku kas secara profesional.">
+    <meta property="twitter:image" content="https://kknku-app.web.app/icon-512.png">
+
+    <!-- PWA Link -->
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <meta name="theme-color" content="#f8fafc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { 
+                extend: { 
+                    fontFamily: { sans: ['Inter', 'sans-serif'] },
+                    colors: {
+                        siska: { dark: '#1f2937', darker: '#111827', panel: '#1f2937', highlight: '#0ea5e9' }
+                    }
+                } 
+            }
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        body { font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        .pb-safe { padding-bottom: max(env(safe-area-inset-bottom), 16px); }
+        .pt-safe { padding-top: max(env(safe-area-inset-top), 0px); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; touch-action: pan-x; overscroll-behavior-x: contain; }
+        
+        .will-change-transform { will-change: transform, opacity; }
+        @keyframes slideUpIn { 0% { opacity: 0; transform: translateY(50px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDownIn { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } }
+        @keyframes zoomIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes slideUpPopup { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
+        
+        .scroll-enter-up { animation: slideUpIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .scroll-enter-down { animation: slideDownIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .animate-in { animation: slideUpIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-zoom { animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade { animation: fadeIn 0.2s ease-out forwards; }
+        .animate-popup { animation: slideUpPopup 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        
+        input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+        input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.5); cursor: pointer; }
+        .dark input[type="datetime-local"]::-webkit-calendar-picker-indicator,
+        .dark input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); }
+        
+        .table-responsive { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .nav-active { border-left: 4px solid #0ea5e9; background-color: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+        .dark .nav-active { background-color: rgba(14, 165, 233, 0.2); }
+        
+        .mic-recording { animation: pulse-red 1.5s infinite; }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        
+        .custom-checkbox { appearance: none; background-color: #fff; margin: 0; font: inherit; color: currentColor; width: 1.25em; height: 1.25em; border: 2px solid #cbd5e1; border-radius: 0.25em; display: grid; place-content: center; transition: all 0.2s; cursor: pointer; }
+        .dark .custom-checkbox { background-color: #1e293b; border-color: #475569; }
+        .custom-checkbox::before { content: ""; width: 0.75em; height: 0.75em; transform: scale(0); transition: 120ms transform ease-in-out; box-shadow: inset 1em 1em white; transform-origin: center; clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%); }
+        .custom-checkbox:checked { background-color: #10b981; border-color: #10b981; }
+        .custom-checkbox:checked::before { transform: scale(1); }
+        
+        .formal-letter-table { width: 100%; border-collapse: collapse; margin: 16px 0; font-family: 'Inter', sans-serif; font-size: 13px; table-layout: auto; }
+        .formal-letter-table th, .formal-letter-table td { border: 1px solid #94a3b8; padding: 10px; word-wrap: break-word; vertical-align: top; }
+        .formal-letter-table th { background-color: #f1f5f9; color: #1e293b; font-weight: bold; text-align: left; }
+        .dark .formal-letter-table th { border-color: #475569; background-color: #334155; color: #f8fafc; }
+        .dark .formal-letter-table td { border-color: #475569; color: #cbd5e1; }
+        .formal-letter-table tr:nth-child(even) { background-color: #f8fafc; }
+        .dark .formal-letter-table tr:nth-child(even) { background-color: #1e293b; }
+
+        /* Rich Text Editor Styling */
+        #editor-content:empty:before { content: attr(placeholder); color: #94a3b8; pointer-events: none; display: block; }
+        .dark #editor-content:empty:before { color: #475569; }
+        #editor-content { white-space: pre-wrap; outline: none; }
+        #editor-content table { width: 100%; border-collapse: collapse; margin: 16px 0; border: 1px solid #94a3b8; table-layout: fixed; }
+        #editor-content th, #editor-content td { border: 1px solid #94a3b8; padding: 10px; min-width: 50px; position: relative; word-wrap: break-word; }
+        #editor-content th { background-color: #f1f5f9; font-weight: 700; }
+        .dark #editor-content table { border-color: #475569; }
+        .dark #editor-content th, .dark #editor-content td { border-color: #475569; }
+        .dark #editor-content th { background-color: #334155; color: #f8fafc; }
+        
+        .modul-content h1, .modul-content h2, .modul-content h3 { font-weight: 800; margin-top: 1.5em; margin-bottom: 0.5em; color: currentColor; }
+        .modul-content h1 { font-size: 1.5rem; text-align: center; }
+        .modul-content h2 { font-size: 1.25rem; }
+        .modul-content h3 { font-size: 1.1rem; }
+        .modul-content p { margin-bottom: 1em; line-height: 1.6; }
+        .modul-content ul, .modul-content ol { margin-bottom: 1em; padding-left: 1.5em; }
+        .modul-content ul { list-style-type: disc; }
+        .modul-content ol { list-style-type: decimal; }
+        .modul-content li { margin-bottom: 0.25em; }
+    </style>
+</head>
+<body class="w-full h-[100dvh] overflow-hidden flex bg-slate-50 dark:bg-siska-darker text-slate-900 dark:text-white font-sans selection:bg-blue-200 dark:selection:bg-blue-900">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-40 hidden lg:hidden transition-opacity" onclick="toggleSidebar()"></div>
+    
+    <!-- ================= SIDEBAR ================= -->
+    <aside id="sidebar" class="fixed lg:static inset-y-0 left-0 z-50 w-64 bg-white dark:bg-siska-panel border-r border-slate-200 dark:border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 flex flex-col shadow-2xl lg:shadow-none">
+        <div class="h-[70px] flex items-center px-6 border-b border-slate-200 dark:border-slate-800 pt-safe shrink-0">
+            <div class="flex items-center gap-3">
+                <svg viewBox="0 0 100 100" class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20 25a5 5 0 015-5h50a5 5 0 015 5v50a5 5 0 01-5 5H25a5 5 0 01-5-5V25z" class="text-blue-600 dark:text-blue-500" />
+                    <path d="M35 40h30M35 55h30" class="text-slate-700 dark:text-slate-200" stroke-width="7"/>
+                    <path d="M45 70h10" class="text-blue-600 dark:text-blue-500" stroke-width="8"/>
+                </svg>
+                <div class="flex flex-col">
+                    <span class="app-title text-lg font-black tracking-tight leading-none text-slate-800 dark:text-white">KKNKU</span>
+                    <span class="app-subtitle text-[9px] font-bold text-blue-600 uppercase tracking-widest leading-none mt-1">Sekretariat Pro</span>
+                </div>
+            </div>
+        </div>
+        <div class="p-5 border-b border-slate-200 dark:border-slate-800">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-slate-200 dark:bg-slate-700 flex items-center justify-center shrink-0">
+                    <i data-lucide="user" class="w-5 h-5 text-slate-500 dark:text-slate-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="profile-name text-[13px] font-bold text-slate-900 dark:text-white truncate">DAENG TIO WALDI</p>
+                    <p class="profile-role text-[10px] text-slate-500 dark:text-slate-400 uppercase tracking-wider truncate">Admin Posko</p>
+                </div>
+            </div>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+            <p class="px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Dashboards</p>
+            <button onclick="switchTab('notes')" id="nav-notes" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="book-open" class="w-5 h-5"></i><span class="text-sm font-semibold">Arsip Notulensi</span>
+            </button>
+            <button onclick="switchTab('tasks')" id="nav-tasks" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="check-square" class="w-5 h-5"></i><span class="text-sm font-semibold">Delegasi Tugas</span>
+            </button>
+            <button onclick="switchTab('absensi')" id="nav-absensi" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="users" class="w-5 h-5"></i><span class="text-sm font-semibold">Absensi & Jurnal</span>
+            </button>
+            <button onclick="switchTab('keuangan')" id="nav-keuangan" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <svg viewBox="0 0 24 24" class="w-5 h-5 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                    <path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path>
+                    <path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path>
+                </svg>
+                <span class="text-sm font-semibold">Buku Kas & Transaksi</span>
+            </button>
+            <button onclick="switchTab('agenda')" id="nav-agenda" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="calendar-days" class="w-5 h-5"></i><span class="text-sm font-semibold">Kalender Akademik</span>
+            </button>
+            <button onclick="switchTab('templates')" id="nav-templates" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="briefcase" class="w-5 h-5"></i><span class="text-sm font-semibold">Pustaka Surat</span>
+            </button>
+            
+            <p class="px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">Pustaka & Modul KKL</p>
+            <button onclick="switchTab('modul_kkl')" id="nav-modul_kkl" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="library" class="w-5 h-5 text-emerald-500"></i><span class="text-sm font-semibold">Modul KKL 2026</span>
+            </button>
+            <button onclick="switchTab('modul_sihalal')" id="nav-modul_sihalal" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-500"></i><span class="text-sm font-semibold">Panduan SIHALAL</span>
+            </button>
+            <button onclick="switchTab('modul_materi')" id="nav-modul_materi" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="presentation" class="w-5 h-5 text-emerald-500"></i><span class="text-sm font-semibold">Materi Halal BPJPH</span>
+            </button>
+            <button onclick="switchTab('modul_pks')" id="nav-modul_pks" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="file-signature" class="w-5 h-5 text-emerald-500"></i><span class="text-sm font-semibold">Perjanjian Kerja Sama</span>
+            </button>
+
+            <p class="px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">Manajemen</p>
+            <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="settings" class="w-5 h-5"></i><span class="text-sm font-semibold">Pengaturan Sistem</span>
+            </button>
+        </nav>
+        <div class="p-4 border-t border-slate-200 dark:border-slate-800 pb-safe">
+            <button id="btn-theme" class="w-full flex items-center justify-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 py-3 rounded-xl text-sm font-semibold hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+                <i data-lucide="moon" id="icon-theme" class="w-5 h-5"></i> Ganti Tema
+            </button>
+        </div>
+    </aside>
+    
+    <!-- ================= MAIN CONTENT AREA ================= -->
+    <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-slate-100 dark:bg-siska-darker">
+        <header class="h-[70px] bg-white dark:bg-siska-panel border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 lg:px-6 z-30 pt-safe shrink-0 shadow-sm">
+            <div class="flex items-center gap-3">
+                <button onclick="toggleSidebar()" class="lg:hidden p-2.5 -ml-2 text-slate-600 dark:text-slate-300 rounded-lg bg-slate-100 dark:bg-slate-800 active:scale-95 transition-transform">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+                <div class="hidden sm:block">
+                    <div class="flex items-center text-xs font-semibold text-slate-500 gap-2">
+                        <i data-lucide="home" class="w-4 h-4"></i> <span>/</span> <span class="text-blue-600 dark:text-blue-400" id="breadcrumb-text">Dashboard</span>
+                    </div>
+                </div>
+            </div>
+            <button id="btn-fab" class="flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-md transition-all active:scale-95">
+                <i data-lucide="plus" class="w-5 h-5"></i> <span class="hidden sm:inline">Buat Baru</span>
+            </button>
+        </header>
+        
+        <div id="scroll-container" class="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
+            <div class="max-w-6xl mx-auto w-full">
+                
+                <!-- SISKA Header Banner -->
+                <div class="relative mb-6" id="banner-container">
+                    <button id="btn-toggle-banner" onclick="toggleBanner()" class="absolute top-4 right-4 z-20 p-2.5 bg-white/20 hover:bg-white/30 rounded-xl backdrop-blur-sm text-white transition-all shadow-sm active:scale-95" title="Sembunyikan Dasbor">
+                        <i data-lucide="eye-off" id="banner-toggle-icon" class="w-5 h-5"></i>
+                    </button>
+                    
+                    <div id="siska-banner" class="bg-gradient-to-r from-slate-800 to-slate-700 dark:from-slate-800 dark:to-slate-900 rounded-2xl p-6 md:p-8 shadow-lg text-white relative overflow-hidden transition-all duration-300">
+                        <div class="absolute right-0 top-0 w-64 h-full bg-gradient-to-l from-blue-500/20 to-transparent pointer-events-none"></div>
+                        <div class="absolute -right-10 -top-10 opacity-10 pointer-events-none">
+                            <i data-lucide="graduation-cap" class="w-64 h-64"></i>
+                        </div>
+                        <div class="relative z-10">
+                            <p class="campus-name text-[10px] md:text-xs font-bold tracking-widest text-slate-300 uppercase mb-1">INSTITUT AGAMA ISLAM NEGERI PONTIANAK</p>
+                            <h2 class="text-2xl md:text-3xl font-extrabold mb-4">Selamat datang, <span class="profile-name inline-block">DAENG TIO WALDI</span></h2>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-lg text-xs font-semibold border border-white/10"><i data-lucide="user" class="w-4 h-4"></i> <span class="status-name">Mahasiswa</span></span>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-lg text-xs font-semibold border border-white/10"><i data-lucide="calendar" class="w-4 h-4"></i> <span class="period-name">2025/2026 Genap</span></span>
+                                <span class="major-name inline-flex items-center gap-1.5 px-3 py-1.5 bg-white/10 backdrop-blur-sm rounded-lg text-xs font-semibold border border-white/10">Manajemen Bisnis Syariah</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="siska-banner-mini" class="hidden bg-white dark:bg-siska-panel border border-slate-200 dark:border-slate-800 rounded-2xl px-5 py-4 shadow-sm text-slate-800 dark:text-white transition-all duration-300 flex items-center justify-between cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800" onclick="toggleBanner()">
+                        <div class="flex items-center gap-3">
+                            <div class="bg-blue-100 dark:bg-blue-900/50 p-2 rounded-lg text-blue-600 dark:text-blue-400"><i data-lucide="graduation-cap" class="w-5 h-5"></i></div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-500 uppercase tracking-widest leading-none mb-1">Status Dasbor</p>
+                                <h3 class="font-bold text-sm leading-none"><span class="profile-name">DAENG TIO WALDI</span> - <span class="status-name text-slate-500">Mahasiswa</span></h3>
+                            </div>
+                        </div>
+                        <button class="p-2 text-slate-400 hover:text-blue-500 transition-colors"><i data-lucide="eye" class="w-5 h-5"></i></button>
+                    </div>
+                </div>
+
+                <!-- 6 Dashboard Cards -->
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">
+                    <div onclick="switchTab('notes')" class="cursor-pointer bg-white dark:bg-siska-panel p-4 md:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-blue-300 dark:hover:border-blue-700 transition-all flex flex-col group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-blue-50 dark:bg-blue-900/30 p-3 rounded-xl text-blue-600 group-hover:scale-110 transition-transform"><i data-lucide="book-open" class="w-6 h-6"></i></div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Arsip</span>
+                        </div>
+                        <h3 id="stat-notes" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</h3>
+                    </div>
+                    <div onclick="switchTab('tasks')" class="cursor-pointer bg-white dark:bg-siska-panel p-4 md:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-amber-300 dark:hover:border-amber-700 transition-all flex flex-col group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-amber-50 dark:bg-amber-900/30 p-3 rounded-xl text-amber-600 group-hover:scale-110 transition-transform"><i data-lucide="check-square" class="w-6 h-6"></i></div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Tugas</span>
+                        </div>
+                        <h3 id="stat-tasks" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</h3>
+                    </div>
+                    <div onclick="switchTab('absensi')" class="cursor-pointer bg-white dark:bg-siska-panel p-4 md:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-rose-300 dark:hover:border-rose-700 transition-all flex flex-col group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-rose-50 dark:bg-rose-900/30 p-3 rounded-xl text-rose-600 group-hover:scale-110 transition-transform"><i data-lucide="users" class="w-6 h-6"></i></div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Absen</span>
+                        </div>
+                        <h3 id="stat-absensi" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</h3>
+                    </div>
+                    <div onclick="switchTab('keuangan')" class="cursor-pointer bg-white dark:bg-siska-panel p-4 md:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-indigo-300 dark:hover:border-indigo-700 transition-all flex flex-col group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-indigo-50 dark:bg-indigo-900/30 p-3 rounded-xl text-indigo-600 group-hover:scale-110 transition-transform">
+                                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                    <path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path>
+                                    <path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path>
+                                </svg>
+                            </div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Kas</span>
+                        </div>
+                        <h3 id="stat-keuangan" class="text-[17px] font-black text-slate-900 dark:text-white leading-none truncate mt-1">Terintegrasi</h3>
+                    </div>
+                    <div onclick="switchTab('agenda')" class="cursor-pointer bg-white dark:bg-siska-panel p-4 md:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-700 transition-all flex flex-col group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-emerald-50 dark:bg-emerald-900/30 p-3 rounded-xl text-emerald-600 group-hover:scale-110 transition-transform"><i data-lucide="calendar-days" class="w-6 h-6"></i></div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Jadwal</span>
+                        </div>
+                        <h3 id="stat-agenda" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</h3>
+                    </div>
+                    <div onclick="switchTab('templates')" class="cursor-pointer bg-white dark:bg-siska-panel p-4 md:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-purple-300 dark:hover:border-purple-700 transition-all flex flex-col group">
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="bg-purple-50 dark:bg-purple-900/30 p-3 rounded-xl text-purple-600 group-hover:scale-110 transition-transform"><i data-lucide="briefcase" class="w-6 h-6"></i></div>
+                            <span class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Surat</span>
+                        </div>
+                        <h3 id="stat-templates" class="text-2xl font-black text-slate-900 dark:text-white leading-none">0</h3>
+                    </div>
+                </div>
+                
+                <div id="content-area" class="w-full pb-32"></div>
+            </div>
+        </div>
+        
+        <!-- ================= EDITOR VIEW (RICH TEXT) ================= -->
+        <div id="view-editor" class="hidden flex flex-col h-full w-full absolute inset-0 z-[100] bg-slate-50 dark:bg-siska-darker animate-in">
+            <div class="flex justify-between items-center px-4 md:px-6 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-siska-panel/95 backdrop-blur-md pt-safe shadow-sm">
+                <button onclick="closeEditor()" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors active:scale-95"><i data-lucide="arrow-left" class="w-6 h-6"></i></button>
+                <span id="editor-type-label" class="font-bold text-sm tracking-widest uppercase text-slate-800 dark:text-slate-200">Editor Dokumen</span>
+                <div class="flex items-center gap-2">
+                    <button id="btn-mic" onclick="toggleMic()" class="p-2.5 text-slate-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-all active:scale-95" title="Dikte Suara (On/Off Manual)">
+                        <i data-lucide="mic" id="icon-mic" class="w-6 h-6"></i>
+                    </button>
+                    <button onclick="saveNote()" class="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white rounded-xl text-sm font-bold active:scale-95 transition-all shadow-md">Simpan</button>
+                </div>
+            </div>
+            
+            <div class="flex-1 overflow-y-auto flex flex-col relative">
+                <div class="bg-white dark:bg-siska-panel px-5 md:px-8 py-5 border-b border-slate-200 dark:border-slate-800">
+                    <input type="text" id="editor-title" placeholder="Subjek Dokumen..." class="w-full text-2xl md:text-3xl font-bold bg-transparent border-none outline-none text-slate-900 dark:text-white placeholder-slate-400 focus:ring-0 px-0 mb-4" />
+                    <div class="flex flex-wrap items-center gap-3">
+                        <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300 text-sm bg-slate-50 dark:bg-slate-900 p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                            <i data-lucide="calendar" class="w-5 h-5"></i>
+                            <input type="datetime-local" id="editor-date" class="bg-transparent border-none outline-none focus:ring-0 text-slate-700 dark:text-slate-300 cursor-pointer p-0 font-medium text-xs md:text-sm" />
+                        </div>
+                        <span id="mic-status-label" class="hidden text-xs font-bold text-red-500 bg-red-50 dark:bg-red-900/20 px-3 py-1.5 rounded-lg animate-pulse">● Perekaman Suara Aktif...</span>
+                    </div>
+                </div>
+                <div id="quick-insert-bar" class="flex gap-2 px-5 py-4 overflow-x-auto scrollbar-hide bg-slate-50 dark:bg-slate-900 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 shadow-sm items-center">
+                    <!-- Template Cepat Diinjeksi JS -->
+                </div>
+                <!-- Editor diubah menjadi contenteditable untuk menangani Tabel absolut HTML -->
+                <div id="editor-content" contenteditable="true" placeholder="Ketik di sini atau sisipkan tabel absolut..." class="w-full flex-1 p-5 md:p-8 bg-slate-50 dark:bg-siska-darker border-none outline-none text-slate-800 dark:text-slate-200 leading-relaxed focus:ring-0 text-[14px] md:text-[15px] pb-32 font-sans min-h-[50vh]"></div>
+                
+                <!-- Floating Table Toolbar dengan Fitur Drag (Bisa Digeser) -->
+                <div id="floating-table-toolbar" class="hidden absolute bg-slate-900 text-white shadow-xl rounded-xl p-1.5 flex gap-1.5 z-[150] transition-opacity duration-200 border border-slate-700 touch-none">
+                    <!-- Area Pegangan untuk Menggeser -->
+                    <div id="toolbar-drag-handle" class="cursor-move p-2 text-slate-400 hover:text-white flex items-center justify-center bg-slate-800 rounded-lg active:bg-slate-700" title="Tahan dan Geser">
+                        <i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i>
+                    </div>
+                    <div class="w-px bg-slate-700 mx-0.5"></div>
+                    <button type="button" onclick="tableAction('addRow')" class="px-3 py-2 bg-slate-800 hover:bg-emerald-600 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5" title="Tambah Baris"><i data-lucide="plus" class="w-4 h-4"></i> Baris</button>
+                    <button type="button" onclick="tableAction('addCol')" class="px-3 py-2 bg-slate-800 hover:bg-blue-600 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5" title="Tambah Kolom"><i data-lucide="plus" class="w-4 h-4"></i> Kolom</button>
+                    <div class="w-px bg-slate-700 mx-0.5"></div>
+                    <button type="button" onclick="tableAction('delRow')" class="px-3 py-2 bg-slate-800 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5" title="Hapus Baris"><i data-lucide="trash-2" class="w-4 h-4"></i> Baris</button>
+                    <button type="button" onclick="tableAction('delCol')" class="px-3 py-2 bg-slate-800 hover:bg-red-600 text-white rounded-lg text-xs font-bold transition-colors flex items-center gap-1.5" title="Hapus Kolom"><i data-lucide="trash-2" class="w-4 h-4"></i> Kolom</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ================= VIEWER VIEW ================= -->
+        <div id="view-viewer" class="hidden flex flex-col h-full w-full absolute inset-0 z-40 bg-white dark:bg-siska-darker animate-in">
+            <div class="flex justify-between items-center px-4 md:px-6 py-3 border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-siska-panel/95 backdrop-blur-md pt-safe shadow-sm shrink-0">
+                <button onclick="closeViewer()" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors active:scale-95"><i data-lucide="arrow-left" class="w-6 h-6"></i></button>
+                <span id="viewer-type-label" class="font-semibold text-xs tracking-widest text-slate-500 uppercase">Dokumen</span>
+                <div class="flex gap-2 items-center">
+                    <button onclick="shareDoc()" class="p-2.5 text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-all active:scale-95" title="Bagikan"><i data-lucide="share-2" class="w-5 h-5"></i></button>
+                    <button id="btn-use-template" onclick="useTemplate()" class="hidden p-2.5 bg-blue-100 dark:bg-blue-900/50 text-blue-700 dark:text-blue-400 rounded-xl transition-all active:scale-95" title="Gunakan Template"><i data-lucide="file-plus" class="w-5 h-5"></i></button>
+                    <button id="btn-edit-doc" onclick="editCurrentNote()" class="p-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-xl transition-all active:scale-95" title="Edit"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                    <button onclick="copyViewerText()" id="btn-copy" class="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-teal-600 text-white shadow-sm active:scale-95">
+                        <i data-lucide="copy" class="w-5 h-5 icon-copy"></i> <span class="text-copy hidden sm:inline">Salin</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth relative max-w-4xl mx-auto w-full">
+                <div class="bg-white dark:bg-siska-panel p-6 md:p-10 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 min-h-full">
+                    <button id="btn-script-filter" onclick="openScriptView()" class="w-full flex items-center justify-center gap-2 bg-slate-800 text-white p-4 rounded-xl mb-8 shadow-md active:scale-[0.98] transition-all font-bold text-sm tracking-wide hidden hover:bg-slate-700">
+                        <i data-lucide="wand-2" class="w-5 h-5 text-teal-400"></i> BUAT NASKAH PEMBACAAN
+                    </button>
+                    <h1 id="viewer-title" class="text-2xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-4 leading-snug"></h1>
+                    <div class="flex items-center gap-3 mb-8 border-b border-slate-200 dark:border-slate-800 pb-5">
+                        <span class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-500 rounded-lg text-xs font-bold uppercase tracking-wider">Arsip Resmi</span>
+                        <p id="viewer-date" class="text-sm font-semibold text-slate-500"></p>
+                    </div>
+                    <div id="viewer-content" class="prose prose-slate dark:prose-invert max-w-none text-slate-800 dark:text-slate-200 leading-relaxed text-[15px] font-sans"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ================= SCRIPT TELEPROMPTER VIEW ================= -->
+        <div id="view-script" class="hidden flex flex-col h-full w-full absolute inset-0 z-[110] bg-slate-900 animate-zoom text-white">
+            <div class="flex justify-between items-center px-4 py-3 border-b border-slate-700 bg-slate-800/90 backdrop-blur-md pt-safe shrink-0">
+                <button onclick="closeScriptView()" class="p-2.5 text-slate-300 hover:bg-slate-700 rounded-xl"><i data-lucide="x" class="w-6 h-6"></i></button>
+                <span class="font-bold text-xs tracking-widest uppercase text-teal-400 flex items-center gap-2"><i data-lucide="monitor-play" class="w-5 h-5"></i> Teleprompter</span>
+                <div class="w-12"></div>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6 md:p-12 scroll-smooth flex flex-col items-center pb-32">
+                <div class="text-center mb-10 max-w-3xl w-full">
+                    <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3">Naskah Kesimpulan</h2>
+                    <h1 id="script-title" class="text-3xl md:text-4xl font-extrabold text-white leading-tight"></h1>
+                </div>
+                <div class="bg-slate-800 p-8 md:p-12 rounded-3xl border border-slate-700 shadow-2xl relative max-w-3xl w-full">
+                    <div class="absolute -top-5 -left-5 bg-teal-500 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i data-lucide="mic-2" class="w-6 h-6"></i></div>
+                    <p class="text-xl md:text-2xl leading-relaxed text-slate-300 italic mb-8 font-serif">"Berdasarkan hasil diskusi kita pada kegiatan hari ini, izinkan saya membacakan rangkuman kesimpulan dan keputusan yang telah disepakati bersama:"</p>
+                    <div id="script-points" class="space-y-6 mb-8 text-lg md:text-xl text-white"></div>
+                    <p class="text-xl md:text-2xl leading-relaxed text-slate-300 italic border-t border-slate-700 pt-8 font-serif">"Demikian kesimpulan rapat hari ini. Kami mohon komitmen seluruh pihak terkait untuk melaksanakan keputusan tersebut. Terima kasih."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= CUSTOM TABLE GENERATOR MODAL ================= -->
+        <div id="table-modal" class="hidden fixed inset-0 z-[160] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade">
+            <div class="bg-white dark:bg-siska-panel w-full max-w-3xl rounded-2xl shadow-2xl flex flex-col max-h-[90vh] animate-zoom border border-slate-200 dark:border-slate-700 overflow-hidden">
+                <div class="p-4 md:p-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-900">
+                    <h3 class="text-lg md:text-xl font-bold text-slate-900 dark:text-white flex items-center gap-2"><i data-lucide="table" class="w-6 h-6 text-indigo-500"></i> Buat Tabel HTML Absolut</h3>
+                    <button onclick="closeTableModal()" class="p-2.5 text-slate-500 hover:bg-slate-200 dark:hover:bg-slate-800 rounded-xl transition-colors active:scale-95"><i data-lucide="x" class="w-6 h-6"></i></button>
+                </div>
+                
+                <div class="p-4 md:p-6 bg-slate-50 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 flex flex-col md:flex-row gap-6 items-center justify-center w-full">
+                    <div class="flex items-center gap-4 bg-slate-100 dark:bg-slate-800 p-2 rounded-xl border border-slate-200 dark:border-slate-700 w-full md:w-auto justify-between">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">Kolom:</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateTableConfig('col', -1)" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-700 rounded-lg shadow-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 active:scale-95 transition-all text-xl font-bold border border-slate-200 dark:border-slate-600">-</button>
+                            <span id="tc-cols" class="w-8 text-center font-black text-slate-800 dark:text-white text-lg">3</span>
+                            <button onclick="updateTableConfig('col', 1)" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-700 rounded-lg shadow-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 active:scale-95 transition-all text-xl font-bold border border-slate-200 dark:border-slate-600">+</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 bg-slate-100 dark:bg-slate-800 p-2 rounded-xl border border-slate-200 dark:border-slate-700 w-full md:w-auto justify-between">
+                        <span class="text-xs font-bold text-slate-500 uppercase tracking-widest px-2">Baris:</span>
+                        <div class="flex items-center gap-2">
+                            <button onclick="updateTableConfig('row', -1)" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-700 rounded-lg shadow-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 active:scale-95 transition-all text-xl font-bold border border-slate-200 dark:border-slate-600">-</button>
+                            <span id="tc-rows" class="w-8 text-center font-black text-slate-800 dark:text-white text-lg">3</span>
+                            <button onclick="updateTableConfig('row', 1)" class="w-10 h-10 flex items-center justify-center bg-white dark:bg-slate-700 rounded-lg shadow-sm text-slate-700 dark:text-slate-300 hover:bg-slate-50 active:scale-95 transition-all text-xl font-bold border border-slate-200 dark:border-slate-600">+</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-4 md:p-6 flex-1 overflow-auto bg-slate-100 dark:bg-siska-darker" id="table-builder-container">
+                    <!-- Dynamic Grid -->
+                </div>
+                <div class="p-4 md:p-5 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-siska-panel flex justify-end gap-3">
+                    <button onclick="closeTableModal()" class="px-6 py-3 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">Batal</button>
+                    <button onclick="insertGeneratedTable()" class="px-6 py-3 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-md flex items-center gap-2 active:scale-95"><i data-lucide="check" class="w-5 h-5"></i> Sisipkan Tabel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= CUSTOM CONFIRM MODAL ================= -->
+        <div id="confirm-modal" class="hidden fixed inset-0 z-[120] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade">
+            <div class="bg-white dark:bg-siska-panel w-full max-w-sm rounded-2xl shadow-2xl p-6 md:p-8 animate-zoom border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-3 mb-4 text-red-500">
+                    <i data-lucide="alert-triangle" class="w-7 h-7"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white" id="modal-title">Konfirmasi Penghapusan</h3>
+                </div>
+                <p class="text-slate-600 dark:text-slate-400 mb-6 text-sm leading-relaxed" id="modal-desc">Apakah Anda yakin ingin menghapus data ini? Tindakan ini bersifat permanen dan tidak dapat dibatalkan.</p>
+                <div class="flex justify-end gap-3">
+                    <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors active:scale-95">Batal</button>
+                    <button id="modal-confirm-btn" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-red-600 hover:bg-red-700 transition-colors shadow-md active:scale-95">Ya, Hapus</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ================= CUSTOM EDIT JURNAL/ABSENSI MODAL ================= -->
+        <div id="edit-journal-modal" class="hidden fixed inset-0 z-[125] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade">
+            <div class="bg-white dark:bg-siska-panel w-full max-w-lg rounded-2xl shadow-2xl p-6 md:p-8 animate-zoom border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-3 mb-4 text-teal-600 dark:text-teal-400">
+                    <i data-lucide="edit" class="w-7 h-7"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white">Edit Deskripsi Jurnal</h3>
+                </div>
+                <div class="mb-5">
+                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Isi Catatan Jurnal Kegiatan</label>
+                    <textarea id="edit-journal-textarea" class="w-full h-40 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl p-4 text-sm outline-none text-slate-900 dark:text-white focus:border-teal-500 resize-none font-sans leading-relaxed"></textarea>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button onclick="closeEditJournalModal()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors active:scale-95">Batal</button>
+                    <button id="journal-save-btn" class="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-teal-600 hover:bg-teal-700 transition-colors shadow-md active:scale-95">Simpan Perubahan</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- ================= CUSTOM ALERT MODAL ================= -->
+        <div id="alert-modal" class="hidden fixed inset-0 z-[130] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade">
+            <div class="bg-white dark:bg-siska-panel w-full max-w-sm rounded-2xl shadow-2xl p-6 md:p-8 animate-zoom border border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-3 mb-4 text-blue-500" id="alert-modal-icon-container">
+                    <i data-lucide="info" class="w-7 h-7" id="alert-modal-icon"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white" id="alert-modal-title">Informasi</h3>
+                </div>
+                <p class="text-slate-600 dark:text-slate-400 mb-6 text-sm leading-relaxed" id="alert-modal-desc"></p>
+                <div class="flex justify-end">
+                    <button onclick="closeAlertModal()" class="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md active:scale-95">Oke</button>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
+                    navigator.serviceWorker.register('./sw.js').catch(err => console.error('SW Failed!', err));
+                }
+            });
+        }
+        
+        function toggleBanner() {
+            const banner = document.getElementById('siska-banner');
+            const mini = document.getElementById('siska-banner-mini');
+            const toggleBtn = document.getElementById('btn-toggle-banner');
+            if (banner.classList.contains('hidden')) {
+                banner.classList.remove('hidden');
+                mini.classList.add('hidden');
+                toggleBtn.classList.remove('hidden');
+            } else {
+                banner.classList.add('hidden');
+                mini.classList.remove('hidden');
+                toggleBtn.classList.add('hidden');
+            }
+        }
+
+        function loadProfile() {
+            const p = JSON.parse(localStorage.getItem('kknku_profile')) || {
+                name: 'DAENG TIO WALDI', role: 'Admin Posko',
+                appTitle: 'KKNKU', appSubtitle: 'Sekretariat Pro',
+                campus: 'INSTITUT AGAMA ISLAM NEGERI PONTIANAK',
+                status: 'Mahasiswa', period: '2025/2026 Genap', major: 'Manajemen Bisnis Syariah'
+            };
+            document.querySelectorAll('.profile-name').forEach(el => el.textContent = p.name);
+            document.querySelectorAll('.profile-role').forEach(el => el.textContent = p.role);
+            document.querySelectorAll('.app-title').forEach(el => el.textContent = p.appTitle);
+            document.querySelectorAll('.app-subtitle').forEach(el => el.textContent = p.appSubtitle);
+            document.querySelectorAll('.campus-name').forEach(el => el.textContent = p.campus);
+            document.querySelectorAll('.status-name').forEach(el => el.textContent = p.status);
+            document.querySelectorAll('.period-name').forEach(el => el.textContent = p.period);
+            document.querySelectorAll('.major-name').forEach(el => el.textContent = p.major);
+        }
+        
+        function saveSettingsForm(e) {
+            e.preventDefault();
+            const p = {
+                appTitle: document.getElementById('set-apptitle').value,
+                appSubtitle: document.getElementById('set-appsubtitle').value,
+                campus: document.getElementById('set-campus').value,
+                name: document.getElementById('set-name').value,
+                status: document.getElementById('set-status').value,
+                period: document.getElementById('set-period').value,
+                major: document.getElementById('set-major').value,
+                role: document.getElementById('set-role').value
+            };
+            localStorage.setItem('kknku_profile', JSON.stringify(p));
+            loadProfile();
+            customAlert("Pengaturan Sistem berhasil disimpan.", "Sukses", "success");
+            switchTab('notes');
+        }
+        
+        const STUDENTS_DATA = [
+            { no: 1, nim: '12301031', name: 'IRHAD PRASETYA', gender: 'L', prodi: 'PAI' },
+            { no: 2, nim: '12301100', name: 'SASENA', gender: 'P', prodi: 'PAI' },
+            { no: 3, nim: '12301152', name: 'KHAIRUDIN', gender: 'L', prodi: 'PAI' },
+            { no: 4, nim: '12302053', name: 'SYARIFAH FADILAH', gender: 'P', prodi: 'PBA' },
+            { no: 5, nim: '12303083', name: 'PUTRI NUR FATIMAH ARIEF', gender: 'P', prodi: 'ES' },
+            { no: 6, nim: '12303084', name: 'DEBY AGUSTINA', gender: 'P', prodi: 'ES' },
+            { no: 7, nim: '12303087', name: 'Dania Novita Sari', gender: 'P', prodi: 'ES' },
+            { no: 8, nim: '12303093', name: 'ANISSAFITRI NOVAYANTI', gender: 'L', prodi: 'ES' },
+            { no: 9, nim: '12305008', name: 'MUHAMMAD ADITYA AKMAL', gender: 'L', prodi: 'KPI' },
+            { no: 10, nim: '12305069', name: 'DWI DESTRIANI', gender: 'P', prodi: 'KPI' },
+            { no: 11, nim: '12307057', name: 'SELVI AVILYANTI', gender: 'P', prodi: 'PS' },
+            { no: 12, nim: '12307060', name: 'INDA SATLIAH', gender: 'P', prodi: 'PS' },
+            { no: 13, nim: '12309059', name: 'MATRA\'I', gender: 'L', prodi: 'IAT' },
+            { no: 14, nim: '12310080', name: 'DEWI BUNGA SAPUTRI', gender: 'P', prodi: 'PGMI' },
+            { no: 15, nim: '12310081', name: 'NADIA MAULIDIYANTI', gender: 'P', prodi: 'PGMI' },
+            { no: 16, nim: '12314071', name: 'HALIMAH TUSAKDIYAH', gender: 'P', prodi: 'PI' },
+            { no: 17, nim: '12314072', name: 'SRI PUTRI HASANAH', gender: 'P', prodi: 'PI' },
+            { no: 18, nim: '12314084', name: 'KHOIRUNNISA', gender: 'P', prodi: 'PI' },
+            { no: 19, nim: '12315096', name: 'DAENG TIO WALDI', gender: 'L', prodi: 'MBS' },
+            { no: 20, nim: '12315101', name: 'ARI AKBAR', gender: 'L', prodi: 'MBS' }
+        ];
+        
+        const QUICK_INSERT_TEXTS = [
+            { icon: 'list', label: 'Poin', text: "<br>• " },
+            { icon: 'mic-2', label: 'Sambutan', text: "Assalamu’alaikum Warahmatullahi Wabarakatuh. Alhamdulillahi rabbil 'alamin, wa bihi nasta'in 'alaa umuuriddunya waddiin.<br><br>Yang terhormat Bapak/Ibu Kepala Desa beserta jajaran aparatur struktural desa,<br>Yang dihormati segenap representasi tokoh agama, tokoh masyarakat, dan pimpinan kelembagaan desa,<br>Serta delegasi mahasiswa pelaksana program KKN yang patut dibanggakan.<br><br>Puji syukur senantiasa dihaturkan atas kehadirat Allah SWT, atas limpahan rahmat dan justifikasi-Nya sehingga forum konsolidasi ini dapat diselenggarakan. Program Kuliah Kerja Nyata (KKN) ini direalisasikan sebagai manifestasi konkret dari implementasi Tri Dharma Perguruan Tinggi yang difokuskan pada penguatan literasi dan pemberdayaan struktural masyarakat.<br><br>Diharapkan elaborasi program pengabdian ini dapat direalisasikan secara presisi sesuai dengan rancangan strategis yang telah divalidasi, dengan harapan mampu menghadirkan implikasi positif serta pembangunan yang berkesinambungan bagi masyarakat setempat.<br><br>(Lanjutkan paparan substansi...)" },
+            { icon: 'target', label: 'Tujuan', text: "Program ini didesain secara sistematis dengan orientasi pencapaian tujuan sebagai berikut:<br><br>1. Diimplementasikannya program pemberdayaan masyarakat berbasis riset terapan yang relevan dengan kebutuhan sosio-ekonomi lokal.<br>2. Diakselerasikannya peningkatan kapasitas sumber daya manusia (SDM) desa melalui intervensi teknologi dan inovasi tata kelola administratif.<br>3. Dibangunnya sinergitas kelembagaan antara sektor akademis dan aparatur desa dalam memitigasi serta mendegradasi problematika desa secara komprehensif.<br>4. Direalisasikannya pemetaan komprehensif terhadap potensi desa yang dikalibrasi untuk pengembangan kemandirian masyarakat secara berkelanjutan.<br>5. Diinternalisasikannya nilai-nilai moderasi beragama dan etika Rahmatan lil 'Alamin sebagai fondasi penyelesaian resolusi konflik sosial." },
+            { icon: 'clock', label: 'Pembukaan', text: "--- AGENDA PEMBUKAAN FORUM KONSOLIDASI ---<br><br>Kegiatan ini secara resmi direalisasikan pada:<br>Hari, Tanggal : <br>Waktu         : <br>Lokasi        : <br><br>Agenda Prioritas Pembahasan:<br>1. Pemaparan rancangan strategis dan matriks program kerja KKN.<br>2. Konsolidasi teknis dengan pemangku kepentingan desa terkait alokasi sumber daya.<br>3. Pemetaan awal hambatan operasional serta perumusan mitigasi risiko.<br><br>Notulensi Dialektika Forum:<br>• " },
+            { icon: 'check-circle-2', label: 'Penutupan', text: "<br>--- KESIMPULAN DAN RESOLUSI FORUM ---<br><br>Berdasarkan dialektika dan pertimbangan empiris yang telah dilaksanakan, ditetapkan resolusi sebagai berikut:<br><br>1. [Deskripsikan Ketetapan 1 secara lugas] (Penanggung Jawab: ... | Durasi Eksekusi: ...)<br>2. [Deskripsikan Ketetapan 2 secara lugas] (Penanggung Jawab: ... | Durasi Eksekusi: ...)<br><br>Seluruh ketetapan ini bersifat mengikat secara prosedural dan akan dievaluasi secara periodik oleh tim supervisor. Forum konsolidasi ini ditutup secara resmi pada pukul [00:00] WIB. Terima kasih atas atensi dan komitmen kolaborasi seluruh pihak." }
+        ];
+        
+        let rawTemplates = [
+            { id: 't1', category: 'Pra-KKN', title: '1. Surat Tugas Mahasiswa KKN', content: `[KOP SURAT KAMPUS/PANITIA KKN]\n\nNomor     : 001/ST-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Berkas\nHal       : Instruksi Pelaksanaan Tugas Kuliah Kerja Nyata (KKN)\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMemperhatikan pedoman akademik dan kalender pendidikan Universitas [Nama Kampus] Tahun Akademik [Tahun], dengan ini diinstruksikan kepada mahasiswa yang identitasnya tercantum pada lampiran surat ini untuk merealisasikan program pengabdian kepada masyarakat dalam kerangka Kuliah Kerja Nyata (KKN).\n\nPenugasan ini diimplementasikan secara terstruktur di wilayah administratif Desa [Nama Desa], yang dilaksanakan secara berkelanjutan mulai dari tanggal [Tanggal Mulai] sampai dengan tanggal [Tanggal Selesai]. \n\nDiinstruksikan pula kepada mahasiswa terkait untuk berkoordinasi penuh dengan aparatur pemerintah desa setempat demi memastikan sinkronisasi antara program akademik dengan agenda pembangunan desa. Surat tugas ini diterbitkan untuk dipergunakan sebagai landasan legal-formal operasional di lapangan. Atas kolaborasi dan fasilitasi yang diberikan oleh Bapak/Ibu Kepala Desa, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota Kampus], [Tanggal Surat]\nMengetahui,\nKetua LPPM / Panitia KKN\n\n\n\n(Nama Terang & Gelar)\nNIP. ....................` },
+            { id: 't2', category: 'Pra-KKN', title: '2. Surat Pengantar/Penerjunan KKN', content: `[KOP SURAT KAMPUS]\n\nNomor     : 002/SP-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Serah Terima dan Pengantar Mahasiswa KKN\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nBerdasarkan ketetapan institusional mengenai implementasi Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], dengan ini kami bertindak atas nama Dosen Pembimbing Lapangan (DPL) secara resmi menyerahkan otoritas pembinaan [Jumlah] mahasiswa KKN kepada Pemerintah Desa [Nama Desa].\n\nPenyerahan ini dilakukan agar mahasiswa bersangkutan dapat melaksanakan agenda pengabdian kepada masyarakat yang terhitung efektif sejak [Tanggal Mulai] hingga [Tanggal Selesai]. Kami memohon dengan hormat agar mahasiswa ini dapat diakomodasi, dievaluasi, serta diberikan supervisi struktural selama berintegrasi dengan masyarakat di wilayah otoritas Bapak/Ibu.\n\nDiharapkan sinergitas ini mampu menghasilkan implikasi positif bagi penguatan kelembagaan desa serta peningkatan kompetensi empiris mahasiswa. Demikian surat pengantar ini disampaikan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nDosen Pembimbing Lapangan\n\n\n\n(Nama DPL & Gelar)\nNIP. ....................` },
+            { id: 't3', category: 'Pra-KKN', title: '3. Surat Permohonan Izin Lokasi KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 003/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Bendel Proposal Kegiatan\nHal       : Permohonan Justifikasi Izin Lokasi Pelaksanaan KKN\n\nYth. Kepala Bakesbangpol / Bupati [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nDalam rangka memenuhi kualifikasi kurikulum akademik wajib pada program Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], dengan ini kami mengajukan permohonan penerbitan izin lokasi pelaksanaan pengabdian masyarakat. Wilayah observasi dan intervensi program difokuskan pada Desa [Nama Desa], Kecamatan [Nama Kecamatan], yang direncanakan beroperasi mulai tanggal [Tanggal Mulai] sampai dengan [Tanggal Selesai].\n\nSebagai dasar pertimbangan yuridis dan akademis, turut dilampirkan proposal teknis yang memuat rancangan program kerja empiris yang akan dieksekusi, termasuk di dalamnya pemetaan metode partisipatif guna memastikan kegiatan ini tidak mengintervensi tatanan sosial setempat, melainkan mengakselerasi potensi lokal yang tersedia.\n\nBesar harapan kami agar justifikasi perizinan ini dapat segera diproses. Atas atensi dan otorisasi yang diberikan, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nKetua Kelompok KKN                    Sekretaris\n\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
+            { id: 't4', category: 'Pra-KKN', title: '4. Surat Pernyataan Peserta KKN', content: `SURAT PERNYATAAN KOMITMEN PESERTA KKN\n\nYang bertanda tangan di bawah ini:\nNama Terang         : [Nama Mahasiswa]\nNomor Induk Mhs     : [NIM]\nFakultas / Prodi    : [Fakultas / Program Studi]\nIdentitas Kelompok  : [Nomor/Nama Kelompok]\n\nMelalui dokumen ini menyatakan secara mutlak KOMITMEN penuh untuk menaati dan mengimplementasikan seluruh regulasi, kode etik, dan tata tertib Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Tahun [Tahun]. \n\nSelanjutnya ditegaskan bahwa saya bersedia untuk:\n1. Mempresentasikan integritas almamater dalam setiap tindakan dan komunikasi publik.\n2. Beradaptasi dan mengikatkan diri pada norma sosial, adat istiadat, serta hukum positif yang berlaku di wilayah lokus pengabdian.\n3. Tidak berafiliasi dengan aktivitas provokatif, politik praktis, maupun tindakan indisipliner yang bertentangan dengan kaidah akademis.\n\nApabila di kemudian hari terbukti dilakukan pelanggaran atas klausul pernyataan ini, saya menyatakan bersedia diproses secara institusional dan menerima sanksi akademis tingkat maksimal tanpa hak penuntutan kembali.\n\nPernyataan ini dikonstruksi dalam keadaan sadar, sehat secara rasional, dan tanpa tekanan dari pihak manapun.\n\n[Kota], [Tanggal]\nYang Membuat Pernyataan,\n\n[Meterai 10.000]\n\n\n(Nama Mahasiswa)\nNIM. [NIM]` },
+            { id: 't34', category: 'Administrasi', title: '34. Presensi Peserta KKL 2026 (Sengkubang)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nPRESENSI PESERTA KKL 2026\nKelompok   : SENGKUBANG\n\n| NO. | NIM      | NAMA                      | L/P | PRODI | HARI KE-1 |\n| --- | -------- | ------------------------- | --- | ----- | --------- |\n| 1.  | 12301031 | IRHAD PRASETYA            | L   | PAI   |           |\n| 2.  | 12301100 | SASENA                    | P   | PAI   |           |\n| 3.  | 12301152 | KHAIRUDIN                 | L   | PAI   |           |` },
+            { id: 't35', category: 'Jurnal Harian', title: '35. Jurnal Bimbingan KKL 2026 (Sengkubang)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nJURNAL BIMBINGAN KKL 2026\nKelompok   : SENGKUBANG\n\n| NO. | Hari/Tgl. | Materi Bimbingan/Kegiatan | Hasil/Komentar Pembimbing |\n| --- | --------- | ------------------------- | ------------------------- |\n| 1.  |           |                           |                           |\n| 2.  |           |                           |                           |` },
+            { id: 't36', category: 'Administrasi', title: '36. Jaket KKL 2026 (Tanjung 1)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nDAFTAR PENERIMAAN JAKET PESERTA KKL 2026\nKelompok   : TANJUNG 1\nPembimbing : NELLY S.Pd.I, M.S.I\nPanitia    : FATHANIAH, S.Pd.I\n\n| NO. | NIM      | NAMA                       | L/P | UKURAN | TANDA TANGAN |\n| --- | -------- | -------------------------- | --- | ------ | ------------ |\n| 1   | 12301093 | HERASTI RISNA AYUNDA       | P   | M      |              |\n| 2   | 12301110 | ZURIAT ROMADHAN            | L   | XL     |              |\n| 3   | 12302051 | FITRIA NINGSIH             | P   | L      |              |\n| 4   | 12303066 | MONICA VIKA                | P   | M      |              |\n| 5   | 12303080 | WATI                       | P   | XL     |              |\n| 6   | 12303115 | DEDI AHMAD                 | L   | L      |              |\n| 7   | 12305064 | Azizah                     | P   | S      |              |\n| 8   | 12307046 | Effa Nagetha               | P   | L      |              |\n| 9   | 12307050 | ALIYA SAFITRI              | P   | M      |              |\n| 10  | 12307056 | SYARIFAH ARDILLA RAHMAWATI | P   | L      |              |\n| 11  | 12309056 | SAYYIDAH FADHILATUNNISA    | P   | XL     |              |\n| 12  | 12310074 | TIFARA ANDRIANI            | P   | M      |              |\n| 13  | 12310084 | PUTRI WAHYU SHAFIYYAH      | P   | XXL    |              |\n| 14  | 12314080 | Artiya Maharani            | P   | L      |              |\n| 15  | 12314083 | OLIVIA SALSABILLA          | L   | M      |              |\n| 16  | 12314086 | Ariyansyah                 | L   | XL     |              |\n| 17  | 12315092 | fajrul muwahid             | L   | L      |              |\n| 18  | 12315095 | MUHAMMAD VICKY WIZARD      | L   | XL     |              |\n| 19  | 12315110 | KHAIRUNNISA CITRA RAHAYU   | P   | S      |              |` },
+            { id: 't37', category: 'Administrasi', title: '37. Presensi KKL 2026 (Tanjung 1)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nPRESENSI PESERTA KKL 2026\nKelompok   : TANJUNG 1\nPembimbing : NELLY S.Pd.I, M.S.I\nPanitia    : FATHANIAH, S.Pd.I\n\n| NO. | NIM      | NAMA                       | L/P | PRODI | HARI 1 | HARI 2 | HARI 3 |\n| --- | -------- | -------------------------- | --- | ----- | ------ | ------ | ------ |\n| 1   | 12301093 | HERASTI RISNA AYUNDA       | P   | PAI   |        |        |        |\n| 2   | 12301110 | ZURIAT ROMADHAN            | L   | PAI   |        |        |        |\n| 3   | 12302051 | FITRIA NINGSIH             | P   | PBA   |        |        |        |\n| 4   | 12303066 | MONICA VIKA                | P   | ES    |        |        |        |\n| 5   | 12303080 | WATI                       | P   | ES    |        |        |        |\n| 6   | 12303115 | DEDI AHMAD                 | L   | ES    |        |        |        |\n| 7   | 12305064 | Azizah                     | P   | KPI   |        |        |        |\n| 8   | 12307046 | Effa Nagetha               | P   | PS    |        |        |        |\n| 9   | 12307050 | ALIYA SAFITRI              | P   | PS    |        |        |        |\n| 10  | 12307056 | SYARIFAH ARDILLA RAHMAWATI | P   | PS    |        |        |        |\n| 11  | 12309056 | SAYYIDAH FADHILATUNNISA    | P   | IAT   |        |        |        |\n| 12  | 12310074 | TIFARA ANDRIANI            | P   | PGMI  |        |        |        |\n| 13  | 12310084 | PUTRI WAHYU SHAFIYYAH      | P   | PGMI  |        |        |        |\n| 14  | 12314080 | Artiya Maharani            | P   | PI    |        |        |        |\n| 15  | 12314083 | OLIVIA SALSABILLA          | L   | PI    |        |        |        |\n| 16  | 12314086 | Ariyansyah                 | L   | PI    |        |        |        |\n| 17  | 12315092 | fajrul muwahid             | L   | MBS   |        |        |        |\n| 18  | 12315095 | MUHAMMAD VICKY WIZARD      | L   | MBS   |        |        |        |\n| 19  | 12315110 | KHAIRUNNISA CITRA RAHAYU   | P   | MBS   |        |        |        |` },
+            { id: 't38', category: 'Jurnal Harian', title: '38. Jurnal Bimbingan KKL 2026 (Tanjung 1)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nJURNAL BIMBINGAN KKL 2026\nKelompok   : TANJUNG 1\nPembimbing : NELLY S.Pd.I, M.S.I\nPanitia    : FATHANIAH, S.Pd.I\n\n| NO. | Hari/Tgl. Bimbingan | Materi Bimbingan | Hasil/Komentar Pembimbing |\n| --- | ------------------- | ---------------- | ------------------------- |\n| 1.  |                     |                  |                           |\n| 2.  |                     |                  |                           |\n| 3.  |                     |                  |                           |` },
+            { id: 't39', category: 'Administrasi', title: '39. Curriculum Vitae (Heni Soleha)', content: `Data Pribadi\nCURRICULUM VITAE (CV)\n\n| Nama                     | : Heni Soleha, S. Sos. I |\n| ------------------------ | --------------------------------------------------------------------------------------------- |\n| Tempat dan Tanggal Lahir | : Pontianak, 09 Oktober 1982 |\n| Alamat                   | : JL. Ya'M. Sabran. Komp. Graha Mitra Peramai 1 A 12, Kel. Tanjung Hulu, Kec. Pontianak Timur |\n| Alamat Email             | : htoyyiban412@gmail.com |\n| WA                       | : 0852-4577-2587 |\n| Motto hidup              | : Khairunnas 'anfauhum linnas |\n| Status                   | : Mahasiswi |\n\n**Pendidikan**\n1. SDN 172 Pontianak (Lulus 1994)\n2. MTS, Al-Ma'Arif Pontianak (Lulus 1997)\n3. SMK N 1 Pontianak (Lulus 2000)\n4. STAIN Pontianak (Lulus 2005)\n\n**Pekerjaan**\n1. Pendamping Proses Produk Halal (PPPH) Halal Center IAIN Pontianak\n2. Penyelia Halal\n3. Jasa Perizinan\n\n**Organisasi**\n1. Dirut PT. SSK (Sahabat Sukses Kalimantan Barat) Kabupaten Kubu Raya Tahun 2020-2022\n2. Dirut PT. SHK (Simpul Hijau Khatulistiwa) Pontianak Timur Tahun 2022\n3. IWAPI (Ikatan Wanita Pengusaha Indonesia) Kota Pontianak Tahun 2024-2029\n4. Pengurus DPD KPPI (Kaukus Perempuan Politik Indonesia) Tahun 2025-2029\n5. Pengurus GENPRO (Global Enterpreneurs Professsional) KALBAR VP. Entrepreneur Women Tahun 2026-2028` },
+            { id: 't40', category: 'Pasca-KKN', title: '40. Panduan Format Laporan Akhir KKL', content: `LAPORAN AKHIR KULIAH KERJA LAPANGAN (KKL)\nJUDUL KEGIATAN: (Ditulis dengan jelas, spesifik, dan mencerminkan solusi yang ditawarkan)\n\nDISUSUN OLEH:\nKetua Kelompok : (NIM)\nAnggota        : (NIM)\n\nLEMBAGA PENELITIAN DAN PENGABDIAN KEPADA MASYARAKAT (LPPM)\nINSTITUT AGAMA ISLAM NEGERI (IAIN) PONTIANAK\nTAHUN 2026\n\n---\nBAB I: PENDAHULUAN\n1.1 Latar Belakang (Gambaran umum masalah, relevansi dengan tema strategis KKL, alasan pemilihan lokasi)\n1.2 Tujuan dan Manfaat Kegiatan\n1.3 Kondisi Umum Lokasi\n\nBAB II: METODE PELAKSANAAN\n1.1 Waktu dan Tempat Pelaksanaan\n1.2 Metode Pendekatan\n1.3 Rencana Aksi Detail (RAD) / Tahapan Kegiatan\n1.4 Target Peserta dan Mitra\n\nBAB III: HASIL DAN PEMBAHASAN\n1.1 Deskripsi Pelaksanaan Program\n1.2 Analisis Output (Luaran Langsung)\n1.3 Analisis Outcome (Dampak/Perubahan)\n1.4 Integrasi Nilai Keislaman dan Kearifan Lokal\n1.5 Kendala dan Solusi\n\nBAB IV: PENUTUP\n4.1 Kesimpulan\n4.2 Rekomendasi Keberlanjutan (Exit Strategy)\n\nDAFTAR PUSTAKA\nLAMPIRAN (Dokumentasi, Logbook, Daftar Hadir, dll)` },
+            { id: 't41', category: 'Pasca-KKN', title: '41. Panduan Laporan Individu (Refleksi)', content: `STRUKTUR ISI REFLEKSI INDIVIDU (Maksimal 3 Halaman)\n\nJUDUL REFLEKSI\n(Contoh: "Belajar Merajut Harmoni: Refleksi Nilai Rahmatan lil 'Alamin dalam Pendampingan UMKM di Tengah Keragaman Budaya Dayak dan Melayu di Desa X")\n\n1. Pendahuluan (Ekspektasi dan Realitas Lapangan)\n- Gambarkan kondisi awal dan ekspektasi sebelum terjun ke lokasi.\n- Deskripsikan realitas pertama yang ditemui di lapangan dan adaptasi awal.\n\n2. Inti Refleksi Pembelajaran\n- Interaksi Sosial dan Kearifan Lokal: Ceritakan pengalaman konkret interaksi dengan masyarakat majemuk.\n- Integrasi Nilai Keislaman (Rahmatan lil 'Alamin): Refleksikan bagaimana prinsip kasih sayang universal diterapkan.\n- Tantangan dan Transformasi Diri: Uraikan kendala terbesar dan perubahan signifikan pada diri sendiri.\n\n3. Penutup (Komitmen dan Rekomendasi)\n- Simpulkan pembelajaran transformatif terbesar.\n- Berikan 1-2 rekomendasi konkret untuk perbaikan KKL.` },
+            { id: 't42', category: 'Pelaksanaan', title: '42. Format Rencana Aksi Detail (RAD)', content: `FORMAT RENCANA AKSI DETAIL (RAD)\n\n| No | Nama Kegiatan | Tujuan Spesifik (Output/Outcome) | Sasaran / Peserta | Metode Pelaksanaan | Waktu & Tempat | Penanggung Jawab | Kebutuhan Sumber Daya | Indikator Keberhasilan |\n| -- | ------------- | -------------------------------- | ----------------- | ------------------ | -------------- | ---------------- | --------------------- | ---------------------- |\n| 1  | Pelatihan A   | Meningkatkan keterampilan warga  | 20 Warga Desa     | Workshop Praktik   | Balai Desa     | Mhs A            | Modul, Laptop         | 80% paham materi       |\n| 2  | Sosialisasi B | Meningkatkan kesadaran           | 50 Warga          | FGD & Penyuluhan   | Masjid Desa    | Mhs B            | Spanduk, Brosur       | Dibagikannya 50 brosur |` },
+            { id: 't43', category: 'Jurnal Harian', title: '43. Format Logbook Harian', content: `LOGBOOK HARIAN DAN MINGGUAN KKL\n\n| No | Hari/Tanggal | Waktu & Durasi | Uraian Kegiatan (Sesuai RAD) | Target Peserta/Mitra | Kendala yang Dihadapi | Solusi / Tindak Lanjut | Rencana Esok Hari |\n| -- | ------------ | -------------- | ---------------------------- | -------------------- | --------------------- | ---------------------- | ----------------- |\n| 1  | Senin, ...   | 08.00-12.00    | Observasi partisipatif       | Kepala Desa          | Jadwal bentrok        | Menyesuaikan waktu     | Wawancara tokoh   |\n| 2  |              |                |                              |                      |                       |                        |                   |` }
+        ];
+        
+        let state = {
+            theme: localStorage.getItem('kknku_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
+            activeTab: 'notes',
+            notes: JSON.parse(localStorage.getItem('kknku_notes')) || [],
+            tasks: JSON.parse(localStorage.getItem('kknku_tasks')) || [],
+            absensi: JSON.parse(localStorage.getItem('kknku_absensi')) || [],
+            keuangan: JSON.parse(localStorage.getItem('kknku_keuangan')) || [],
+            agenda: JSON.parse(localStorage.getItem('kknku_agenda')) || [],
+            templates: JSON.parse(localStorage.getItem('kknku_templates')) || rawTemplates,
+            editingNoteId: null,
+            editingType: 'note',
+            viewingDoc: null,
+            editorUndoBuffer: '',
+            deleteTarget: null,
+            editingJournalId: null
+        };
+        let recognition = null;
+        let isRecording = false;
+        
+        if (state.notes.length === 0 && state.tasks.length === 0 && state.agenda.length === 0) {
+            state.notes = [{ id: `mock-1`, title: `Rapat Evaluasi Minggu Pertama`, content: `--- PEMBUKAAN RAPAT ---<br><br>Ringkasan Diskusi:<br>• Warga mengeluhkan kurangnya sosialisasi terkait program bank sampah.<br>• Divisi acara butuh tambahan dana untuk proyektor.<br><br>--- KESIMPULAN ---<br>Keputusan Final:<br>1. Sosialisasi bank sampah akan diulang door-to-door pada hari Jumat.<br>2. Dana proyektor dialihkan dari sisa kas konsumsi.<br>3. Rapat selanjutnya diagendakan hari Minggu malam.`, date: new Date().toISOString() }];
+            state.tasks = [{ id: 'ts-1', text: 'Cetak surat undangan', pic: 'Sekretaris', done: false }];
+            state.agenda = [{ id: 'ag-1', text: 'Penyuluhan Pertanian', date: '2026-07-20', location: 'Balai Desa', done: false }];
+            saveData();
+        }
+        
+        function saveData() {
+            localStorage.setItem('kknku_notes', JSON.stringify(state.notes));
+            localStorage.setItem('kknku_tasks', JSON.stringify(state.tasks));
+            localStorage.setItem('kknku_absensi', JSON.stringify(state.absensi));
+            localStorage.setItem('kknku_keuangan', JSON.stringify(state.keuangan));
+            localStorage.setItem('kknku_agenda', JSON.stringify(state.agenda));
+            localStorage.setItem('kknku_templates', JSON.stringify(state.templates));
+            updateDashboardStats();
+        }
+        
+        function updateDashboardStats() {
+            document.getElementById('stat-notes').textContent = state.notes.length;
+            document.getElementById('stat-tasks').textContent = state.tasks.filter(t => !t.done).length;
+            document.getElementById('stat-absensi').textContent = state.absensi.length;
+            document.getElementById('stat-agenda').textContent = state.agenda.length;
+            document.getElementById('stat-templates').textContent = state.templates.length;
+        }
+        
+        function applyTheme() {
+            document.documentElement.classList.toggle('dark', state.theme === 'dark');
+            document.getElementById('icon-theme').setAttribute('data-lucide', state.theme === 'dark' ? 'sun' : 'moon');
+            lucide.createIcons();
+            localStorage.setItem('kknku_theme', state.theme);
+        }
+        
+        document.getElementById('btn-theme').addEventListener('click', () => {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            applyTheme();
+        });
+        
+        function toggleSidebar(forceClose = false) {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (forceClose || !sidebar.classList.contains('-translate-x-full')) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+            }
+        }
+        
+        const tabNames = {
+            'notes': 'Arsip Notulensi',
+            'tasks': 'Delegasi Tugas',
+            'absensi': 'Absensi & Jurnal',
+            'keuangan': 'Buku Kas Kelompok',
+            'agenda': 'Kalender Akademik',
+            'templates': 'Pustaka Surat',
+            'modul_kkl': 'Modul KKL 2026',
+            'modul_sihalal': 'Panduan SIHALAL',
+            'modul_materi': 'Materi Halal BPJPH',
+            'modul_pks': 'Perjanjian Kerja Sama',
+            'settings': 'Pengaturan Sistem'
+        };
+        
+        function switchTab(tab) {
+            state.activeTab = tab;
+            document.getElementById('breadcrumb-text').textContent = tabNames[tab];
+            
+            Object.keys(tabNames).forEach(t => {
+                const btn = document.getElementById(`nav-${t}`);
+                if (btn) {
+                    if(t === tab) {
+                        btn.classList.add('nav-active');
+                        btn.classList.remove('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-50', 'dark:hover:bg-slate-800');
+                    } else {
+                        btn.classList.remove('nav-active');
+                        btn.classList.add('text-slate-600', 'dark:text-slate-400', 'hover:bg-slate-50', 'dark:hover:bg-slate-800');
+                    }
+                }
+            });
+            
+            toggleSidebar(true);
+            if (window.innerWidth < 768) {
+                document.getElementById('scroll-container').scrollTo({ top: 150, behavior: 'smooth' });
+            }
+            renderContent();
+        }
+        
+        function formatProfessionalTables(text) {
+            if (!text) return '';
+            const lines = text.split('\n');
+            let resultHtml = '';
+            let inTable = false;
+            let tableLines = [];
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                const isDivider = line.includes('---') && (line.includes('+') || line.includes('|') || line.includes('-'));
+                const isRow = line.includes('|');
+                
+                if (isRow || isDivider) {
+                    if (!inTable) {
+                        inTable = true;
+                        tableLines = [];
+                    }
+                    tableLines.push(line);
+                } else {
+                    if (inTable) {
+                        resultHtml += renderHtmlTable(tableLines);
+                        inTable = false;
+                        tableLines = [];
+                    }
+                    resultHtml += escapeHtml(line) + '<br>';
+                }
+            }
+            if (inTable) resultHtml += renderHtmlTable(tableLines);
+            return resultHtml;
+        }
+        
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+        
+        function renderHtmlTable(lines) {
+            const dataRows = lines.filter(line => line.includes('|') && !line.includes('----'));
+            if (dataRows.length === 0) return '';
+            let html = '<div class="table-responsive"><table class="formal-letter-table w-full">';
+            dataRows.forEach((row, index) => {
+                const cols = row.split('|').map(c => c.trim()).filter((c, i, arr) => {
+                    if (i === 0 && c === '') return false;
+                    if (i === arr.length - 1 && c === '') return false;
+                    return true;
+                });
+                html += '<tr>';
+                cols.forEach(col => {
+                    if (index === 0) html += `<th>${escapeHtml(col)}</th>`;
+                    else html += `<td>${escapeHtml(col)}</td>`;
+                });
+                html += '</tr>';
+            });
+            html += '</table></div>';
+            return html;
+        }
+        
+        let tableConfig = { cols: 3, rows: 3 };
+        
+        function openTableModal() {
+            tableConfig = { cols: 3, rows: 3 };
+            document.getElementById('tc-cols').textContent = tableConfig.cols;
+            document.getElementById('tc-rows').textContent = tableConfig.rows;
+            renderTableBuilder();
+            document.getElementById('table-modal').classList.remove('hidden');
+        }
+        
+        function closeTableModal() {
+            document.getElementById('table-modal').classList.add('hidden');
+        }
+        
+        function updateTableConfig(type, change) {
+            if (type === 'col') {
+                tableConfig.cols = Math.max(1, Math.min(10, tableConfig.cols + change));
+                document.getElementById('tc-cols').textContent = tableConfig.cols;
+            } else {
+                tableConfig.rows = Math.max(1, Math.min(20, tableConfig.rows + change));
+                document.getElementById('tc-rows').textContent = tableConfig.rows;
+            }
+            renderTableBuilder();
+        }
+        
+        function renderTableBuilder() {
+            const container = document.getElementById('table-builder-container');
+            container.innerHTML = '';
+            const grid = document.createElement('div');
+            grid.className = 'grid gap-2 min-w-max';
+            grid.style.gridTemplateColumns = `repeat(${tableConfig.cols}, minmax(130px, 1fr))`;
+            
+            for(let c=0; c<tableConfig.cols; c++) {
+                grid.innerHTML += `<input type="text" id="tb-0-${c}" placeholder="Header ${c+1}" class="w-full p-2.5 text-sm font-bold bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg outline-none focus:border-indigo-500 text-slate-900 dark:text-white text-center" />`;
+            }
+            for(let r=1; r<=tableConfig.rows; r++) {
+                for(let c=0; c<tableConfig.cols; c++) {
+                    grid.innerHTML += `<input type="text" id="tb-${r}-${c}" placeholder="Isi sel..." class="w-full p-2.5 text-sm bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg outline-none focus:border-indigo-500 text-slate-800 dark:text-slate-200" />`;
+                }
+            }
+            container.appendChild(grid);
+        }
+        
+        function insertGeneratedTable() {
+            let html = '<div class="table-responsive"><table class="formal-letter-table w-full">';
+            html += '<thead><tr>';
+            for(let c=0; c<tableConfig.cols; c++) {
+                html += `<th>${escapeHtml(document.getElementById(`tb-0-${c}`).value.trim() || `Header ${c+1}`)}</th>`;
+            }
+            html += '</tr></thead><tbody>';
+            for(let r=1; r<=tableConfig.rows; r++) {
+                html += '<tr>';
+                for(let c=0; c<tableConfig.cols; c++) {
+                    html += `<td>${escapeHtml(document.getElementById(`tb-${r}-${c}`).value.trim() || '')}<br></td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</tbody></table></div><p><br></p>';
+            closeTableModal();
+            insertToEditor(html, true);
+        }
+
+        let virtualStore = {};
+        let itemObserver = null;
+        let lastScrollY = 0;
+        let scrollDirection = 'down';
+        const scrollContainer = document.getElementById('scroll-container');
+        
+        scrollContainer.addEventListener('scroll', (e) => {
+            const currentY = e.target.scrollTop;
+            scrollDirection = currentY > lastScrollY ? 'down' : 'up';
+            lastScrollY = currentY;
+        }, { passive: true });
+        
+        function renderContent() {
+            if (itemObserver) itemObserver.disconnect();
+            virtualStore = {};
+            
+            itemObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    const el = entry.target;
+                    if (entry.isIntersecting) {
+                        if (el.innerHTML === '') {
+                            el.innerHTML = virtualStore[el.id];
+                            lucide.createIcons({ root: el });
+                            const child = el.firstElementChild;
+                            if (child && child.classList.contains('opacity-0')) {
+                                child.classList.remove('opacity-0');
+                                child.classList.add('will-change-transform', scrollDirection === 'down' ? 'scroll-enter-up' : 'scroll-enter-down');
+                                child.onanimationend = () => { child.classList.remove('scroll-enter-up', 'scroll-enter-down', 'will-change-transform'); };
+                            }
+                        }
+                        el.style.minHeight = 'auto'; 
+                    } else {
+                        if (el.innerHTML !== '') {
+                            el.style.minHeight = el.getBoundingClientRect().height + 'px';
+                            el.innerHTML = ''; 
+                        }
+                    }
+                });
+            }, { root: scrollContainer, rootMargin: '100px 0px' });
+            
+            const container = document.getElementById('content-area');
+            let html = '';
+            
+            // DASHBOARDS
+            if (state.activeTab === 'notes') {
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden shadow-sm">
+                    <div class="px-5 py-5 border-b border-slate-200 dark:border-slate-800 flex justify-between items-center bg-slate-50 dark:bg-slate-800/50">
+                        <h2 class="font-bold text-slate-800 dark:text-white flex items-center gap-2"><i data-lucide="book-open" class="w-5 h-5 text-blue-500"></i> Data Arsip Notulensi</h2>
+                    </div>
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800/50">
+                `;
+                if (state.notes.length === 0) html += `<div class="p-8 text-center text-slate-400">Arsip kosong.</div>`;
+                state.notes.forEach(note => {
+                    const vId = 'vitem-' + note.id;
+                    virtualStore[vId] = `
+                        <div class="opacity-0 w-full text-left p-4 md:px-6 hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors group block">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                <div onclick="openViewer('${note.id}')" class="flex-1 cursor-pointer min-w-0">
+                                    <div class="flex items-center gap-2 mb-1.5">
+                                        <span class="text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">Dokumen</span>
+                                        <span class="text-xs font-medium text-slate-500"><i data-lucide="clock" class="w-3.5 h-3.5 inline"></i> ${new Date(note.date).toLocaleString('id-ID', {dateStyle:'medium', timeStyle:'short'})}</span>
+                                    </div>
+                                    <h3 class="font-bold text-[16px] text-slate-900 dark:text-white truncate mb-1">${note.title}</h3>
+                                    <p class="text-sm text-slate-500 dark:text-slate-400 truncate">${note.content.replace(/<[^>]*>?/gm, ' ')}</p>
+                                </div>
+                                <div class="flex items-center gap-2 shrink-0">
+                                    <button onclick="event.stopPropagation(); openViewer('${note.id}')" class="px-5 py-2.5 text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700 rounded-xl transition-colors border border-slate-200 dark:border-slate-700 shadow-sm">Buka</button>
+                                    <button onclick="event.stopPropagation(); triggerDelete('${note.id}', 'note')" class="p-2.5 text-sm font-bold text-red-600 bg-red-50 hover:bg-red-100 dark:bg-red-900/20 dark:hover:bg-red-900/40 rounded-xl transition-colors border border-red-200 dark:border-red-900/50 shadow-sm"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full"></div>`;
+                });
+                html += `</div></div>`;
+            } 
+            else if (state.activeTab === 'tasks') {
+                html += `
+                    <div class="bg-white dark:bg-siska-panel p-5 md:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm mb-6">
+                        <h2 class="font-bold text-slate-800 dark:text-white flex items-center gap-2 mb-4"><i data-lucide="check-square" class="w-5 h-5 text-amber-500"></i> Form Input Delegasi</h2>
+                        <form id="form-task" class="flex flex-col md:flex-row gap-3">
+                            <input id="input-task-text" required placeholder="Tindak lanjut rapat..." class="flex-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-amber-500" />
+                            <div class="flex gap-2 w-full md:w-auto">
+                              <input id="input-task-pic" required placeholder="Nama PIC" class="w-full min-w-0 flex-1 md:w-48 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-amber-500" />
+                             <button type="submit" class="shrink-0 bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm px-6 py-3 rounded-xl active:scale-95 transition-all shadow-md">Tambah</button>
+                           </div>
+                        </form>
+                    </div>
+                    <div class="bg-white dark:bg-siska-panel border border-slate-200 dark:border-slate-800 rounded-2xl shadow-sm overflow-hidden">
+                        <div class="table-responsive">
+                            <div class="min-w-[600px] w-full flex flex-col">
+                                <div class="flex items-center bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 text-xs font-bold uppercase tracking-widest border-b border-slate-200 dark:border-slate-800 py-4 px-5">
+                                    <div class="w-16 text-center">Sts</div>
+                                    <div class="flex-1 min-w-[200px]">Uraian Tugas</div>
+                                    <div class="w-48">Delegasi (PIC)</div>
+                                    <div class="w-20 text-right">Aksi</div>
+                                </div>
+                                <div class="divide-y divide-slate-100 dark:divide-slate-800/50">`;
+                state.tasks.forEach(task => {
+                    const vId = 'vitem-' + task.id;
+                    const statusClass = task.done ? 'bg-slate-50/50 dark:bg-slate-900/30' : 'bg-white dark:bg-siska-panel';
+                    const iconClass = task.done ? 'text-emerald-500' : 'text-slate-300 dark:text-slate-600';
+                    const iconName = task.done ? 'check-square' : 'circle';
+                    const textClass = task.done ? 'line-through text-slate-400' : 'text-slate-800 dark:text-slate-200 font-medium';
+                    virtualStore[vId] = `
+                        <div class="opacity-0 group ${statusClass} hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors cursor-pointer flex items-center py-4 px-5" onclick="toggleTask('${task.id}')">
+                            <div class="w-16 text-center shrink-0">
+                                <button class="${iconClass} p-2 active:scale-95 transition-transform"><i data-lucide="${iconName}" class="w-6 h-6"></i></button>
+                            </div>
+                            <div class="flex-1 min-w-0 pr-4">
+                                <p class="text-[15px] ${textClass} truncate">${task.text}</p>
+                            </div>
+                            <div class="w-48 shrink-0">
+                                <span class="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-md uppercase tracking-wider border border-slate-200 dark:border-slate-700">${task.pic}</span>
+                            </div>
+                            <div class="w-20 text-right shrink-0">
+                                <button onclick="event.stopPropagation(); triggerDelete('${task.id}', 'task')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full"></div>`;
+                });
+                html += `</div></div></div></div>`;
+            }
+            else if (state.activeTab === 'absensi') {
+                html += `
+                    <div class="bg-rose-50 dark:bg-rose-900/10 p-5 md:p-6 rounded-2xl border border-rose-200 dark:border-rose-900/30 shadow-sm mb-6">
+                        <div class="flex justify-between items-center mb-4">
+                            <h2 class="font-bold text-rose-800 dark:text-rose-400 flex items-center gap-2"><i data-lucide="users" class="w-6 h-6"></i> Catat Jurnal & Absensi KKL</h2>
+                            <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 px-2.5 py-1.5 rounded-md">Kelompok Sengkubang</span>
+                        </div>
+                        <form id="form-absensi" class="flex flex-col gap-4">
+                            <div class="flex flex-col md:flex-row gap-3">
+                                <div class="flex-1">
+                                    <label class="block text-xs font-bold text-rose-700 dark:text-rose-500 mb-1.5 uppercase tracking-wider">Tanggal Kegiatan / Hari Ke-</label>
+                                    <input id="input-absen-date" type="date" required class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-rose-500" />
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-rose-700 dark:text-rose-500 mb-1.5 uppercase tracking-wider">Materi Bimbingan / Deskripsi Full Kegiatan</label>
+                                <textarea id="input-absen-text" required placeholder="Catat detail aktivitas harian dan hasil evaluasi pembimbing di sini..." class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-rose-500 resize-none h-28"></textarea>
+                            </div>
+                            
+                            <div class="mt-2 bg-white dark:bg-siska-panel border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden shadow-sm">
+                                <div class="bg-slate-100 dark:bg-slate-800 px-5 py-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center">
+                                    <span class="text-sm font-bold text-slate-600 dark:text-slate-300">Daftar Kehadiran Anggota</span>
+                                    <button type="button" onclick="selectAllAbsen()" class="text-sm font-semibold text-blue-600 dark:text-blue-400 hover:underline">Pilih Semua</button>
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 p-4 gap-x-6 gap-y-3" id="absen-checkbox-container"></div>
+                            </div>
+                            <button type="submit" class="w-full bg-rose-600 hover:bg-rose-700 text-white font-bold text-sm px-6 py-3.5 rounded-xl active:scale-95 transition-all shadow-md mt-2 flex items-center justify-center gap-2"><i data-lucide="save" class="w-5 h-5"></i> Simpan Absensi & Jurnal</button>
+                        </form>
+                    </div>
+                    <div class="relative border-l-[3px] border-slate-200 dark:border-slate-700 ml-4 pl-6 space-y-6">`;
+                
+                if (state.absensi.length === 0) html += `<p class="text-slate-400 text-sm italic">Belum ada catatan jurnal harian.</p>`;
+                state.absensi.sort((a, b) => new Date(b.date) - new Date(a.date)).forEach(ab => {
+                    const vId = 'vitem-' + ab.id;
+                    const presentCount = Object.values(ab.attendance).filter(v => v).length;
+                    virtualStore[vId] = `
+                        <div class="opacity-0 relative bg-white dark:bg-siska-panel p-5 md:p-6 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all group">
+                            <div class="absolute -left-[32.5px] top-7 w-5 h-5 bg-rose-500 rounded-full ring-[6px] ring-slate-100 dark:ring-siska-darker"></div>
+                            <div class="flex justify-between items-start gap-4">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-3">
+                                        <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300 border border-slate-200 dark:border-slate-700 flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${new Date(ab.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'long', year:'numeric'})}</span>
+                                        <span class="px-2.5 py-1 rounded-md text-[10px] font-bold bg-rose-100 text-rose-700 dark:bg-rose-900/40 dark:text-rose-400 flex items-center gap-1.5"><i data-lucide="check-circle" class="w-3.5 h-3.5"></i> ${presentCount}/20 Hadir</span>
+                                    </div>
+                                    <div class="relative bg-slate-50 dark:bg-slate-900/50 p-4 md:p-5 rounded-xl border border-slate-100 dark:border-slate-800/80 mb-4 group/journal">
+                                        <p id="desc-text-${ab.id}" class="text-[15px] text-slate-700 dark:text-slate-300 leading-relaxed font-medium whitespace-pre-wrap">${ab.text}</p>
+                                        <div class="absolute top-2 right-2 flex items-center gap-1 opacity-100 sm:opacity-0 group-hover/journal:opacity-100 transition-opacity bg-white/80 dark:bg-slate-900/80 backdrop-blur-sm p-1 rounded-lg border border-slate-200 dark:border-slate-800">
+                                            <button onclick="copyJournalDescription('${ab.id}')" class="p-2 hover:text-indigo-600 dark:hover:text-indigo-400 text-slate-400 transition-colors" title="Salin Deskripsi"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                            <button onclick="openEditJournalModal('${ab.id}')" class="p-2 hover:text-teal-600 dark:hover:text-teal-400 text-slate-400 transition-colors" title="Edit Deskripsi"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                        </div>
+                                    </div>
+                                    <details class="text-sm group/details">
+                                        <summary class="font-bold text-slate-500 cursor-pointer hover:text-rose-500 select-none flex items-center gap-1 mb-2 outline-none"><i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-open/details:rotate-90"></i> Lihat Rincian Absensi</summary>
+                                        <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pl-5">
+                                            ${STUDENTS_DATA.map(student => `
+                                                <div class="flex items-center gap-2 ${ab.attendance[student.nim] ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-slate-400 line-through'}">
+                                                    <i data-lucide="${ab.attendance[student.nim] ? 'check' : 'x'}" class="w-4 h-4 shrink-0"></i>
+                                                    <span class="truncate" title="${student.name}">${student.name}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </details>
+                                </div>
+                                <button onclick="event.stopPropagation(); triggerDelete('${ab.id}', 'absensi')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full"></div>`;
+                });
+                html += `</div>`;
+            }
+            else if (state.activeTab === 'keuangan') {
+                html += `
+                    <div class="bg-indigo-50 dark:bg-indigo-900/10 p-6 md:p-8 rounded-2xl border border-indigo-200 dark:border-indigo-900/30 shadow-sm mb-6 text-center">
+                        <div class="w-20 h-20 bg-indigo-100 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 rounded-2xl flex items-center justify-center mx-auto mb-5 shadow-sm">
+                            <svg viewBox="0 0 24 24" class="w-10 h-10 text-indigo-500" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect>
+                                <line x1="16" y1="2" x2="16" y2="6"></line>
+                                <line x1="8" y1="2" x2="8" y2="6"></line>
+                                <line x1="3" y1="10" x2="21" y2="10"></line>
+                                <path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M16 14h.01"></path>
+                                <path d="M8 18h.01"></path><path d="M12 18h.01"></path><path d="M16 18h.01"></path>
+                            </svg>
+                        </div>
+                        <h2 class="text-xl md:text-2xl font-black text-slate-900 dark:text-white mb-3">Buku Kas & Transaksi Keuangan</h2>
+                        <p class="text-[15px] text-slate-600 dark:text-slate-400 max-w-lg mx-auto mb-8 leading-relaxed">
+                            Kami telah mengintegrasikan pencatatan kas kelompok ke aplikasi keuangan profesional kami yang super lengkap. Anda dapat mencatat pemasukan, pengeluaran, laporan laba rugi, dan bagan keuangan secara interaktif langsung pada dasbor keuangan kami.
+                        </p>
+                        <div class="flex flex-col sm:flex-row gap-3 justify-center items-center">
+                            <a href="https://komlaps2a-svg.github.io/finance-dashboard/" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-sm px-8 py-3.5 rounded-xl transition-all shadow-md active:scale-95">
+                                <i data-lucide="external-link" class="w-5 h-5"></i> Buka Aplikasi Buku Kas Lengkap
+                            </a>
+                        </div>
+                    </div>
+                    <div class="bg-white dark:bg-siska-panel rounded-2xl border border-slate-200 dark:border-slate-800 p-5 md:p-6 shadow-sm">
+                        <h3 class="font-bold text-slate-800 dark:text-white mb-4 text-[15px]">Panduan Penggunaan Kas Terintegrasi:</h3>
+                        <ul class="space-y-3 text-sm text-slate-600 dark:text-slate-400">
+                            <li class="flex gap-2.5 items-start"><span class="text-indigo-500 font-bold">•</span><span>Catat semua iuran kelompok secara rutin pada menu transaksi di aplikasi kas.</span></li>
+                            <li class="flex gap-2.5 items-start"><span class="text-indigo-500 font-bold">•</span><span>Seluruh pengeluaran posko (seperti bahan konsumsi atau pembelian proyektor/peralatan) wajib disertai deskripsi.</span></li>
+                            <li class="flex gap-2.5 items-start"><span class="text-indigo-500 font-bold">•</span><span>Gunakan fitur ekspor laporan keuangan di dalam tautan di atas untuk melampirkan berkas di LPJ Akhir.</span></li>
+                        </ul>
+                    </div>
+                `;
+            }
+            else if (state.activeTab === 'agenda') {
+                html += `
+                    <div class="bg-emerald-50 dark:bg-emerald-900/10 p-5 md:p-6 rounded-2xl border border-emerald-200 dark:border-emerald-900/30 shadow-sm mb-8">
+                        <h2 class="font-bold text-emerald-800 dark:text-emerald-400 flex items-center gap-2 mb-4"><i data-lucide="calendar-plus" class="w-5 h-5"></i> Plot Kalender Baru</h2>
+                        <form id="form-agenda" class="flex flex-col md:flex-row gap-3">
+                            <input id="input-agenda-text" required placeholder="Nama Kegiatan (Misal: Senam Bersama)" class="flex-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500" />
+                            <div class="flex gap-2">
+                                <input id="input-agenda-date" type="date" required class="flex-1 md:w-40 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500" />
+                                <input id="input-agenda-loc" placeholder="Lokasi" class="flex-1 md:w-48 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-emerald-500" />
+                            </div>
+                            <button type="submit" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-sm px-6 py-3 rounded-xl active:scale-95 transition-all shadow-md">Jadwalkan</button>
+                        </form>
+                    </div>
+                    <div class="relative border-l-[3px] border-slate-200 dark:border-slate-700 ml-4 pl-6 space-y-6">`;
+                
+                if (state.agenda.length === 0) html += `<p class="text-slate-400 text-sm italic">Belum ada agenda diset.</p>`;
+                state.agenda.forEach(ag => {
+                    const vId = 'vitem-' + ag.id;
+                    const isDone = ag.done;
+                    const statusClass = isDone ? 'bg-slate-50 dark:bg-slate-900/50 opacity-60' : 'bg-white dark:bg-siska-panel';
+                    const dotClass = isDone ? 'bg-slate-400' : 'bg-emerald-500';
+                    const textClass = isDone ? 'line-through text-slate-500' : 'text-slate-800 dark:text-slate-200';
+                    virtualStore[vId] = `
+                        <div class="opacity-0 relative ${statusClass} p-5 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-700 transition-all group cursor-pointer" onclick="toggleAgenda('${ag.id}')">
+                            <div class="absolute -left-[32.5px] top-7 w-5 h-5 ${dotClass} rounded-full ring-[6px] ring-slate-100 dark:ring-siska-darker transition-colors"></div>
+                            <div class="flex justify-between items-start gap-4">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-2">
+                                        <span class="px-2.5 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${isDone ? 'bg-slate-200 text-slate-600 dark:bg-slate-700 dark:text-slate-300' : 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400'} border ${isDone ? 'border-slate-300 dark:border-slate-600' : 'border-emerald-200 dark:border-emerald-800'}">${isDone ? 'Selesai' : 'Berjalan'}</span>
+                                        <span class="text-xs font-semibold text-slate-500 flex items-center gap-1.5"><i data-lucide="calendar" class="w-3.5 h-3.5"></i> ${new Date(ag.date).toLocaleDateString('id-ID', {weekday:'long', day:'numeric', month:'short', year:'numeric'})}</span>
+                                    </div>
+                                    <h3 class="font-bold text-[17px] ${textClass} leading-snug mb-2">${ag.text}</h3>
+                                    <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4"></i> ${ag.location || 'Lokasi Belum Ditentukan'}</p>
+                                </div>
+                                <button onclick="event.stopPropagation(); triggerDelete('${ag.id}', 'agenda')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full"></div>`;
+                });
+                html += `</div>`;
+            }
+            else if (state.activeTab === 'templates') {
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm overflow-hidden mb-6">
+                    <div class="px-5 py-5 border-b border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex justify-between items-center">
+                        <h2 class="font-bold text-slate-800 dark:text-white flex items-center gap-2"><i data-lucide="briefcase" class="w-5 h-5 text-purple-500"></i> Pustaka Surat & Format KKL</h2>
+                        <span class="text-xs font-bold bg-white dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700">${state.templates.length} Arsip</span>
+                    </div>
+                    <div class="divide-y divide-slate-100 dark:divide-slate-800/50">`;
+                state.templates.forEach(template => {
+                    const vId = 'vitem-' + template.id;
+                    virtualStore[vId] = `
+                        <div class="opacity-0 w-full text-left p-4 md:px-5 hover:bg-slate-50 dark:hover:bg-slate-800/50 flex items-center justify-between gap-4 transition-colors group">
+                            <div onclick="openViewer('${template.id}', true)" class="flex-1 cursor-pointer flex items-center gap-4 min-w-0">
+                                <div class="bg-slate-100 dark:bg-slate-800 p-3 rounded-xl text-slate-500 dark:text-slate-400 group-hover:bg-purple-50 group-hover:text-purple-600 dark:group-hover:bg-purple-900/30 transition-colors shrink-0"><i data-lucide="file-text" class="w-6 h-6"></i></div>
+                                <div class="min-w-0">
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1">${template.category || 'Dokumen'}</span>
+                                    <span class="font-bold text-[15px] text-slate-900 dark:text-slate-200 truncate block">${template.title}</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button onclick="event.stopPropagation(); triggerDelete('${template.id}', 'template')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                            </div>
+                        </div>
+                    `;
+                    html += `<div id="${vId}" class="observe-item w-full"></div>`;
+                });
+                html += `</div></div>`;
+            }
+            
+            // MODUL KKL (FULL 1:1 DARI PDF & PPT)
+            else if (state.activeTab === 'modul_kkl') {
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
+                    <h1 class="text-center">MODUL PANDUAN MAHASISWA KULIAH KERJA LAPANGAN (KKL)<br>INSTITUT AGAMA ISLAM NEGERI (IAIN) PONTIANAK</h1>
+                    <p class="text-center font-bold text-slate-500">"Integrasi Keilmuan, Nilai Islam Rahmatan lil 'Alamin, dan Kearifan Lokal Kalimantan Barat"</p>
+                    <hr class="my-8 border-slate-200 dark:border-slate-700">
+                    
+                    <h2>KATA PENGANTAR</h2>
+                    <p>Puji syukur ke hadirat Allah SWT, Tuhan Yang Maha Esa, atas segala rahmat dan karunia-Nya, sehingga "Modul Panduan Mahasiswa Kuliah Kerja Lapangan (KKL) IAIN Pontianak" ini dapat diselesaikan. Shalawat serta salam semoga senantiasa tercurah kepada junjungan kita, Nabi Muhammad SAW, sang pembawa cahaya Islam sebagai rahmatan lil 'alamin.</p>
+                    <p>Modul ini disusun sebagai kompas dan pedoman praktis bagi para mahasiswa yang akan diterjunkan ke tengah masyarakat. Kami memandang KKL bukan sekadar rutinitas akademik tahunan atau syarat kelulusan, melainkan sebuah perjalanan ilmiah dan spiritual. Ini adalah momentum emas bagi mahasiswa untuk mengintegrasikan keilmuan kontemporer dengan etika keislaman, serta merajut harmoni dalam keberagaman sosial dan budaya di Bumi Khatulistiwa.</p>
+                    <p>Selama 1 hingga 2 bulan ke depan, mahasiswa akan berinteraksi langsung dengan realitas masyarakat yang majemuk meliputi keragaman etnis (Melayu, Dayak, Tionghoa, dan lainnya), pluralitas agama, serta kondisi geografis yang menantang, termasuk di wilayah 3T (Terdepan, Terluar, Tertinggal). Modul ini hadir untuk membekali mahasiswa dengan pemahaman tentang etika pengabdian, adaptasi kearifan lokal, prinsip keselamatan, serta metode pemberdayaan yang partisipatif, di mana masyarakat diposisikan sebagai subjek, bukan sekadar objek.</p>
+                    <p>Melalui panduan ini, kami mengajak mahasiswa untuk melampaui sekadar pencapaian output seremonial. Fokuslah pada outcome dampak nyata, perubahan perilaku, dan keberlanjutan (exit strategy) bagi mitra desa. Jadikan logbook harian, Rencana Aksi Detail (RAD), dan laporan akhir sebagai instrumen akuntabilitas dan refleksi diri yang mendalam. Utamakan prinsip inklusivitas, kesetaraan, dan kasih sayang universal dalam setiap langkah interaksi mahasiswa dengan warga.</p>
+                    
+                    <h2>A. PENGANTAR DAN FILOSOFI KKL</h2>
+                    <h3>1. Apa itu KKL?</h3>
+                    <p>KKL bukan sekadar kegiatan rutin tahunan, melainkan proses ilmiah dan spiritual yang mengintegrasikan keilmuan kontemporer dengan etika dan nilai-nilai keislaman (rahmatan lil 'alamin). KKL bertujuan memberdayakan masyarakat secara partisipatif, kontekstual, dan berkelanjutan.</p>
+                    <h3>2. Konteks Lapangan</h3>
+                    <p>Lokus KKL mencakup 14 kabupaten/kota di Kalimantan Barat, termasuk wilayah 3T (Terdepan, Terluar, Tertinggal). Mahasiswa akan berinteraksi dengan masyarakat yang sangat majemuk (Etnis: Melayu, Dayak, Tionghoa dan lain-lain; Agama: Islam, Kristen, Katolik, Hindu, Buddha, Konghucu). Keragaman ini adalah kekayaan yang harus dikelola dengan bijak.</p>
+                    
+                    <h2>B. PANDUAN KKL REGULER</h2>
+                    <p>Jalur ini diperuntukkan bagi mahasiswa yang akan diterjunkan secara kolektif dan terstruktur selama 1-2 bulan.</p>
+                    <h3>1. Tahap Pra-Lapangan (Persiapan)</h3>
+                    <ul>
+                        <li><strong>Syarat Pendaftaran:</strong> Minimal semester 7, IPK minimal 2,75, dan wajib mengikuti sosialisasi.</li>
+                        <li><strong>Pembekalan:</strong> Wajib mengikuti pembekalan intensif minimal 1 hari (tatap muka/daring). Materi mencakup etika pengabdian, teknik wawancara, keselamatan kerja, pemahaman adat lokal, dan pendalaman tema teknis.</li>
+                        <li><strong>Pembentukan Kelompok:</strong> 10-20 mahasiswa lintas prodi (multidisiplin) didampingi 1-2 Dosen Pembimbing Lapangan (DPL).</li>
+                    </ul>
+                    <h3>2. Tahap di Lapangan (Pelaksanaan)</h3>
+                    <ul>
+                        <li><strong>Koordinasi Awal:</strong> Bertemu dengan perangkat desa, tokoh adat, dan tokoh agama untuk menyamakan persepsi dan mendapatkan izin.</li>
+                        <li><strong>Observasi Partisipatif (Minimal 3 Hari):</strong> Memetakan potensi, masalah, dan kebutuhan riil masyarakat.</li>
+                        <li><strong>Penyusunan Rencana Aksi Detail (RAD):</strong> Menyusun program kerja yang disepakati bersama masyarakat dan diketahui DPL.</li>
+                        <li><strong>Eksekusi Program:</strong> Menjalankan program (pelatihan, pendampingan, penyuluhan, dll.) dengan prinsip akuntabel, transparan, dan memiliki exit strategy (keberlanjutan).</li>
+                        <li><strong>Pembimbingan:</strong> DPL akan berkunjung minimal 1-3 kali (awal, tengah, akhir) dan melakukan konsultasi daring mingguan.</li>
+                    </ul>
+                    <h3>3. Tahap Pasca-Lapangan (Pelaporan)</h3>
+                    <ul>
+                        <li><strong>Penarikan dan Serah Terima:</strong> Serah terima hasil kegiatan secara simbolis kepada mitra desa (dituangkan dalam Berita Acara).</li>
+                        <li><strong>Penyusunan Laporan:</strong> Logbook harian, Laporan Akhir Kelompok, Laporan Individu.</li>
+                        <li><strong>Seminar Hasil:</strong> Presentasi capaian dan pembelajaran di kampus.</li>
+                    </ul>
+                    
+                    <h2>C. ETIKA, KESELAMATAN, DAN KEARIFAN LOKAL</h2>
+                    <ol>
+                        <li><strong>Adaptasi Budaya:</strong> Hormati adat istiadat Melayu, Dayak, dan Tionghoa. Tanyakan tata krama setempat sebelum bertindak.</li>
+                        <li><strong>Komunikasi Lintas Agama:</strong> Bersikap inklusif dan menghormati tempat ibadah serta ritual agama lain.</li>
+                        <li><strong>Keselamatan di Wilayah 3T:</strong> Patuhi protokol keselamatan, jangan melakukan aktivitas berisiko tinggi sendirian, dan segera laporkan situasi darurat kepada DPL dan LPPM.</li>
+                        <li><strong>Netralitas:</strong> Dilarang memanfaatkan program KKL untuk kepentingan politik praktis atau pribadi.</li>
+                    </ol>
+
+                    <h2>D. PANDUAN TEKNIS DOKUMENTASI & LOGBOOK</h2>
+                    <ol>
+                        <li><strong>Mengisi Logbook Harian:</strong> Mencantumkan uraian kegiatan, durasi, jumlah peserta, kendala, solusi, dan rencana hari berikutnya.</li>
+                        <li><strong>Dokumentasi Visual:</strong> Mengunggah foto/video kegiatan secara berkala ke repositori daring LPPM. Pastikan foto menunjukkan interaksi nyata dengan masyarakat.</li>
+                    </ol>
+
+                    <h2>E. SISTEM PENILAIAN DAN SANKSI</h2>
+                    <h3>1. Bobot Penilaian (KKL Reguler)</h3>
+                    <div class="table-responsive">
+                        <table class="formal-letter-table w-full">
+                            <thead>
+                                <tr><th>Komponen Penilaian</th><th>Bobot (%)</th><th>Keterangan</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Kehadiran dan partisipasi aktif</td><td>20%</td><td>Dinilai dari daftar hadir, logbook, dan observasi DPL.</td></tr>
+                                <tr><td>Laporan Kelompok</td><td>20%</td><td>Kelengkapan, kerapian, dan kualitas dokumentasi.</td></tr>
+                                <tr><td>Esai Kegiatan Pengabdian</td><td>25%</td><td>Dinilai dari substansi, analisis dampak (outcome), rekomendasi keberlanjutan, serta kesesuaian format.</td></tr>
+                                <tr><td>Tulisan Naratif</td><td>35%</td><td>Dinilai oleh DPL (60%) dan mitra desa/kelompok masyarakat (40%) melalui instrumen kepuasan mitra.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h3>2. Sanksi Pelanggaran</h3>
+                    <div class="table-responsive">
+                        <table class="formal-letter-table w-full">
+                            <thead>
+                                <tr><th>Pelanggaran</th><th>Sanksi</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Tidak hadir pembekalan tanpa alasan sah</td><td>Wajib ikut susulan atau Tidak Lulus</td></tr>
+                                <tr><td>Meninggalkan lokasi > 3 hari tanpa izin DPL</td><td>Peringatan tertulis & pengurangan nilai 20 poin</td></tr>
+                                <tr><td>Tidak menyerahkan logbook 2 minggu berturut-turut</td><td>Peringatan tertulis; berlanjut Tidak Lulus</td></tr>
+                                <tr><td>Mengajukan Konversi dengan data palsu/dokumen rekayasa</td><td>Tidak Lulus, wajib ikut Reguler, sanksi akademik</td></tr>
+                                <tr><td>Merugikan masyarakat (pencurian, pelecehan, pelanggaran adat berat)</td><td>Tidak Lulus, wajib ulang, diproses kode etik (skorsing)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h2>F. HAK DAN KEWAJIBAN MAHASISWA</h2>
+                    <h3>1. Hak Mahasiswa</h3>
+                    <p><strong>Reguler:</strong> Mendapat pembekalan, pendampingan DPL, perlindungan hukum institusi, pengakuan SKS/nilai, dan Surat Keterangan PkM.<br>
+                    <strong>Konversi:</strong> Mendapat pengakuan akademik setara (4 SKS), Surat Keterangan Konversi, fasilitas administrasi (surat rekomendasi), dan akses konsultasi Dosen Pembimbing Akademik.</p>
+                    <h3>2. Kewajiban Mahasiswa</h3>
+                    <p><strong>Reguler:</strong> Ikuti seluruh tahapan, patuhi etika/adat, susun laporan tepat waktu, jaga nama baik kampus, dan kembalikan aset pinjaman.<br>
+                    <strong>Konversi:</strong> Ajukan proposal sesuai prosedur, laksanakan sesuai proposal, susun laporan ringkas, dan menanggung seluruh biaya sendiri.</p>
+
+                    <h2>G. CHECKLIST PRAKTIS SEBELUM BERANGKAT (KHUSUS REGULER)</h2>
+                    <div class="table-responsive">
+                        <table class="formal-letter-table w-full">
+                            <thead>
+                                <tr><th>Perlengkapan</th><th>Keterangan</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Surat Tugas dan Surat Pengantar dari Kampus/LPPM sudah di tangan.</td><td>[ ] Sudah &nbsp;&nbsp; [ ] Belum</td></tr>
+                                <tr><td>Kontak DPL dan perangkat desa/mitra sudah tersimpan.</td><td>[ ] Sudah &nbsp;&nbsp; [ ] Belum</td></tr>
+                                <tr><td>Rencana Aksi Detail (RAD) sudah dibahas dan disetujui.</td><td>[ ] Sudah &nbsp;&nbsp; [ ] Belum</td></tr>
+                                <tr><td>Format Logbook dan lembar informed consent (jika ada riset) sudah disiapkan.</td><td>[ ] Sudah &nbsp;&nbsp; [ ] Belum</td></tr>
+                                <tr><td>P3K dan perlengkapan keselamatan dasar sudah dibawa (terutama untuk lokasi 3T).</td><td>[ ] Sudah &nbsp;&nbsp; [ ] Belum</td></tr>
+                                <tr><td>Memahami larangan keras, jangan berjanji memberikan bantuan materi yang tidak bisa dipenuhi, dan jangan memaksakan program yang tidak diinginkan masyarakat.</td><td>[ ] Mengerti &nbsp;&nbsp; [ ] Belum</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                `;
+            }
+
+            else if (state.activeTab === 'modul_sihalal') {
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
+                    <h1 class="text-center">PANDUAN AKTIVASI AKUN PESERTA<br>PELATIHAN PENDAMPING PROSES PRODUK HALAL (PPPH)</h1>
+                    <p class="text-center font-bold text-slate-500">Halal Center IAIN Pontianak</p>
+                    <hr class="my-8 border-slate-200 dark:border-slate-700">
+                    
+                    <h3>Langkah 1: Mengunduh Sertifikat Pelatihan dari LMS BPJPH</h3>
+                    <p>Setelah Bapak/Ibu menyelesaikan tugas dan menonton materi di LMS BPJPH dengan pencapaian Tracking 100%, dan Lulus Pelatihan di atas nilai 60 silakan langsung mengecek sertifikat halal di Akun lembaga pelatihan.</p>
+                    <ol>
+                        <li>Buka website untuk pelatihan: <strong>lembaga.halal.go.id</strong></li>
+                        <li>Login menggunakan Email/Username dan Password akun LMS Bapak/Ibu. Isi penjumlahan angka captcha untuk melanjutkan.</li>
+                        <li>Setelah berhasil masuk ke <em>Dashboard</em>, pilih menu <strong>"Profile"</strong> yang berada di bilah sisi kiri.</li>
+                        <li>Lalu pilih <strong>"Sertifikat Pelatihan Pendamping PPH"</strong>.</li>
+                        <li>Sertifikat Tanda Lulus Pelatihan dari BPJPH akan muncul dan terunduh secara otomatis dalam format PDF.</li>
+                    </ol>
+
+                    <h3>Langkah 2: Aktivasi Akun SiHalal</h3>
+                    <p>Jika Sertifikat LMS Great Edu dan BPJPH sudah terbit di akun peserta pelatihan, selanjutnya lakukan aktivasi akun dengan Login kembali ke portal pendampingan.</p>
+                    <ol>
+                        <li>Kembali ke website portal: <strong>ptsp.halal.go.id</strong></li>
+                        <li>Tampilan pertama setelah login akan memunculkan formulir UPDATE DATA. Lengkapi data-data seperti NIK, Password, Data Rekening, Pekerjaan, dll. Lalu klik "Simpan".</li>
+                        <li>Setelah menekan tombol simpan, <strong>Pakta Integritas</strong> Pendamping Proses Produk Halal akan muncul secara otomatis. Klik SETUJU untuk menyelesaikannya. Tampilan ini akan selalu muncul setiap kali login, karena akun telah diaktifkan dengan mengisi UPDATE DATA. Tahap Pelatihan Selesai.</li>
+                    </ol>
+
+                    <h3>Langkah 3: Penggunaan Website SIHALAL</h3>
+                    <p>Aktivasi akun selesai, selanjutnya login di website SIHALAL. Website untuk Pendampingan, Input Data sekaligus Verval adalah: <strong>ptsp.halal.go.id</strong></p>
+                    <p>SIHALAL adalah singkatan dari Sistem Informasi Halal. Ini merupakan aplikasi layanan Sertifikasi Halal berbasis web yang dikembangkan oleh Badan Penyelenggara Jaminan Produk Halal (BPJPH) Kementerian Agama Republik Indonesia.</p>
+                    <p>Fungsi utama dari SIHALAL adalah untuk mendukung dan memfasilitasi proses pendaftaran dan layanan sertifikasi halal bagi pelaku usaha. Melalui website ini, pelaku usaha bisa:</p>
+                    <ul>
+                        <li>Membuat dan mengelola akun untuk pendaftaran.</li>
+                        <li>Mengajukan permohonan sertifikasi halal untuk produk atau jasanya.</li>
+                        <li>Mengunggah dokumen-dokumen yang diperlukan.</li>
+                        <li>Memantau perkembangan proses sertifikasi halalnya.</li>
+                    </ul>
+                    <p>Login menggunakan akun SIHALAL tanpa perlu mendaftar akun baru jika sudah tersinkronisasi. Begini tampilan Sihalal terbaru untuk penginputan data pelaku usaha, verifikasi dan validasi permohonan pengajuan, serta pendampingan bagi pendamping proses produk halal dalam bertugas.</p>
+                </div>
+                `;
+            }
+
+            else if (state.activeTab === 'modul_materi') {
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
+                    <h1 class="text-center">MATERI SOSIALISASI HALAL<br>PENDAMPINGAN PROSES PRODUK HALAL (P3H)</h1>
+                    <p class="text-center font-bold text-slate-500">"Bersama Mewujudkan Produk Halal, Aman, Sehat, dan Berkah"</p>
+                    <hr class="my-8 border-slate-200 dark:border-slate-700">
+
+                    <h2>1. Dasar Hukum Kewajiban Halal</h2>
+                    <p><strong>Al-Baqarah Ayat 168:</strong><br>
+                    "Wahai manusia, makanlah sebagian (makanan) di bumi yang halal lagi baik dan janganlah mengikuti langkah-langkah setan. Sesungguhnya ia bagimu merupakan musuh yang nyata."</p>
+
+                    <h3>Penahapan Kewajiban Bersertifikat Halal (Bagi UMK)</h3>
+                    <p>Untuk Produk makanan, minuman, hasil sembelihan, dan jasa penyembelihan:</p>
+                    <ul>
+                        <li>Dimulai dari tanggal <strong>17 Oktober 2019</strong></li>
+                        <li>Sampai dengan <strong>17 Oktober 2026</strong></li>
+                    </ul>
+                    <p><em>Sumber: Pasal 160 PP No. 42 Tahun 2024 Tentang Penyelenggaraan Bidang Jaminan Produk Halal.</em></p>
+
+                    <h3>PP 42 Tahun 2024 (Pasal 2)</h3>
+                    <ul>
+                        <li>Produk yang masuk, beredar, dan diperdagangkan di wilayah Indonesia wajib bersertifikat halal.</li>
+                        <li>Produk yang berasal dari Bahan yang diharamkan dikecualikan dari kewajiban bersertifikat halal dan <strong>wajib diberikan keterangan tidak halal</strong>.</li>
+                    </ul>
+
+                    <h2>2. Manfaat Sertifikat Halal Buat Produkmu</h2>
+                    <ul>
+                        <li>Meningkatkan kepercayaan konsumen.</li>
+                        <li>Memberikan jaminan dan kepastian aman.</li>
+                        <li>Memperluas jaringan distribusi produk.</li>
+                        <li>Memberi nilai tambah.</li>
+                        <li>Produk akan memiliki Unique Selling Point.</li>
+                        <li>Meningkatkan kemampuan dalam pemasaran.</li>
+                        <li>Memiliki kesempatan meraih pasar halal global.</li>
+                    </ul>
+
+                    <h2>3. Kriteria Produk yang Wajib Bersertifikat Halal</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div>
+                            <h4>Barang meliputi:</h4>
+                            <ol>
+                                <li>Makanan</li>
+                                <li>Minuman</li>
+                                <li>Obat</li>
+                                <li>Kosmetik</li>
+                                <li>Produk Kimiawi</li>
+                                <li>Produk Biologi</li>
+                                <li>Produk Rekayasa Genetik</li>
+                                <li>Barang gunaan yang dipakai, digunakan, dan dimanfaatkan oleh masyarakat.</li>
+                            </ol>
+                        </div>
+                        <div>
+                            <h4>Jasa Layanan Terkait:</h4>
+                            <ol>
+                                <li>Penyembelihan</li>
+                                <li>Pengolahan</li>
+                                <li>Penyimpanan</li>
+                                <li>Pengemasan</li>
+                                <li>Pendistribusian</li>
+                                <li>Penjualan</li>
+                                <li>Penyajian</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <h2>4. Memahami Informasi Pada Sertifikat Halal</h2>
+                    <p>Sertifikat Halal adalah pengakuan kehalalan suatu produk yang diterbitkan oleh BPJPH berdasarkan fatwa halal MUI.</p>
+                    <ul>
+                        <li>Terdapat lambang garuda.</li>
+                        <li>Menggunakan 3 bahasa (Indonesia, Arab, Inggris).</li>
+                        <li>Nomor Sertifikat Halal dari BPJPH (diawali huruf ID).</li>
+                        <li>Nomor Keputusan Komisi Fatwa MUI/Komite Fatwa.</li>
+                        <li>Jenis Produk dan Nama Produk Pelaku Usaha (Jika lebih dari 1, memakai lampiran).</li>
+                        <li>Tanda tangan elektronik oleh Kepala BPJPH.</li>
+                    </ul>
+
+                    <h2>5. Syarat Sertifikasi Halal Gratis (SEHATI) - Self Declare</h2>
+                    <ul>
+                        <li>Pelaku Usaha memiliki NIB dan termasuk skala Mikro/Kecil.</li>
+                        <li>Produk tidak berisiko (menggunakan bahan yang sudah dipastikan kehalalannya).</li>
+                        <li>Proses produksi sederhana, bebas dari kontaminasi najis.</li>
+                        <li>Dilakukan secara manual/semi-otomatis (bukan pabrik besar).</li>
+                        <li>Telah diverifikasi kehalalannya oleh Pendamping P3H.</li>
+                    </ul>
+
+                    <h2>6. Alur Proses Sertifikasi Halal (Self Declare)</h2>
+                    <ol>
+                        <li>Pelaku Usaha daftar via SIHALAL (ptsp.halal.go.id).</li>
+                        <li>Lembaga Pendamping Proses Produk Halal (LP3H) memverifikasi pengajuan.</li>
+                        <li>BPJPH menerbitkan tagihan (Rp 230.000) yang dibayarkan via virtual account (Subsidi jika ikut program SEHATI).</li>
+                        <li>Pendamping P3H melakukan verifikasi dan validasi langsung ke lokasi (Verval).</li>
+                        <li>Komite Fatwa menetapkan kehalalan.</li>
+                        <li>BPJPH menerbitkan Sertifikat Halal.</li>
+                    </ol>
+                </div>
+                `;
+            }
+
+            else if (state.activeTab === 'modul_pks') {
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
+                    <h2 class="text-center uppercase leading-snug">Perjanjian Kerjasama (PKs)<br>Antara Lembaga Penelitian Dan Pengabdian Kepada Masyarakat (LPPM)<br>Institut Agama Islam Negeri (IAIN) Pontianak<br>Dengan [Nama Lembaga/Mitra]<br>Tentang [Judul Program/Kegiatan PkM]</h2>
+                    <br>
+                    <p>NOMOR : (Untuk nomor ini setiap kelompok berkoordinasi dengan Panitia KKL)<br>NOMOR : (Untuk nomor ini setiap kelompok berkoordinasi dengan Kepala Desa/Lembaga Mitra)</p>
+                    
+                    <p>Pada hari ini, _______ tanggal _______ bulan _______ tahun _______ , bertempat di (sesuaikan wilayahnya), yang bertanda tangan di bawah ini:</p>
+                    
+                    <p><strong>(Nama Ketua Kelompok)</strong> : Ketua Kelompok ___________ Kuliah Kerja Lapangan (KKL) Institut Agama Islam Negeri (IAIN) Pontianak, berkedudukan di Jalan Letjend Soeprapto No. 19 Pontianak, dalam hal ini bertindak untuk dan atas nama LPPM IAIN Pontianak berdasarkan Surat Keputusan Rektor Nomor _______ Tahun 20__(sesuaikan dengan Nomor SK sebagai peserta KKL), selanjutnya disebut sebagai <strong>PIHAK PERTAMA</strong>.</p>
+                    
+                    <p><strong>__________________</strong> : [Jabatan] [Nama Desa/Lembaga/Mitra], berkedudukan di [Alamat Lengkap Mitra], dalam hal ini bertindak untuk dan atas nama [Nama Desa/Lembaga/Mitra], selanjutnya disebut sebagai <strong>PIHAK KEDUA</strong>.</p>
+
+                    <p>PIHAK PERTAMA dan PIHAK KEDUA secara bersama-sama disebut PARA PIHAK, terlebih dahulu menerangkan hal-hal sebagai berikut:</p>
+                    <ol>
+                        <li>Bahwa PIHAK PERTAMA adalah unsur pelaksana akademik di lingkungan IAIN Pontianak yang mempunyai tugas mengkoordinasikan, memfasilitasi, dan melaksanakan kegiatan penelitian dan pengabdian kepada masyarakat.</li>
+                        <li>Bahwa PIHAK KEDUA adalah [sebutkan profil Desa/Lembaga/mitra] yang membutuhkan pendampingan/pelaksanaan program [sebutkan program] di wilayah kerjanya.</li>
+                        <li>Bahwa berdasarkan Nota Kesepahaman antara IAIN Pontianak dengan [Nama Lembaga/Mitra] Nomor _______ dan Nomor _______ tanggal _______, PARA PIHAK sepakat untuk melaksanakan kerjasama secara operasional melalui Perjanjian Kerjasama ini.</li>
+                    </ol>
+
+                    <h3>PASAL 1 : MAKSUD DAN TUJUAN</h3>
+                    <p>(1) Maksud Perjanjian Kerjasama ini adalah sebagai pedoman operasional bagi PARA PIHAK dalam melaksanakan program [sebutkan judul program] yang merupakan implementasi dari Nota Kesepahaman yang telah ditandatangani sebelumnya.<br>
+                    (2) Tujuan Perjanjian Kerjasama ini adalah untuk mencapai hasil yang optimal dalam pelaksanaan program, yang bermanfaat bagi masyarakat dan kedua belah pihak sesuai dengan tugas dan fungsi masing-masing.</p>
+
+                    <h3>PASAL 2 : RUANG LINGKUP KEGIATAN</h3>
+                    <p>Ruang lingkup Perjanjian Kerjasama ini meliputi:<br>
+                    - [Sebutkan kegiatan 1] : [Uraian singkat kegiatan]<br>
+                    - [Sebutkan kegiatan 2] : [Uraian singkat kegiatan]<br>
+                    - [Sebutkan kegiatan 3] : [Uraian singkat kegiatan]<br>
+                    - [Sebutkan luaran yang diharapkan] : [Uraian luaran]</p>
+
+                    <h3>PASAL 3 : TEMPAT DAN WAKTU PELAKSANAAN</h3>
+                    <p>(1) Kegiatan sebagaimana dimaksud dalam Pasal 2 Perjanjian Kerjasama ini akan dilaksanakan di:<br>
+                    Lokasi : [Desa/Kelurahan, Kecamatan, Kabupaten/Kota]<br>
+                    Sasaran : [Kelompok sasaran, jumlah peserta]<br>
+                    (2) Kegiatan akan dilaksanakan dalam jangka waktu _____ (______) bulan, terhitung mulai tanggal _______ sampai dengan tanggal _______.<br>
+                    (3) Jadwal pelaksanaan kegiatan secara rinci akan diatur dalam Rencana Tindak Lanjut (RTL) yang merupakan bagian tidak terpisahkan dari Perjanjian Kerjasama ini.</p>
+
+                    <h3>PASAL 4 : HAK DAN KEWAJIBAN PARA PIHAK</h3>
+                    <p><strong>Hak PIHAK PERTAMA:</strong> Mendapatkan fasilitas dan dukungan dari PIHAK KEDUA dalam pelaksanaan kegiatan; Mendapatkan data dan informasi yang diperlukan; Mendapatkan pengakuan atas kontribusi akademik.</p>
+                    <p><strong>Kewajiban PIHAK PERTAMA:</strong> Menyiapkan tim pelaksana yang kompeten; Melaksanakan kegiatan sesuai dengan proposal; Menyediakan bahan, materi, dan narasumber/fasilitator; Menyusun laporan; Menjaga nama baik kampus; Mendokumentasikan kegiatan.</p>
+                    <p><strong>Hak PIHAK KEDUA:</strong> Mendapatkan pendampingan dan pelaksanaan program; Mendapatkan laporan hasil; Memberikan masukan dan saran.</p>
+                    <p><strong>Kewajiban PIHAK KEDUA:</strong> Memfasilitasi kebutuhan operasional di lapangan; Memobilisasi peserta/sasaran kegiatan; Memberikan data informasi; Berpartisipasi aktif.</p>
+
+                    <h3>PASAL 5 : PENDANAAN</h3>
+                    <p>(1) Pembiayaan seluruh kegiatan dalam Perjanjian Kerjasama ini bersumber dari:<br>
+                    PIHAK PERTAMA : Dana yang dikumpulkan dari seluruh anggota Kelompok sebesar Rp _________________________ .<br>
+                    PIHAK KEDUA : [Sebutkan kontribusi mitra, jika ada] sebesar Rp _________________________ .<br>
+                    (2) Rincian anggaran tercantum dalam Lampiran Rencana Anggaran Biaya (RAB).</p>
+
+                    <h3>PASAL 6 : PENUTUP</h3>
+                    <p>Perjanjian Kerjasama ini dibuat dalam rangkap 2 (dua) asli, masing-masing bermeterai cukup, dan memiliki kekuatan hukum yang sama setelah ditandatangani oleh PARA PIHAK. Demikian Perjanjian Kerjasama ini dibuat dengan sebenarnya untuk dapat dilaksanakan dengan penuh tanggung jawab.</p>
+
+                    <br><br>
+                    <div class="table-responsive">
+                        <table class="formal-letter-table w-full text-center">
+                            <tr>
+                                <td class="w-1/2 p-6 border-none">
+                                    PIHAK PERTAMA,<br>
+                                    Ketua LPPM IAIN Pontianak<br><br><br><br><br>
+                                    <strong>( Dr. Usman, M. Pd.I)</strong>
+                                </td>
+                                <td class="w-1/2 p-6 border-none">
+                                    PIHAK KEDUA,<br>
+                                    Kepala Desa/Ketua Lembaga/Mitra<br><br><br><br><br>
+                                    <strong>(_________________________)</strong>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                `;
+            }
+
+            else if (state.activeTab === 'settings') {
+                const p = JSON.parse(localStorage.getItem('kknku_profile')) || {
+                    name: 'DAENG TIO WALDI', role: 'Admin Posko',
+                    appTitle: 'KKNKU', appSubtitle: 'Sekretariat Pro',
+                    campus: 'INSTITUT AGAMA ISLAM NEGERI PONTIANAK',
+                    status: 'Mahasiswa', period: '2025/2026 Genap', major: 'Manajemen Bisnis Syariah'
+                };
+                html += `
+                <div class="bg-white dark:bg-siska-panel rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8 max-w-3xl mx-auto mb-10">
+                    <div class="mb-8 border-b border-slate-200 dark:border-slate-800 pb-5">
+                        <h2 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2"><i data-lucide="settings" class="w-6 h-6 text-slate-500"></i> Pengaturan Sistem & Profil</h2>
+                        <p class="text-[15px] text-slate-500 mt-2">Ubah identitas aplikasi dan profil pengguna yang tampil di dasbor.</p>
+                    </div>
+                    <form id="form-settings" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Nama Aplikasi Utama</label>
+                                <input id="set-apptitle" value="${p.appTitle}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Sub-nama Aplikasi</label>
+                                <input id="set-appsubtitle" value="${p.appSubtitle}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                            </div>
+                        </div>
+                        <div class="space-y-2 pt-4 border-t border-slate-200 dark:border-slate-800">
+                            <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Nama Institusi / Kampus</label>
+                            <input id="set-campus" value="${p.campus}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Nama Lengkap Pengguna</label>
+                                <input id="set-name" value="${p.name}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Peran / Jabatan KKN</label>
+                                <input id="set-role" value="${p.role}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Status Akademik</label>
+                                <input id="set-status" value="${p.status}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Periode Akademik</label>
+                                <input id="set-period" value="${p.period}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Fakultas / Program Studi</label>
+                            <input id="set-major" value="${p.major}" required class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-sm outline-none text-slate-900 dark:text-white focus:border-blue-500" />
+                        </div>
+                        <div class="pt-6 flex justify-end">
+                            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3.5 rounded-xl active:scale-[0.98] transition-all shadow-md">Simpan Perubahan</button>
+                        </div>
+                    </form>
+                </div>
+                `;
+            }
+
+            container.innerHTML = html;
+            
+            setTimeout(() => { document.querySelectorAll('.observe-item').forEach(el => itemObserver.observe(el)); }, 50);
+            
+            if(state.activeTab === 'absensi') {
+                const checkCont = document.getElementById('absen-checkbox-container');
+                let chkHtml = '';
+                STUDENTS_DATA.forEach(s => {
+                    chkHtml += `
+                        <label class="flex items-center gap-3.5 cursor-pointer p-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                            <input type="checkbox" id="absen-chk-${s.nim}" class="custom-checkbox cb-absen-item" checked />
+                            <div class="flex flex-col min-w-0">
+                                <span class="text-[15px] font-semibold text-slate-800 dark:text-slate-200 truncate">${s.name}</span>
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${s.nim} • ${s.prodi}</span>
+                            </div>
+                        </label>
+                    `;
+                });
+                if(checkCont) checkCont.innerHTML = chkHtml;
+            }
+            
+            if(document.getElementById('form-task')) {
+                document.getElementById('form-task').addEventListener('submit', function(e) {
+                    e.preventDefault(); addTask(document.getElementById('input-task-text').value, document.getElementById('input-task-pic').value);
+                });
+            }
+            if(document.getElementById('form-agenda')) {
+                document.getElementById('form-agenda').addEventListener('submit', function(e) {
+                    e.preventDefault(); addAgenda(document.getElementById('input-agenda-text').value, document.getElementById('input-agenda-date').value, document.getElementById('input-agenda-loc').value);
+                });
+            }
+            if(document.getElementById('form-absensi')) {
+                document.getElementById('form-absensi').addEventListener('submit', function(e) {
+                    e.preventDefault(); addAbsensi();
+                });
+            }
+            if(document.getElementById('form-settings')) {
+                document.getElementById('form-settings').addEventListener('submit', saveSettingsForm);
+            }
+        }
+
+        function addTask(text, pic) {
+            if (!text || !pic) return;
+            state.tasks.push({ id: 'ts-' + Date.now(), text, pic, done: false });
+            saveData(); renderContent();
+            document.getElementById('input-task-text').value = '';
+            document.getElementById('input-task-pic').value = '';
+        }
+        function toggleTask(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (task) { task.done = !task.done; saveData(); renderContent(); }
+        }
+        
+        function addAgenda(text, date, location) {
+            if (!text || !date) return;
+            state.agenda.push({ id: 'ag-' + Date.now(), text, date, location, done: false });
+            saveData(); renderContent();
+            document.getElementById('input-agenda-text').value = '';
+            document.getElementById('input-agenda-date').value = '';
+            document.getElementById('input-agenda-loc').value = '';
+        }
+        function toggleAgenda(id) {
+            const agenda = state.agenda.find(a => a.id === id);
+            if (agenda) { agenda.done = !agenda.done; saveData(); renderContent(); }
+        }
+        
+        function selectAllAbsen() {
+            const boxes = document.querySelectorAll('.cb-absen-item');
+            const allChecked = Array.from(boxes).every(cb => cb.checked);
+            boxes.forEach(cb => cb.checked = !allChecked);
+        }
+        function addAbsensi() {
+            const date = document.getElementById('input-absen-date').value;
+            const text = document.getElementById('input-absen-text').value;
+            const attendance = {};
+            STUDENTS_DATA.forEach(s => {
+                const isChecked = document.getElementById(`absen-chk-${s.nim}`).checked;
+                attendance[s.nim] = isChecked;
+            });
+            state.absensi.push({ id: Date.now().toString(), date, text, attendance });
+            saveData(); renderContent();
+            document.getElementById('input-absen-text').value = '';
+            customAlert("Absensi dan Jurnal berhasil disimpan.", "Berhasil", "success");
+        }
+        
+        function copyJournalDescription(id) {
+            const ab = state.absensi.find(item => item.id === id);
+            if (!ab) return;
+            const ta = document.createElement("textarea");
+            ta.value = ab.text;
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                customAlert("Deskripsi jurnal berhasil disalin ke papan klip.", "Tersalin", "success");
+            } catch (err) {
+                customAlert("Gagal menyalin teks.", "Kesalahan", "error");
+            }
+            document.body.removeChild(ta);
+        }
+        function openEditJournalModal(id) {
+            const ab = state.absensi.find(item => item.id === id);
+            if (!ab) return;
+            state.editingJournalId = id;
+            document.getElementById('edit-journal-textarea').value = ab.text;
+            document.getElementById('edit-journal-modal').classList.remove('hidden');
+        }
+        function closeEditJournalModal() {
+            state.editingJournalId = null;
+            document.getElementById('edit-journal-modal').classList.add('hidden');
+        }
+        document.getElementById('journal-save-btn').addEventListener('click', () => {
+            if (!state.editingJournalId) return;
+            const text = document.getElementById('edit-journal-textarea').value.trim();
+            if (!text) { customAlert("Deskripsi tidak boleh kosong!", "Peringatan", "warning"); return; }
+            const ab = state.absensi.find(item => item.id === state.editingJournalId);
+            if (ab) { ab.text = text; saveData(); renderContent(); }
+            closeEditJournalModal();
+            customAlert("Perubahan deskripsi berhasil disimpan.", "Berhasil", "success");
+        });
+        
+        function toggleMic() {
+            if (!('webkitSpeechRecognition' in window)) {
+                customAlert("Browser Anda tidak mendukung Web Speech API (disarankan menggunakan Google Chrome).", "Tidak Didukung", "error");
+                return;
+            }
+            const btnMic = document.getElementById('btn-mic');
+            const statusLabel = document.getElementById('mic-status-label');
+            const editorDiv = document.getElementById('editor-content');
+            
+            if (!recognition) {
+                recognition = new webkitSpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = false;
+                recognition.lang = 'id-ID';
+                
+                recognition.onstart = () => {
+                    isRecording = true;
+                    btnMic.classList.add('text-red-500', 'bg-red-50', 'dark:bg-red-900/30', 'mic-recording');
+                    btnMic.classList.remove('text-slate-500');
+                    statusLabel.classList.remove('hidden');
+                };
+                recognition.onresult = (event) => {
+                    let finalTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) finalTranscript += event.results[i][0].transcript + ' ';
+                    }
+                    if (finalTranscript) insertToEditor(finalTranscript, false);
+                };
+                recognition.onerror = (event) => { console.error("Mic Error:", event.error); };
+                recognition.onend = () => {
+                    if (isRecording) {
+                        try { recognition.start(); } catch(e) {}
+                    } else {
+                        btnMic.classList.remove('text-red-500', 'bg-red-50', 'dark:bg-red-900/30', 'mic-recording');
+                        btnMic.classList.add('text-slate-500');
+                        statusLabel.classList.add('hidden');
+                    }
+                };
+            }
+            if (isRecording) {
+                isRecording = false;
+                recognition.stop();
+            } else {
+                recognition.start();
+                editorDiv.focus();
+            }
+        }
+        
+        function triggerDelete(id, type) {
+            state.deleteTarget = { id, type };
+            document.getElementById('confirm-modal').classList.remove('hidden');
+        }
+        function closeModal() {
+            state.deleteTarget = null;
+            document.getElementById('confirm-modal').classList.add('hidden');
+        }
+        document.getElementById('modal-confirm-btn').addEventListener('click', () => {
+            if (!state.deleteTarget) return;
+            const { id, type } = state.deleteTarget;
+            
+            if (type === 'note') state.notes = state.notes.filter(n => n.id !== id);
+            else if (type === 'task') state.tasks = state.tasks.filter(t => t.id !== id);
+            else if (type === 'absensi') state.absensi = state.absensi.filter(t => t.id !== id);
+            else if (type === 'agenda') state.agenda = state.agenda.filter(a => a.id !== id);
+            else if (type === 'template') state.templates = state.templates.filter(t => t.id !== id);
+            
+            saveData(); closeModal(); renderContent();
+        });
+        
+        function customAlert(message, title = 'Informasi', type = 'info') {
+            document.getElementById('alert-modal-title').textContent = title;
+            document.getElementById('alert-modal-desc').textContent = message;
+            const iconContainer = document.getElementById('alert-modal-icon-container');
+            const iconEl = document.getElementById('alert-modal-icon');
+            
+            iconContainer.className = 'flex items-center gap-3 mb-4';
+            if (type === 'success') {
+                iconContainer.classList.add('text-emerald-500');
+                iconEl.setAttribute('data-lucide', 'check-circle');
+            } else if (type === 'error' || type === 'warning') {
+                iconContainer.classList.add('text-amber-500');
+                iconEl.setAttribute('data-lucide', 'alert-triangle');
+            } else {
+                iconContainer.classList.add('text-blue-500');
+                iconEl.setAttribute('data-lucide', 'info');
+            }
+            lucide.createIcons({ root: document.getElementById('alert-modal') });
+            document.getElementById('alert-modal').classList.remove('hidden');
+        }
+        function closeAlertModal() {
+            document.getElementById('alert-modal').classList.add('hidden');
+        }
+        
+        const toDatetimeLocal = (isoString) => {
+            const d = new Date(isoString);
+            const pad = (n) => n.toString().padStart(2, '0');
+            return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+        };
+        
+        document.getElementById('btn-fab').addEventListener('click', () => {
+            if (state.activeTab === 'templates') openEditor(null, null, 'template');
+            else if (state.activeTab === 'notes') openEditor(null, null, 'note');
+            else if (state.activeTab === 'tasks') { document.getElementById('input-task-text')?.focus(); document.getElementById('scroll-container').scrollTo({top:0, behavior:'smooth'}); }
+            else if (state.activeTab === 'absensi') { document.getElementById('input-absen-date')?.focus(); document.getElementById('scroll-container').scrollTo({top:0, behavior:'smooth'}); }
+            else if (state.activeTab === 'keuangan') { window.open('https://komlaps2a-svg.github.io/finance-dashboard/', '_blank'); }
+            else if (state.activeTab === 'agenda') { document.getElementById('input-agenda-text')?.focus(); document.getElementById('scroll-container').scrollTo({top:0, behavior:'smooth'}); }
+            else { openEditor(null, null, 'note'); }
+        });
+        
+        function openEditor(docId = null, templateData = null, type = 'note') {
+            state.editingType = type;
+            state.editingNoteId = docId;
+            state.editorUndoBuffer = ''; 
+            
+            const titleInput = document.getElementById('editor-title');
+            const contentDiv = document.getElementById('editor-content');
+            const dateInput = document.getElementById('editor-date');
+            
+            if (docId) {
+                const doc = type === 'template' ? state.templates.find(t => t.id === docId) : state.notes.find(n => n.id === docId);
+                titleInput.value = doc.title;
+                let cStr = doc.content;
+                if (!cStr.includes('<table') && !cStr.includes('<br>') && !cStr.includes('<p>')) {
+                    cStr = formatProfessionalTables(cStr);
+                    cStr = cStr.replace(/\n/g, '<br>');
+                }
+                contentDiv.innerHTML = cStr;
+                dateInput.value = doc.date ? toDatetimeLocal(doc.date) : toDatetimeLocal(new Date().toISOString());
+            } else if (templateData) {
+                titleInput.value = templateData.title;
+                let cStr = templateData.content;
+                if (!cStr.includes('<table') && !cStr.includes('<br>') && !cStr.includes('<p>')) {
+                    cStr = formatProfessionalTables(cStr);
+                    cStr = cStr.replace(/\n/g, '<br>');
+                }
+                contentDiv.innerHTML = cStr;
+                dateInput.value = toDatetimeLocal(new Date().toISOString());
+            } else {
+                titleInput.value = '';
+                contentDiv.innerHTML = '';
+                dateInput.value = toDatetimeLocal(new Date().toISOString());
+            }
+            document.getElementById('editor-type-label').textContent = type === 'template' ? 'Editor Pustaka Surat' : 'Editor Arsip Notulensi';
+            renderQuickInsertBar();
+            document.getElementById('view-editor').classList.remove('hidden');
+        }
+        
+        function renderQuickInsertBar() {
+            const qib = document.getElementById('quick-insert-bar');
+            qib.innerHTML = '';
+            
+            const btnTable = document.createElement('button');
+            btnTable.type = 'button';
+            btnTable.className = "flex-shrink-0 flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-800/50 text-indigo-700 dark:text-indigo-400 px-4 py-2 rounded-xl text-[14px] font-bold active:scale-95 shadow-sm transition-all hover:bg-indigo-100 dark:hover:bg-indigo-900/50";
+            btnTable.innerHTML = `<i data-lucide="table" class="w-5 h-5"></i> Buat Tabel`;
+            btnTable.onclick = openTableModal;
+            qib.appendChild(btnTable);
+            
+            QUICK_INSERT_TEXTS.forEach((item) => {
+                const btn = document.createElement('button');
+                btn.type = 'button'; 
+                btn.className = "flex-shrink-0 flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 px-4 py-2 rounded-xl text-[14px] font-bold active:scale-95 shadow-sm hover:bg-slate-50 dark:hover:bg-slate-700 transition-all";
+                btn.innerHTML = `<i data-lucide="${item.icon}" class="w-5 h-5"></i> ${item.label}`;
+                btn.onclick = () => insertToEditor(item.text);
+                qib.appendChild(btn);
+            });
+            
+            const divider = document.createElement('div');
+            divider.className = "w-px h-6 bg-slate-300 dark:bg-slate-700 mx-2 flex-shrink-0";
+            qib.appendChild(divider);
+            
+            const btnUndo = document.createElement('button');
+            btnUndo.type = 'button';
+            btnUndo.id = 'btn-editor-undo';
+            btnUndo.className = "hidden flex-shrink-0 flex items-center gap-2 bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400 px-4 py-2 rounded-xl text-[14px] font-bold active:scale-95 shadow-sm transition-all";
+            btnUndo.innerHTML = `<i data-lucide="undo-2" class="w-5 h-5"></i> Batal Hapus`;
+            btnUndo.onclick = restoreEditorContent;
+            qib.appendChild(btnUndo);
+            
+            const btnClear = document.createElement('button');
+            btnClear.type = 'button';
+            btnClear.className = "flex-shrink-0 flex items-center gap-2 bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 px-4 py-2 rounded-xl text-[14px] font-bold active:scale-95 shadow-sm transition-all";
+            btnClear.innerHTML = `<i data-lucide="trash-2" class="w-5 h-5"></i> Bersihkan`;
+            btnClear.onclick = clearEditorContent;
+            qib.appendChild(btnClear);
+            lucide.createIcons({ root: qib });
+        }
+        
+        function insertToEditor(htmlStr, forceFocus = true) {
+            const editorDiv = document.getElementById('editor-content');
+            if (forceFocus) editorDiv.focus();
+            try {
+                document.execCommand('insertHTML', false, htmlStr);
+            } catch(e) {
+                editorDiv.innerHTML += htmlStr;
+            }
+            if (forceFocus) editorDiv.focus();
+        }
+        
+        function clearEditorContent() {
+            const editorDiv = document.getElementById('editor-content');
+            if(!editorDiv.innerHTML.trim()) return;
+            state.editorUndoBuffer = editorDiv.innerHTML;
+            editorDiv.innerHTML = '';
+            document.getElementById('btn-editor-undo').classList.remove('hidden');
+        }
+        function restoreEditorContent() {
+            if(!state.editorUndoBuffer) return;
+            const editorDiv = document.getElementById('editor-content');
+            editorDiv.innerHTML = state.editorUndoBuffer;
+            state.editorUndoBuffer = '';
+            document.getElementById('btn-editor-undo').classList.add('hidden');
+            editorDiv.focus();
+        }
+        function closeEditor() {
+            if (isRecording) { isRecording = false; recognition.stop(); }
+            document.getElementById('view-editor').classList.add('hidden');
+        }
+        function saveNote() {
+            const title = document.getElementById('editor-title').value.trim();
+            const content = document.getElementById('editor-content').innerHTML;
+            const dateInput = document.getElementById('editor-date').value;
+            
+            if (!title && !content.trim()) return closeEditor();
+            const newDoc = {
+                id: state.editingNoteId || Date.now().toString(),
+                title: title || (state.editingType === 'template' ? 'Surat Baru (Draft)' : 'Arsip Dokumen (Draft)'),
+                content: content,
+                date: dateInput ? new Date(dateInput).toISOString() : new Date().toISOString()
+            };
+            if (state.editingType === 'template') {
+                if (state.editingNoteId) {
+                    const idx = state.templates.findIndex(t => t.id === state.editingNoteId);
+                    state.templates[idx] = newDoc;
+                } else { state.templates.unshift(newDoc); }
+            } else {
+                if (state.editingNoteId) {
+                    const idx = state.notes.findIndex(n => n.id === state.editingNoteId);
+                    state.notes[idx] = newDoc;
+                } else { state.notes.unshift(newDoc); }
+            }
+            saveData(); closeEditor(); renderContent(); openViewer(newDoc.id, state.editingType === 'template');
+        }
+        
+        // ================= FLOATING TABLE TOOLBAR LOGIC (DRAGGABLE) =================
+        let currentCell = null;
+        let isToolbarDragged = false;
+        let dragActive = false;
+        let currentX, currentY, initialX, initialY;
+        let xOffset = 0, yOffset = 0;
+
+        const toolbarEl = document.getElementById('floating-table-toolbar');
+        
+        function initDragToolbar() {
+            const dragHandle = document.getElementById('toolbar-drag-handle');
+            if(!dragHandle) return;
+
+            dragHandle.addEventListener('touchstart', dragStart, {passive: false});
+            dragHandle.addEventListener('mousedown', dragStart);
+            document.addEventListener('touchend', dragEnd);
+            document.addEventListener('mouseup', dragEnd);
+            document.addEventListener('touchmove', drag, {passive: false});
+            document.addEventListener('mousemove', drag);
+        }
+
+        function dragStart(e) {
+            const dragHandle = document.getElementById('toolbar-drag-handle');
+            if (e.type === 'touchstart') {
+                initialX = e.touches[0].clientX - xOffset;
+                initialY = e.touches[0].clientY - yOffset;
+            } else {
+                initialX = e.clientX - xOffset;
+                initialY = e.clientY - yOffset;
+            }
+            if (e.target === dragHandle || dragHandle.contains(e.target)) {
+                dragActive = true;
+                isToolbarDragged = true; 
+            }
+        }
+
+        function dragEnd() {
+            initialX = currentX;
+            initialY = currentY;
+            dragActive = false;
+        }
+
+        function drag(e) {
+            if (dragActive) {
+                e.preventDefault();
+                if (e.type === 'touchmove') {
+                    currentX = e.touches[0].clientX - initialX;
+                    currentY = e.touches[0].clientY - initialY;
+                } else {
+                    currentX = e.clientX - initialX;
+                    currentY = e.clientY - initialY;
+                }
+                xOffset = currentX;
+                yOffset = currentY;
+                toolbarEl.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+            }
+        }
+
+        document.addEventListener('selectionchange', () => {
+            const selection = window.getSelection();
+            if(!selection.rangeCount) return;
+            const node = selection.anchorNode;
+            if(node) {
+                const cell = node.nodeType === 3 ? node.parentNode.closest('td, th') : (node.closest ? node.closest('td, th') : null);
+                const editor = document.getElementById('editor-content');
+                if(cell && editor.contains(cell)) {
+                    currentCell = cell;
+                    const table = cell.closest('table');
+                    
+                    if (!isToolbarDragged) {
+                        const rect = table.getBoundingClientRect();
+                        toolbarEl.style.top = (window.scrollY + rect.top - 55) + 'px'; 
+                        toolbarEl.style.left = rect.left + 'px';
+                        toolbarEl.style.transform = 'translate3d(0,0,0)';
+                        xOffset = 0; yOffset = 0;
+                    }
+                    toolbarEl.classList.remove('hidden');
+                } else {
+                    if(!dragActive) {
+                        toolbarEl.classList.add('hidden');
+                        currentCell = null;
+                        isToolbarDragged = false;
+                        toolbarEl.style.transform = 'translate3d(0,0,0)';
+                        xOffset = 0; yOffset = 0;
+                    }
+                }
+            }
+        });
+
+        function tableAction(action) {
+            if(!currentCell) return;
+            const tr = currentCell.closest('tr');
+            const table = tr.closest('table');
+            const cellIndex = Array.from(tr.children).indexOf(currentCell);
+
+            if(action === 'addRow') {
+                const newTr = document.createElement('tr');
+                Array.from(tr.children).forEach(c => {
+                    const isTh = c.tagName === 'TH';
+                    const newCell = document.createElement(isTh ? 'th' : 'td');
+                    newCell.innerHTML = '<br>';
+                    newTr.appendChild(newCell);
+                });
+                tr.after(newTr);
+            } else if(action === 'addCol') {
+                Array.from(table.rows).forEach(row => {
+                    if (row.children[cellIndex]) {
+                        const refCell = row.children[cellIndex];
+                        const isTh = refCell.tagName === 'TH';
+                        const newCell = document.createElement(isTh ? 'th' : 'td');
+                        newCell.innerHTML = '<br>';
+                        refCell.after(newCell);
+                    }
+                });
+            } else if(action === 'delRow') {
+                if(table.rows.length > 1) tr.remove();
+            } else if(action === 'delCol') {
+                if(tr.children.length > 1) {
+                    Array.from(table.rows).forEach(row => {
+                        if(row.children[cellIndex]) row.children[cellIndex].remove();
+                    });
+                }
+            }
+            
+            setTimeout(() => {
+                if (!isToolbarDragged) {
+                    const rect = table.getBoundingClientRect();
+                    toolbarEl.style.top = (window.scrollY + rect.top - 55) + 'px';
+                    toolbarEl.style.left = rect.left + 'px';
+                }
+            }, 50);
+        }
+        
+        // Inisialisasi logika drag
+        initDragToolbar();
+        
+        function openViewer(docId, isTemplate = false) {
+            state.viewingDoc = isTemplate ? state.templates.find(t => t.id === docId) : state.notes.find(n => n.id === docId);
+            state.viewingDoc.isTemplate = isTemplate; 
+            
+            document.getElementById('viewer-type-label').textContent = isTemplate ? 'Pratinjau Surat / Modul' : 'Arsip Dokumen';
+            document.getElementById('viewer-title').textContent = state.viewingDoc.title;
+            document.getElementById('viewer-date').textContent = isTemplate ? 'Master File Sistem' : new Date(state.viewingDoc.date).toLocaleString('id-ID', { dateStyle: 'full', timeStyle: 'short' });
+            
+            let cStr = state.viewingDoc.content;
+            if (!cStr.includes('<table') && !cStr.includes('<br>') && !cStr.includes('<p>')) {
+                cStr = formatProfessionalTables(cStr);
+                cStr = cStr.replace(/\n/g, '<br>');
+            }
+            document.getElementById('viewer-content').innerHTML = cStr; 
+            
+            const btnScript = document.getElementById('btn-script-filter');
+            const btnUseTemplate = document.getElementById('btn-use-template');
+            
+            if (isTemplate) {
+                btnScript.classList.add('hidden'); btnUseTemplate.classList.remove('hidden');
+            } else {
+                btnScript.classList.remove('hidden'); btnUseTemplate.classList.add('hidden');
+            }
+            
+            const btnCopy = document.getElementById('btn-copy');
+            btnCopy.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-teal-600 text-white shadow-sm active:scale-95';
+            btnCopy.querySelector('.text-copy').textContent = 'Salin';
+            btnCopy.querySelector('.icon-copy').setAttribute('data-lucide', 'copy');
+            
+            lucide.createIcons();
+            document.getElementById('view-viewer').classList.remove('hidden');
+        }
+        function closeViewer() {
+            document.getElementById('view-viewer').classList.add('hidden'); renderContent();
+        }
+        function useTemplate() {
+            if (!state.viewingDoc) return;
+            closeViewer(); openEditor(null, state.viewingDoc, 'note');
+        }
+        function editCurrentNote() {
+            if (!state.viewingDoc) return;
+            closeViewer(); openEditor(state.viewingDoc.id, null, state.viewingDoc.isTemplate ? 'template' : 'note');
+        }
+        function shareDoc() {
+            if (!state.viewingDoc) return;
+            const cleanText = `${state.viewingDoc.title.replace(/<[^>]*>?/gm, '')}\n\n${state.viewingDoc.content.replace(/<br>/g, '\n').replace(/<[^>]*>?/gm, '')}`;
+            if (navigator.share) {
+                navigator.share({ title: state.viewingDoc.title, text: cleanText }).catch(console.error);
+            } else {
+                copyViewerText();
+                customAlert("Browser Anda tidak mendukung fitur share. Teks telah disalin ke clipboard.", "Informasi", "info");
+            }
+        }
+        function copyViewerText() {
+            if (!state.viewingDoc) return;
+            const cleanText = `${state.viewingDoc.title.replace(/<[^>]*>?/gm, '')}\n\n${state.viewingDoc.content.replace(/<br>/g, '\n').replace(/<[^>]*>?/gm, '')}`;
+            const ta = document.createElement("textarea");
+            ta.value = cleanText; document.body.appendChild(ta); ta.select();
+            try {
+                document.execCommand('copy');
+                const btnCopy = document.getElementById('btn-copy');
+                btnCopy.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-400 shadow-sm active:scale-95';
+                btnCopy.querySelector('.text-copy').textContent = 'Tersalin';
+                btnCopy.querySelector('.icon-copy').setAttribute('data-lucide', 'check');
+                lucide.createIcons();
+                setTimeout(() => {
+                    btnCopy.className = 'flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-bold transition-all bg-teal-600 text-white shadow-sm active:scale-95';
+                    btnCopy.querySelector('.text-copy').textContent = 'Salin';
+                    btnCopy.querySelector('.icon-copy').setAttribute('data-lucide', 'copy');
+                    lucide.createIcons();
+                }, 2000);
+            } catch (err) {}
+            document.body.removeChild(ta);
+        }
+        
+        function openScriptView() {
+            if (!state.viewingDoc) return;
+            document.getElementById('script-title').textContent = state.viewingDoc.title;
+            const lines = state.viewingDoc.content.replace(/<br>/g, '\n').replace(/<[^>]*>?/gm, '').split('\n');
+            const points = lines.filter(line => /^[•\-\*]/.test(line.trim()) || /^\d+\./.test(line.trim()));
+            const finalPoints = points.length > 0 ? points : ["(Tidak ada format poin yang terdeteksi. Silakan bacakan ringkasan secara umum)"];
+            const container = document.getElementById('script-points');
+            container.innerHTML = '';
+            
+            finalPoints.forEach(pt => {
+                const text = pt.replace(/^[•\-\*\d\.]+\s*/, '');
+                container.innerHTML += `
+                    <div class="flex gap-4 items-start">
+                        <span class="text-teal-400 mt-1.5"><i data-lucide="check-circle-2" class="w-6 h-6"></i></span>
+                        <span class="text-[19px] font-bold text-white leading-relaxed">${text}</span>
+                    </div>`;
+            });
+            lucide.createIcons();
+            document.getElementById('view-script').classList.remove('hidden');
+        }
+        function closeScriptView() { document.getElementById('view-script').classList.add('hidden'); }
+        
+        loadProfile();
+        applyTheme();
+        updateDashboardStats();
+        switchTab('notes');
+    </script>
+</body>
+</html>
