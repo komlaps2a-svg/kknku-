@@ -1,4 +1,4 @@
-const CACHE_NAME = 'kknku-pro-v1';
+const CACHE_NAME = 'kknku-pro-v3';
 const CORE_ASSETS = [
     './',
     './index.html',
@@ -7,9 +7,8 @@ const CORE_ASSETS = [
     './icon-512.png'
 ];
 
-// Instalasi & Caching Aset Inti
 self.addEventListener('install', (event) => {
-    self.skipWaiting();
+    self.skipWaiting(); // Langsung install versi baru
     event.waitUntil(
         caches.open(CACHE_NAME).then((cache) => {
             return cache.addAll(CORE_ASSETS);
@@ -17,31 +16,26 @@ self.addEventListener('install', (event) => {
     );
 });
 
-// Pembersihan Cache Usang
 self.addEventListener('activate', (event) => {
     event.waitUntil(
         caches.keys().then((cacheNames) => {
             return Promise.all(
                 cacheNames.map((name) => {
                     if (name !== CACHE_NAME) {
-                        return caches.delete(name);
+                        return caches.delete(name); // Hanya hapus cache aset lama, BUKAN localStorage
                     }
                 })
             );
         })
     );
-    self.clients.claim();
+    self.clients.claim(); // Langsung ambil alih kontrol halaman
 });
 
-// Strategi Stale-While-Revalidate untuk performa instan & offline
 self.addEventListener('fetch', (event) => {
-    // Abaikan request non-GET (seperti POST, PUT)
     if (event.request.method !== 'GET') return;
-
     event.respondWith(
         caches.match(event.request).then((cachedResponse) => {
             const fetchPromise = fetch(event.request).then((networkResponse) => {
-                // Hanya cache request yang valid dan berasal dari skema http/https
                 if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
                     const responseToCache = networkResponse.clone();
                     caches.open(CACHE_NAME).then((cache) => {
@@ -49,12 +43,15 @@ self.addEventListener('fetch', (event) => {
                     });
                 }
                 return networkResponse;
-            }).catch(() => {
-                // Return cache jika offline, abaikan error fetch
-            });
-
-            // Return cache secara instan jika ada, atau tunggu response jaringan jika kosong
+            }).catch(() => {});
             return cachedResponse || fetchPromise;
         })
     );
+});
+
+// Terima pesan dari index.html untuk update paksa
+self.addEventListener('message', (event) => {
+    if (event.data && event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
 });
