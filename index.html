@@ -4,26 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <!-- Meta Tags & PWA Integration -->
     <title>KKNKU - Sekretariat Pro</title>
     <meta name="title" content="KKNKU - Sekretariat Pro">
     <meta name="description" content="Sistem Informasi Sekretariat Mahasiswa KKN Terintegrasi. Mengelola administrasi, persuratan, tugas, absensi, dan buku kas secara profesional.">
     
-    <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://kknku-app.web.app/">
     <meta property="og:title" content="KKNKU - Sekretariat Pro">
     <meta property="og:description" content="Sistem Informasi Sekretariat Mahasiswa KKN Terintegrasi. Mengelola administrasi, persuratan, tugas, absensi, dan buku kas secara profesional.">
     <meta property="og:image" content="https://kknku-app.web.app/icon-512.png">
     
-    <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://kknku-app.web.app/">
     <meta property="twitter:title" content="KKNKU - Sekretariat Pro">
     <meta property="twitter:description" content="Sistem Informasi Sekretariat Mahasiswa KKN Terintegrasi. Mengelola administrasi, persuratan, tugas, absensi, dan buku kas secara profesional.">
     <meta property="twitter:image" content="https://kknku-app.web.app/icon-512.png">
 
-    <!-- PWA Link -->
     <link rel="manifest" href="manifest.json">
     <link rel="apple-touch-icon" href="icon-192.png">
     <meta name="theme-color" content="#f8fafc">
@@ -54,15 +50,25 @@
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; touch-action: pan-x; overscroll-behavior-x: contain; }
         
+        /* Modifikasi Animasi Scroll Ekstrem (Tenggelam/Muncul) */
         .will-change-transform { will-change: transform, opacity; }
-        @keyframes slideUpIn { 0% { opacity: 0; transform: translateY(50px); } 100% { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDownIn { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } }
+        header { transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.3s; z-index: 60; }
+        .header-hidden { transform: translateY(-100%); }
+        
+        @keyframes slideUpIn { 0% { opacity: 0; transform: translateY(60px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes slideDownIn { 0% { opacity: 0; transform: translateY(-60px) scale(0.95); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
+        @keyframes fadeOutDown { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(60px) scale(0.95); } }
+        @keyframes fadeOutUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-60px) scale(0.95); } }
+        
         @keyframes zoomIn { 0% { opacity: 0; transform: scale(0.95); } 100% { opacity: 1; transform: scale(1); } }
         @keyframes fadeIn { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes slideUpPopup { 0% { transform: translateY(100%); } 100% { transform: translateY(0); } }
         
-        .scroll-enter-up { animation: slideUpIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
-        .scroll-enter-down { animation: slideDownIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .scroll-enter-up { animation: slideUpIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .scroll-enter-down { animation: slideDownIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .scroll-exit-up { animation: fadeOutUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .scroll-exit-down { animation: fadeOutDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        
         .animate-in { animation: slideUpIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-zoom { animation: zoomIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-fade { animation: fadeIn 0.2s ease-out forwards; }
@@ -94,7 +100,6 @@
         .formal-letter-table tr:nth-child(even) { background-color: #f8fafc; }
         .dark .formal-letter-table tr:nth-child(even) { background-color: #1e293b; }
 
-        /* Rich Text Editor Styling */
         #editor-content:empty:before { content: attr(placeholder); color: #94a3b8; pointer-events: none; display: block; }
         .dark #editor-content:empty:before { color: #475569; }
         #editor-content { white-space: pre-wrap; outline: none; }
@@ -188,6 +193,25 @@
                 <i data-lucide="file-signature" class="w-5 h-5 text-emerald-500"></i><span class="text-sm font-semibold">Perjanjian Kerja Sama</span>
             </button>
 
+            <!-- TAUTAN EKSTERNAL & CUSTOM URL -->
+            <p class="px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">Tautan Eksternal</p>
+            <button onclick="triggerSiskaRedirect()" class="w-full flex items-center gap-3 px-6 py-3 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
+                <i data-lucide="external-link" class="w-5 h-5 text-blue-500"></i>
+                <span class="text-sm font-semibold">Portal SISKA</span>
+                <div id="siska-loader" class="hidden w-4 h-4 rounded-full border-2 border-slate-300 border-t-blue-500 animate-spin ml-auto"></div>
+            </button>
+            
+            <div id="custom-links-container" class="w-full flex flex-col"></div>
+            
+            <div class="px-5 py-2 mt-2">
+                <form id="form-custom-link" class="flex flex-col gap-2 p-3 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700">
+                    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Tambah Pintasan Baru</span>
+                    <input type="text" id="input-custom-name" placeholder="Nama Tautan (Mis: Drive KKL)" class="w-full text-xs bg-white dark:bg-siska-panel border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 outline-none text-slate-900 dark:text-white" required>
+                    <input type="url" id="input-custom-url" placeholder="https://..." class="w-full text-xs bg-white dark:bg-siska-panel border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 outline-none text-slate-900 dark:text-white" required>
+                    <button type="submit" class="w-full bg-slate-800 hover:bg-slate-900 dark:bg-slate-700 dark:hover:bg-slate-600 text-white text-xs font-bold py-2 rounded-lg shadow-sm transition-colors">Tambah Tautan</button>
+                </form>
+            </div>
+
             <p class="px-6 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 mt-6">Manajemen</p>
             <button onclick="switchTab('settings')" id="nav-settings" class="w-full flex items-center gap-3 px-6 py-3.5 transition-colors text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800">
                 <i data-lucide="settings" class="w-5 h-5"></i><span class="text-sm font-semibold">Pengaturan Sistem</span>
@@ -202,7 +226,7 @@
     
     <!-- ================= MAIN CONTENT AREA ================= -->
     <main class="flex-1 flex flex-col h-full relative overflow-hidden bg-slate-100 dark:bg-siska-darker">
-        <header class="h-[70px] bg-white dark:bg-siska-panel border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 lg:px-6 z-30 pt-safe shrink-0 shadow-sm">
+        <header id="main-header" class="absolute top-0 w-full h-[70px] bg-white dark:bg-siska-panel border-b border-slate-200 dark:border-slate-800 flex items-center justify-between px-4 lg:px-6 z-30 pt-safe shadow-sm">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()" class="lg:hidden p-2.5 -ml-2 text-slate-600 dark:text-slate-300 rounded-lg bg-slate-100 dark:bg-slate-800 active:scale-95 transition-transform">
                     <i data-lucide="menu" class="w-6 h-6"></i>
@@ -218,7 +242,7 @@
             </button>
         </header>
         
-        <div id="scroll-container" class="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth">
+        <div id="scroll-container" class="flex-1 overflow-y-auto p-4 md:p-6 scroll-smooth pt-[86px]">
             <div class="max-w-6xl mx-auto w-full">
                 
                 <!-- SISKA Header Banner -->
@@ -341,12 +365,9 @@
                 <div id="quick-insert-bar" class="flex gap-2 px-5 py-4 overflow-x-auto scrollbar-hide bg-slate-50 dark:bg-slate-900 sticky top-0 z-10 border-b border-slate-200 dark:border-slate-800 shadow-sm items-center">
                     <!-- Template Cepat Diinjeksi JS -->
                 </div>
-                <!-- Editor diubah menjadi contenteditable untuk menangani Tabel absolut HTML -->
                 <div id="editor-content" contenteditable="true" placeholder="Ketik di sini atau sisipkan tabel absolut..." class="w-full flex-1 p-5 md:p-8 bg-slate-50 dark:bg-siska-darker border-none outline-none text-slate-800 dark:text-slate-200 leading-relaxed focus:ring-0 text-[14px] md:text-[15px] pb-32 font-sans min-h-[50vh]"></div>
                 
-                <!-- Floating Table Toolbar dengan Fitur Drag (Bisa Digeser) -->
                 <div id="floating-table-toolbar" class="hidden absolute bg-slate-900 text-white shadow-xl rounded-xl p-1.5 flex gap-1.5 z-[150] transition-opacity duration-200 border border-slate-700 touch-none">
-                    <!-- Area Pegangan untuk Menggeser -->
                     <div id="toolbar-drag-handle" class="cursor-move p-2 text-slate-400 hover:text-white flex items-center justify-center bg-slate-800 rounded-lg active:bg-slate-700" title="Tahan dan Geser">
                         <i data-lucide="grip-vertical" class="w-4 h-4 pointer-events-none"></i>
                     </div>
@@ -493,13 +514,47 @@
                 </div>
             </div>
         </div>
+
+<!-- ================= CUSTOM PROMPT MODAL ================= -->
+        <div id="custom-prompt-modal" class="hidden fixed inset-0 z-[170] flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fade">
+            <div class="bg-white dark:bg-siska-panel w-full max-w-sm rounded-2xl shadow-2xl p-6 md:p-8 animate-zoom border border-slate-200 dark:border-slate-700">
+                <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2" id="prompt-title">Edit Data</h3>
+                <div id="prompt-inputs-container" class="space-y-4 mb-6 mt-4">
+                    <!-- Input fields di-injeksi via JS -->
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button onclick="closeCustomPrompt()" class="px-5 py-2.5 rounded-xl text-sm font-bold text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors active:scale-95">Batal</button>
+                    <button id="prompt-confirm-btn" class="px-5 py-2.5 rounded-xl text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-colors shadow-md active:scale-95">Simpan</button>
+                </div>
+            </div>
+        </div>
     </main>
     
     <script>
-        if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 if (window.location.protocol === 'http:' || window.location.protocol === 'https:') {
-                    navigator.serviceWorker.register('./sw.js').catch(err => console.error('SW Failed!', err));
+                    navigator.serviceWorker.register('./sw.js').then(reg => {
+                        reg.addEventListener('updatefound', () => {
+                            const newWorker = reg.installing;
+                            newWorker.addEventListener('statechange', () => {
+                                if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                                    // Ada update baru, perintahkan SW baru untuk skipWaiting
+                                    newWorker.postMessage({ type: 'SKIP_WAITING' });
+                                    // Reload halaman otomatis (data localStorage tetap aman)
+                                    window.location.reload();
+                                }
+                            });
+                        });
+                    }).catch(err => console.error('SW Failed!', err));
+                    
+                    // Jika SW mendeteksi kontrol baru, refresh untuk menerapkan UI baru
+                    let refreshing;
+                    navigator.serviceWorker.addEventListener('controllerchange', () => {
+                        if (refreshing) return;
+                        refreshing = true;
+                        window.location.reload();
+                    });
                 }
             });
         }
@@ -554,7 +609,7 @@
             switchTab('notes');
         }
         
-        const STUDENTS_DATA = [
+        const INITIAL_STUDENTS = [
             { no: 1, nim: '12301031', name: 'IRHAD PRASETYA', gender: 'L', prodi: 'PAI' },
             { no: 2, nim: '12301100', name: 'SASENA', gender: 'P', prodi: 'PAI' },
             { no: 3, nim: '12301152', name: 'KHAIRUDIN', gender: 'L', prodi: 'PAI' },
@@ -577,6 +632,12 @@
             { no: 20, nim: '12315101', name: 'ARI AKBAR', gender: 'L', prodi: 'MBS' }
         ];
         
+        let stateStudents = JSON.parse(localStorage.getItem('kknku_students')) || INITIAL_STUDENTS;
+        
+        function saveStudents() {
+            localStorage.setItem('kknku_students', JSON.stringify(stateStudents));
+        }
+        
         const QUICK_INSERT_TEXTS = [
             { icon: 'list', label: 'Poin', text: "<br>• " },
             { icon: 'mic-2', label: 'Sambutan', text: "Assalamu’alaikum Warahmatullahi Wabarakatuh. Alhamdulillahi rabbil 'alamin, wa bihi nasta'in 'alaa umuuriddunya waddiin.<br><br>Yang terhormat Bapak/Ibu Kepala Desa beserta jajaran aparatur struktural desa,<br>Yang dihormati segenap representasi tokoh agama, tokoh masyarakat, dan pimpinan kelembagaan desa,<br>Serta delegasi mahasiswa pelaksana program KKN yang patut dibanggakan.<br><br>Puji syukur senantiasa dihaturkan atas kehadirat Allah SWT, atas limpahan rahmat dan justifikasi-Nya sehingga forum konsolidasi ini dapat diselenggarakan. Program Kuliah Kerja Nyata (KKN) ini direalisasikan sebagai manifestasi konkret dari implementasi Tri Dharma Perguruan Tinggi yang difokuskan pada penguatan literasi dan pemberdayaan struktural masyarakat.<br><br>Diharapkan elaborasi program pengabdian ini dapat direalisasikan secara presisi sesuai dengan rancangan strategis yang telah divalidasi, dengan harapan mampu menghadirkan implikasi positif serta pembangunan yang berkesinambungan bagi masyarakat setempat.<br><br>(Lanjutkan paparan substansi...)" },
@@ -585,11 +646,24 @@
             { icon: 'check-circle-2', label: 'Penutupan', text: "<br>--- KESIMPULAN DAN RESOLUSI FORUM ---<br><br>Berdasarkan dialektika dan pertimbangan empiris yang telah dilaksanakan, ditetapkan resolusi sebagai berikut:<br><br>1. [Deskripsikan Ketetapan 1 secara lugas] (Penanggung Jawab: ... | Durasi Eksekusi: ...)<br>2. [Deskripsikan Ketetapan 2 secara lugas] (Penanggung Jawab: ... | Durasi Eksekusi: ...)<br><br>Seluruh ketetapan ini bersifat mengikat secara prosedural dan akan dievaluasi secara periodik oleh tim supervisor. Forum konsolidasi ini ditutup secara resmi pada pukul [00:00] WIB. Terima kasih atas atensi dan komitmen kolaborasi seluruh pihak." }
         ];
         
+        // Penambahan Pustaka hingga ~40+ Format Surat Kompleks
         let rawTemplates = [
-            { id: 't1', category: 'Pra-KKN', title: '1. Surat Tugas Mahasiswa KKN', content: `[KOP SURAT KAMPUS/PANITIA KKN]\n\nNomor     : 001/ST-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Berkas\nHal       : Instruksi Pelaksanaan Tugas Kuliah Kerja Nyata (KKN)\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMemperhatikan pedoman akademik dan kalender pendidikan Universitas [Nama Kampus] Tahun Akademik [Tahun], dengan ini diinstruksikan kepada mahasiswa yang identitasnya tercantum pada lampiran surat ini untuk merealisasikan program pengabdian kepada masyarakat dalam kerangka Kuliah Kerja Nyata (KKN).\n\nPenugasan ini diimplementasikan secara terstruktur di wilayah administratif Desa [Nama Desa], yang dilaksanakan secara berkelanjutan mulai dari tanggal [Tanggal Mulai] sampai dengan tanggal [Tanggal Selesai]. \n\nDiinstruksikan pula kepada mahasiswa terkait untuk berkoordinasi penuh dengan aparatur pemerintah desa setempat demi memastikan sinkronisasi antara program akademik dengan agenda pembangunan desa. Surat tugas ini diterbitkan untuk dipergunakan sebagai landasan legal-formal operasional di lapangan. Atas kolaborasi dan fasilitasi yang diberikan oleh Bapak/Ibu Kepala Desa, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota Kampus], [Tanggal Surat]\nMengetahui,\nKetua LPPM / Panitia KKN\n\n\n\n(Nama Terang & Gelar)\nNIP. ....................` },
-            { id: 't2', category: 'Pra-KKN', title: '2. Surat Pengantar/Penerjunan KKN', content: `[KOP SURAT KAMPUS]\n\nNomor     : 002/SP-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Serah Terima dan Pengantar Mahasiswa KKN\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nBerdasarkan ketetapan institusional mengenai implementasi Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], dengan ini kami bertindak atas nama Dosen Pembimbing Lapangan (DPL) secara resmi menyerahkan otoritas pembinaan [Jumlah] mahasiswa KKN kepada Pemerintah Desa [Nama Desa].\n\nPenyerahan ini dilakukan agar mahasiswa bersangkutan dapat melaksanakan agenda pengabdian kepada masyarakat yang terhitung efektif sejak [Tanggal Mulai] hingga [Tanggal Selesai]. Kami memohon dengan hormat agar mahasiswa ini dapat diakomodasi, dievaluasi, serta diberikan supervisi struktural selama berintegrasi dengan masyarakat di wilayah otoritas Bapak/Ibu.\n\nDiharapkan sinergitas ini mampu menghasilkan implikasi positif bagi penguatan kelembagaan desa serta peningkatan kompetensi empiris mahasiswa. Demikian surat pengantar ini disampaikan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nDosen Pembimbing Lapangan\n\n\n\n(Nama DPL & Gelar)\nNIP. ....................` },
-            { id: 't3', category: 'Pra-KKN', title: '3. Surat Permohonan Izin Lokasi KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 003/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Bendel Proposal Kegiatan\nHal       : Permohonan Justifikasi Izin Lokasi Pelaksanaan KKN\n\nYth. Kepala Bakesbangpol / Bupati [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nDalam rangka memenuhi kualifikasi kurikulum akademik wajib pada program Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], dengan ini kami mengajukan permohonan penerbitan izin lokasi pelaksanaan pengabdian masyarakat. Wilayah observasi dan intervensi program difokuskan pada Desa [Nama Desa], Kecamatan [Nama Kecamatan], yang direncanakan beroperasi mulai tanggal [Tanggal Mulai] sampai dengan [Tanggal Selesai].\n\nSebagai dasar pertimbangan yuridis dan akademis, turut dilampirkan proposal teknis yang memuat rancangan program kerja empiris yang akan dieksekusi, termasuk di dalamnya pemetaan metode partisipatif guna memastikan kegiatan ini tidak mengintervensi tatanan sosial setempat, melainkan mengakselerasi potensi lokal yang tersedia.\n\nBesar harapan kami agar justifikasi perizinan ini dapat segera diproses. Atas atensi dan otorisasi yang diberikan, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nKetua Kelompok KKN                    Sekretaris\n\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
-            { id: 't4', category: 'Pra-KKN', title: '4. Surat Pernyataan Peserta KKN', content: `SURAT PERNYATAAN KOMITMEN PESERTA KKN\n\nYang bertanda tangan di bawah ini:\nNama Terang         : [Nama Mahasiswa]\nNomor Induk Mhs     : [NIM]\nFakultas / Prodi    : [Fakultas / Program Studi]\nIdentitas Kelompok  : [Nomor/Nama Kelompok]\n\nMelalui dokumen ini menyatakan secara mutlak KOMITMEN penuh untuk menaati dan mengimplementasikan seluruh regulasi, kode etik, dan tata tertib Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Tahun [Tahun]. \n\nSelanjutnya ditegaskan bahwa saya bersedia untuk:\n1. Mempresentasikan integritas almamater dalam setiap tindakan dan komunikasi publik.\n2. Beradaptasi dan mengikatkan diri pada norma sosial, adat istiadat, serta hukum positif yang berlaku di wilayah lokus pengabdian.\n3. Tidak berafiliasi dengan aktivitas provokatif, politik praktis, maupun tindakan indisipliner yang bertentangan dengan kaidah akademis.\n\nApabila di kemudian hari terbukti dilakukan pelanggaran atas klausul pernyataan ini, saya menyatakan bersedia diproses secara institusional dan menerima sanksi akademis tingkat maksimal tanpa hak penuntutan kembali.\n\nPernyataan ini dikonstruksi dalam keadaan sadar, sehat secara rasional, dan tanpa tekanan dari pihak manapun.\n\n[Kota], [Tanggal]\nYang Membuat Pernyataan,\n\n[Meterai 10.000]\n\n\n(Nama Mahasiswa)\nNIM. [NIM]` },
+            { id: 't1', category: 'Pemerintah', title: '1. Surat Tugas Mahasiswa KKN', content: `[KOP SURAT KAMPUS/PANITIA KKN]\n\nNomor     : 001/ST-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Berkas\nHal       : Instruksi Pelaksanaan Tugas Kuliah Kerja Nyata (KKN)\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nMemperhatikan pedoman akademik dan kalender pendidikan Universitas [Nama Kampus] Tahun Akademik [Tahun], dengan ini diinstruksikan kepada mahasiswa yang identitasnya tercantum pada lampiran surat ini untuk merealisasikan program pengabdian kepada masyarakat dalam kerangka Kuliah Kerja Nyata (KKN).\n\nPenugasan ini diimplementasikan secara terstruktur di wilayah administratif Desa [Nama Desa], yang dilaksanakan secara berkelanjutan mulai dari tanggal [Tanggal Mulai] sampai dengan tanggal [Tanggal Selesai]. \n\nDiinstruksikan pula kepada mahasiswa terkait untuk berkoordinasi penuh dengan aparatur pemerintah desa setempat demi memastikan sinkronisasi antara program akademik dengan agenda pembangunan desa. Surat tugas ini diterbitkan untuk dipergunakan sebagai landasan legal-formal operasional di lapangan. Atas kolaborasi dan fasilitasi yang diberikan oleh Bapak/Ibu Kepala Desa, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota Kampus], [Tanggal Surat]\nMengetahui,\nKetua LPPM / Panitia KKN\n\n\n\n(Nama Terang & Gelar)\nNIP. ....................` },
+            { id: 't2', category: 'Pemerintah', title: '2. Surat Pengantar/Penerjunan KKN', content: `[KOP SURAT KAMPUS]\n\nNomor     : 002/SP-KKN/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Serah Terima dan Pengantar Mahasiswa KKN\n\nYth. Kepala Desa [Nama Desa]\nKecamatan [Nama Kecamatan], Kabupaten [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nBerdasarkan ketetapan institusional mengenai implementasi Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], dengan ini kami bertindak atas nama Dosen Pembimbing Lapangan (DPL) secara resmi menyerahkan otoritas pembinaan [Jumlah] mahasiswa KKN kepada Pemerintah Desa [Nama Desa].\n\nPenyerahan ini dilakukan agar mahasiswa bersangkutan dapat melaksanakan agenda pengabdian kepada masyarakat yang terhitung efektif sejak [Tanggal Mulai] hingga [Tanggal Selesai]. Kami memohon dengan hormat agar mahasiswa ini dapat diakomodasi, dievaluasi, serta diberikan supervisi struktural selama berintegrasi dengan masyarakat di wilayah otoritas Bapak/Ibu.\n\nDiharapkan sinergitas ini mampu menghasilkan implikasi positif bagi penguatan kelembagaan desa serta peningkatan kompetensi empiris mahasiswa. Demikian surat pengantar ini disampaikan.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nDosen Pembimbing Lapangan\n\n\n\n(Nama DPL & Gelar)\nNIP. ....................` },
+            { id: 't3', category: 'Pemerintah Daerah', title: '3. Surat Permohonan Izin Lokasi KKN (Bakesbangpol/Bupati)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 003/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Bendel Proposal Kegiatan\nHal       : Permohonan Justifikasi Izin Lokasi Pelaksanaan KKN\n\nYth. Kepala Bakesbangpol / Bupati [Nama Kabupaten]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nDalam rangka memenuhi kualifikasi kurikulum akademik wajib pada program Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus], dengan ini kami mengajukan permohonan penerbitan izin lokasi pelaksanaan pengabdian masyarakat. Wilayah observasi dan intervensi program difokuskan pada Desa [Nama Desa], Kecamatan [Nama Kecamatan], yang direncanakan beroperasi mulai tanggal [Tanggal Mulai] sampai dengan [Tanggal Selesai].\n\nSebagai dasar pertimbangan yuridis dan akademis, turut dilampirkan proposal teknis yang memuat rancangan program kerja empiris yang akan dieksekusi, termasuk di dalamnya pemetaan metode partisipatif guna memastikan kegiatan ini tidak mengintervensi tatanan sosial setempat, melainkan mengakselerasi potensi lokal yang tersedia.\n\nBesar harapan kami agar justifikasi perizinan ini dapat segera diproses. Atas atensi dan otorisasi yang diberikan, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nKetua Kelompok KKN                    Sekretaris\n\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
+            { id: 't4', category: 'Administrasi', title: '4. Surat Pernyataan Komitmen Peserta KKN', content: `SURAT PERNYATAAN KOMITMEN PESERTA KKN\n\nYang bertanda tangan di bawah ini:\nNama Terang         : [Nama Mahasiswa]\nNomor Induk Mhs     : [NIM]\nFakultas / Prodi    : [Fakultas / Program Studi]\nIdentitas Kelompok  : [Nomor/Nama Kelompok]\n\nMelalui dokumen ini menyatakan secara mutlak KOMITMEN penuh untuk menaati dan mengimplementasikan seluruh regulasi, kode etik, dan tata tertib Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Tahun [Tahun]. \n\nSelanjutnya ditegaskan bahwa saya bersedia untuk:\n1. Mempresentasikan integritas almamater dalam setiap tindakan dan komunikasi publik.\n2. Beradaptasi dan mengikatkan diri pada norma sosial, adat istiadat, serta hukum positif yang berlaku di wilayah lokus pengabdian.\n3. Tidak berafiliasi dengan aktivitas provokatif, politik praktis, maupun tindakan indisipliner yang bertentangan dengan kaidah akademis.\n\nApabila di kemudian hari terbukti dilakukan pelanggaran atas klausul pernyataan ini, saya menyatakan bersedia diproses secara institusional dan menerima sanksi akademis tingkat maksimal tanpa hak penuntutan kembali.\n\nPernyataan ini dikonstruksi dalam keadaan sadar, sehat secara rasional, dan tanpa tekanan dari pihak manapun.\n\n[Kota], [Tanggal]\nYang Membuat Pernyataan,\n\n[Meterai 10.000]\n\n\n(Nama Mahasiswa)\nNIM. [NIM]` },
+            { id: 't5', category: 'Desa/Dusun/Kampung', title: '5. Undangan Rapat Desa/Dusun (Formal)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 005/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Undangan Musyawarah Rencana Program Kerja\n\nYth. Bapak/Ibu [Nama Jabatan: Kepala Dusun/RT/RW/Tokoh Adat]\ndi [Lokasi]\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nSegala puji bagi Allah SWT yang senantiasa melimpahkan rahmat-Nya. Sehubungan dengan telah dilaksanakannya observasi awal oleh Mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] di wilayah [Nama Desa/Dusun], dengan ini kami bermaksud menyelenggarakan musyawarah koordinasi guna merumuskan Rencana Aksi Detail (RAD) yang akan diimplementasikan.\n\nAdapun agenda tersebut akan diselenggarakan pada:\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. selesai\nTempat       : [Lokasi Kegiatan]\nAgenda       : Pemaparan dan Sinkronisasi Program Kerja KKN 2026\n\nMengingat urgensi kegiatan ini terhadap kelancaran program pemberdayaan masyarakat, kami sangat mengharapkan kehadiran dan partisipasi aktif Bapak/Ibu. Atas perhatian dan kesediaannya, kami ucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nKetua Kelompok KKN                    Sekretaris\n\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
+            { id: 't6', category: 'Perizinan', title: '6. Surat Permohonan Izin Kegiatan Acara/Lomba', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 006/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Proposal Kegiatan\nHal       : Permohonan Izin Pelaksanaan Kegiatan [Nama Kegiatan/Lomba]\n\nYth. Bapak Kepala Desa [Nama Desa] / Kapolsek [Nama Kecamatan]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nSehubungan dengan pelaksanaan program kerja Kuliah Kerja Nyata (KKN) Mahasiswa Universitas [Nama Kampus] Tahun 2026, kami bermaksud menyelenggarakan kegiatan [Nama Kegiatan, Misal: Festival Gebyar Desa / Lomba 17 Agustus]. Kegiatan ini ditujukan untuk mengakselerasi potensi sumber daya manusia dan mempererat kohesi sosial masyarakat setempat.\n\nPelaksanaan kegiatan direncanakan pada:\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. Selesai\nTempat       : [Lokasi Kegiatan]\nTarget Peserta: [Target dan Estimasi Jumlah Peserta]\n\nUntuk menjaga ketertiban, keamanan, serta legalitas formal penyelenggaraan, kami mengajukan permohonan penerbitan izin pelaksanaan kegiatan tersebut. Kami menjamin bahwa acara akan dilangsungkan dengan mematuhi protokol keamanan dan etika sosial yang berlaku.\n\nDemikian permohonan izin ini kami sampaikan. Atas persetujuan dan dukungan Bapak, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nKetua Panitia Kegiatan                Ketua Kelompok KKN\n\n\n\n(Nama Ketua Panitia)                    (Nama Ketua Kelompok)` },
+            { id: 't7', category: 'Peminjaman', title: '7. Surat Permohonan Peminjaman Fasilitas/Alat', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 007/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Peminjaman [Sebutkan Fasilitas/Alat, Misal: Gedung Serbaguna/Proyektor/Sound System]\n\nYth. [Nama Jabatan Pengelola Fasilitas, Misal: Kepala UPTD/Takmir Masjid]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nDalam rangka mendukung suksesi pelaksanaan program kerja Mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] di Desa [Nama Desa], kami bermaksud mengadakan kegiatan [Sebutkan Nama Kegiatan, Misal: Penyuluhan Stunting] yang insya Allah akan dilaksanakan pada:\n\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. Selesai\nTempat       : [Lokasi Kegiatan]\n\nSehubungan dengan hal tersebut, kami mengajukan permohonan peminjaman fasilitas/inventaris berupa [Sebutkan Fasilitas/Alat secara detail beserta jumlahnya] untuk durasi kegiatan di atas. Kami berkomitmen secara penuh untuk menjaga fungsionalitas dan keutuhan fasilitas tersebut, serta mengembalikannya dalam keadaan semula segera setelah acara selesai.\n\nDemikian permohonan peminjaman ini kami ajukan. Atas kerja sama dan kebijaksanaan Bapak/Ibu, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nKetua Kelompok KKN                    Sekretaris\n\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
+            { id: 't8', category: 'Investor/Sponsor', title: '8. Surat Penawaran Kerja Sama (Sponsorship)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 008/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Bendel Proposal Penawaran Sponsorship\nHal       : Penawaran Kerja Sama Sponsorship Kegiatan KKN\n\nYth. Pimpinan/Direktur [Nama Instansi/Perusahaan Calon Sponsor]\ndi Tempat\n\nDengan hormat,\n\nDalam upaya mengoptimalkan pengabdian kepada masyarakat berbasis pemberdayaan, Mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] di Desa [Nama Desa] merancang sebuah mega-proyek bertajuk "[Sebutkan Nama Proyek/Kegiatan Besar]". Proyek ini diproyeksikan akan memberikan dampak (outcome) langsung kepada [Sebutkan Target, Misal: 500 warga lokal dan UMKM] dalam aspek ekonomi dan edukasi.\n\nPelaksanaan proyek dijadwalkan pada [Rentang Waktu Kegiatan]. Mengingat eskalasi kegiatan yang cukup masif, kami mengidentifikasi [Nama Perusahaan/Instansi Bapak/Ibu] sebagai mitra strategis yang memiliki visi selaras dalam agenda Tanggung Jawab Sosial Perusahaan (CSR).\n\nOleh karena itu, kami bermaksud menawarkan kerja sama sponsorship partisipatif. Sebagai kompensasi (kontraprestasi), pihak panitia telah menyiapkan ruang publikasi merek/produk yang komprehensif pada berbagai media promosi kegiatan kami (rincian paket terlampir dalam proposal).\n\nKami sangat menantikan kesempatan untuk mempresentasikan penawaran ini secara langsung. Atas waktu dan pertimbangan Bapak/Ibu, kami ucapkan terima kasih.\n\nHormat kami,\n[Desa], [Tanggal]\nKetua Divisi Humas & Dana             Ketua Kelompok KKN\n\n\n\n(Nama Divisi Dana)                      (Nama Ketua)` },
+            { id: 't9', category: 'Investor/Sponsor', title: '9. Undangan Pertemuan Investor/Sponsor', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 009/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Undangan Pemaparan (Pitching) Program Sponsorship\n\nYth. Bapak/Ibu [Nama Perwakilan/Pimpinan Instansi Sponsor]\n[Nama Instansi/Perusahaan]\ndi Tempat\n\nDengan hormat,\n\nMenindaklanjuti proposal penawaran kerja sama yang telah kami sampaikan sebelumnya perihal kegiatan "[Sebutkan Nama Kegiatan]" yang diinisiasi oleh Mahasiswa KKN Universitas [Nama Kampus], kami bermaksud mengundang Bapak/Ibu untuk hadir dalam agenda pemaparan teknis (pitching) dan diskusi kerja sama.\n\nPertemuan ini bertujuan untuk mengeksplorasi potensi sinergi strategis dan menjabarkan rincian benefit (kontraprestasi) yang akan diterima oleh pihak sponsor. Agenda pertemuan dijadwalkan pada:\n\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. Selesai\nTempat       : [Lokasi Pertemuan/Link Zoom jika daring]\nAgenda       : Presentasi Program & Negosiasi Sponsorship\n\nKami berharap pertemuan ini dapat menjadi fondasi bagi kolaborasi yang produktif. Mohon perkenan Bapak/Ibu untuk mengonfirmasi kehadiran melalui narahubung kami, [Nama Narahubung] di nomor [Nomor HP/WA].\n\nAtas atensi dan kesediaan waktu Bapak/Ibu, diucapkan terima kasih.\n\nHormat kami,\n[Kota], [Tanggal]\nKetua Divisi Humas & Dana             Ketua Kelompok KKN\n\n\n\n(Nama Divisi Dana)                      (Nama Ketua)` },
+            { id: 't10', category: 'Kampus', title: '10. Surat Permintaan Kolaborasi Antar Kelompok KKN', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 010/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Konsep Acara (Term of Reference)\nHal       : Permohonan Kolaborasi Pelaksanaan Program Lintas Kelompok\n\nYth. Ketua Kelompok KKN [Sebutkan Identitas Kelompok Lain, Misal: Desa Y / Kelompok 02]\nUniversitas [Nama Kampus]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nSalam silaturahmi kami sampaikan, semoga kita senantiasa diberikan kelancaran dalam menjalankan tugas pengabdian masyarakat. Sehubungan dengan kesamaan wilayah geografis operasional dan relevansi isu sektoral antara wilayah pengabdian kita, Kelompok KKN Desa [Nama Desa Sendiri] menginisiasi gagasan untuk menyelenggarakan "[Sebutkan Nama Program Kolaborasi, Misal: Seminar Edukasi Pertanian Lintas Desa]".\n\nKami memproyeksikan bahwa kolaborasi lintas kelompok ini akan meminimalisasi redudansi program, mengefisiensikan anggaran, serta memperluas cakupan jangkauan (impact) kegiatan. Pelaksanaan kegiatan direncanakan pada [Tanggal Rencana Kegiatan].\n\nOleh karena itu, kami bermaksud mengajukan tawaran kerja sama (Joint Program) kepada Kelompok KKN [Nama Kelompok Tujuan]. Apabila tawaran ini disetujui, kami mengundang perwakilan kelompok Saudara/i untuk menyelenggarakan rapat koordinasi teknis guna mendiskusikan skema pembagian tugas dan anggaran.\n\nDemikian surat permohonan kolaborasi ini kami sampaikan. Kami menantikan respons positif dari rekan-rekan. Atas perhatiannya, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nKetua Kelompok KKN                    Sekretaris\n\n\n\n(Nama Ketua)                                (Nama Sekretaris)` },
+            { id: 't11', category: 'Ustadz/Tokoh Agama', title: '11. Surat Permohonan Pemateri/Khatib (Ustadz)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 011/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Permohonan Kesediaan Menjadi Pemateri / Khatib\n\nYth. Al-Mukarrom Ustadz [Nama Ustadz / Tokoh Agama]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nAlhamdulillahi rabbil 'alamin, semoga limpahan rahmat dan hidayah Allah SWT senantiasa menyertai aktivitas dakwah Ustadz. Dalam rangka membina kerohanian dan meningkatkan literasi keagamaan masyarakat di lokasi pengabdian kami, Mahasiswa KKN Universitas [Nama Kampus] Desa [Nama Desa] bermaksud menyelenggarakan kegiatan "[Sebutkan Nama Acara, Misal: Tabligh Akbar / Kajian Rutin]".\n\nKegiatan ini akan diselenggarakan pada:\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. Selesai\nTempat       : [Lokasi, Misal: Masjid Jami' Al-Ikhlas]\nTema Kajian  : "[Sebutkan Tema, Misal: Membangun Ekonomi Desa Berbasis Syariah]"\n\nMengingat kapabilitas dan kedalaman keilmuan yang Ustadz miliki, kami dengan penuh takzim memohon kesediaan Ustadz untuk hadir dan bertindak selaku Pemateri/Penceramah pada acara tersebut.\n\nDemikian permohonan ini kami sampaikan. Kami sangat mengharapkan kesediaan Ustadz untuk merajut pencerahan bersama masyarakat desa kami. Atas perkenannya, kami ucapkan jazakumullah khairan katsiran.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nKetua Panitia                         Ketua Kelompok KKN\n\n\n\n(Nama Ketua Panitia)                    (Nama Ketua Kelompok)` },
+            { id: 't12', category: 'Lembaga Pendidikan', title: '12. Surat Permohonan Mengajar di Sekolah (SD/SMP)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 012/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Lembar Rencana Materi\nHal       : Permohonan Izin Mengabdi dan Mengajar Sementara\n\nYth. Kepala Sekolah [Nama Sekolah, Misal: SDN 01 Desa X]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nDengan hormat, sehubungan dengan implementasi program kerja bidang pendidikan oleh Mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] di Desa [Nama Desa], kami mengidentifikasi adanya kebutuhan akselerasi literasi di tingkat pendidikan dasar/menengah.\n\nSebagai wujud sumbangsih akademis, kami bermaksud mengajukan permohonan izin untuk melaksanakan kegiatan "Bakti Mengajar" (pendampingan belajar mengajar ekstra/intrakurikuler) di institusi pendidikan yang Bapak/Ibu pimpin. Program ini tidak dirancang untuk mengintervensi kurikulum yang berjalan, melainkan bersifat suplemen (tambahan) seperti kelas baca tulis, pelatihan komputer dasar, atau motivasi belajar.\n\nKegiatan ini direncanakan akan berlangsung sebanyak [Jumlah] pertemuan dalam sepekan, terhitung sejak tanggal [Tanggal Mulai] hingga [Tanggal Selesai].\n\nDemikian permohonan izin ini kami ajukan. Kami sangat berharap dapat berkolaborasi dengan pihak sekolah guna mendidik generasi penerus. Atas izin dan dukungan Bapak/Ibu, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nPenanggung Jawab Pendidikan           Ketua Kelompok KKN\n\n\n\n(Nama PJ)                               (Nama Ketua Kelompok)` },
+            { id: 't13', category: 'Umum/Sosial', title: '13. Undangan Kerja Bakti Massal (Gotong Royong)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 013/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Undangan Kerja Bakti Massal dan Gotong Royong\n\nYth. Bapak/Ibu/Sdr/i [Sebutkan Sasaran, Misal: Seluruh Warga RT 01 / Karang Taruna]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nSebagai manifestasi kepedulian terhadap sanitasi lingkungan dan kebersihan fasilitas umum di Desa [Nama Desa], kami Mahasiswa KKN Universitas [Nama Kampus] menginisiasi program revitalisasi kebersihan desa.\n\nOleh karena itu, kami mengundang Bapak/Ibu/Sdr/i untuk berpartisipasi aktif dalam kegiatan "Kerja Bakti Massal" yang akan dilaksanakan pada:\n\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. Selesai\nTitik Kumpul : [Lokasi Kumpul]\nFokus Area   : [Sebutkan Fokus, Misal: Pembersihan Saluran Air & Area Masjid]\n\nKami mengimbau kepada seluruh peserta untuk dapat membawa peralatan kebersihan mandiri (cangkul, sapu lidi, parang, dll). Kebersihan desa adalah tanggung jawab kolektif. \n\nKehadiran dan sinergi dari seluruh elemen masyarakat sangat kami harapkan guna menyukseskan kegiatan ini. Atas partisipasinya, kami ucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa], [Tanggal]\nKetua Kelompok KKN                    Kepala Desa / Kadus (Mengetahui)\n\n\n\n(Nama Ketua)                                (Nama Kepala Desa/Kadus)` },
+            { id: 't14', category: 'Administrasi', title: '14. Surat Permintaan Maaf (Formal/Klarifikasi)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 014/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : -\nHal       : Klarifikasi dan Permohonan Maaf Resmi\n\nYth. [Sebutkan Pihak yang Dituju, Misal: Kepala Desa / Pihak Sponsor / Tokoh Adat]\ndi Tempat\n\nDengan hormat,\n\nMelalui surat resmi ini, kami atas nama jajaran Panitia/Mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] Kelompok [Nomor/Nama Desa] bermaksud menyampaikan klarifikasi sekaligus permohonan maaf yang sebesar-besarnya atas insiden/kekeliruan [Sebutkan Kejadian secara diplomatis, Misal: keterlambatan penyerahan proposal / miskomunikasi jadwal / kendala teknis pada acara X] yang terjadi pada tanggal [Tanggal Kejadian].\n\nKami mengakui bahwa insiden tersebut merupakan preseden yang kurang baik dan sepenuhnya berada di luar proyeksi standar operasional (SOP) yang telah kami tetapkan. Hal ini murni disebabkan oleh [Sebutkan Alasan Logis secara ringkas, misal: kendala force majeure / kesalahan teknis internal] tanpa ada intensi untuk mengurangi rasa hormat kami kepada Bapak/Ibu/Instansi terkait.\n\nSebagai langkah mitigasi preventif, kami telah mengevaluasi internal secara komprehensif agar kejadian serupa tidak teramplifikasi di kemudian hari. \n\nKami sangat mengharapkan kebesaran hati Bapak/Ibu untuk menerima permohonan maaf ini, dan kami berharap insiden tersebut tidak mendegradasi ikatan silaturahmi serta prospek kerja sama yang telah terbangun dengan baik. \n\nDemikian surat permohonan maaf ini disampaikan. Atas kebesaran hati dan permaklumannya, kami ucapkan terima kasih.\n\nHormat kami,\n[Kota/Desa], [Tanggal]\nKetua Kelompok KKN                    Dosen Pembimbing Lapangan (Mengetahui)\n\n\n\n(Nama Ketua Kelompok)                   (Nama DPL)` },
+            { id: 't15', category: 'Kepala Daerah', title: '15. Undangan Pejabat Publik (Bupati/Camat)', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 015/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Berkas Term of Reference (ToR)\nHal       : Permohonan Kehadiran dan Membuka Acara Secara Resmi\n\nYth. Bapak [Nama/Jabatan, Misal: Bupati Kabupaten X / Camat Y]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nTeriring salam dan doa semoga Bapak/Ibu senantiasa berada dalam lindungan Allah SWT serta diberikan kemudahan dalam menjalankan amanah pemerintahan.\n\nDalam rangka mengimplementasikan pilar pengabdian masyarakat dari Tri Dharma Perguruan Tinggi, Mahasiswa Kuliah Kerja Nyata (KKN) Universitas [Nama Kampus] akan menyelenggarakan agenda strategis berskala daerah dengan tajuk "[Sebutkan Nama Acara, Misal: Simposium Ekonomi Kreatif Desa dan Gelar UMKM]". \n\nKegiatan puncak ini akan diselenggarakan pada:\nHari/Tanggal : [Hari, Tanggal]\nWaktu        : [Waktu] WIB s.d. Selesai\nTempat       : [Lokasi Acara]\n\nMengingat kapasitas, wewenang, dan urgensi peran Bapak/Ibu dalam mengakselerasi kebijakan di wilayah ini, kami memohon dengan penuh hormat perkenan Bapak/Ibu untuk hadir, memberikan *keynote speech* (sambutan kunci), sekaligus **meresmikan pembukaan acara tersebut**.\n\nSebagai representasi birokrasi tertinggi di wilayah ini, kehadiran Bapak/Ibu akan menjadi katalisator moral yang luar biasa bagi mahasiswa dan masyarakat setempat. Rincian detail agenda (ToR) turut kami lampirkan untuk menjadi bahan pertimbangan.\n\nDemikian surat permohonan ini kami sampaikan. Kami menantikan konfirmasi kehadiran Bapak/Ibu melalui narahubung kami [Nama & Nomor WA]. Atas waktu dan perkenannya, kami ucapkan terima kasih yang tak terhingga.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Desa/Kecamatan], [Tanggal]\nKetua Panitia Pelaksana               Ketua Kelompok KKN\n\n\n\n(Nama Panitia)                          (Nama Ketua Kelompok)` },
+            { id: 't16', category: 'Kepala Daerah', title: '16. Surat Audensi/Audiensi ke Pejabat', content: `[KOP SURAT KELOMPOK KKN]\n\nNomor     : 016/KKN-[Desa]/[Bulan Romawi]/[Tahun]\nLampiran  : 1 (Satu) Lembar Ringkasan Program\nHal       : Permohonan Audiensi Program KKN\n\nYth. Bapak [Nama/Jabatan, Misal: Kepala Dinas Pertanian/Kepala Bappeda]\ndi Tempat\n\nAssalamu'alaikum Warahmatullahi Wabarakatuh.\n\nDengan hormat,\n\nSehubungan dengan pelaksanaan Kuliah Kerja Nyata (KKN) Mahasiswa Universitas [Nama Kampus] di Desa [Nama Desa] yang berfokus pada pemberdayaan sektor [Sebutkan Sektor: Misal Pertanian/UMKM/Kesehatan], kami telah merumuskan beberapa *draft* Rencana Aksi Detail (RAD).\n\nUntuk memastikan bahwa program yang kami rancang bersifat sinkron, tidak tumpang tindih dengan program pemerintah daerah, dan memiliki relevansi yang taktis, kami bermaksud mengajukan permohonan **Audiensi** (Tatap Muka) dengan Bapak/Ibu.\n\nDalam audiensi tersebut, kami merencanakan pemaparan singkat dan memohon arahan, kritik, serta justifikasi dari pihak dinas/pemerintah terkait. Kami memohon agar audiensi dapat dijadwalkan pada rentang hari [Hari, Tanggal] hingga [Hari, Tanggal], menyesuaikan dengan keluangan waktu Bapak/Ibu.\n\nBesar harapan kami Bapak/Ibu berkenan menerima kunjungan kami. Konfirmasi jadwal dapat disampaikan melalui narahubung [Nama & Nomor WA]. Atas atensi dan kebijakan Bapak/Ibu, diucapkan terima kasih.\n\nWassalamu'alaikum Warahmatullahi Wabarakatuh.\n\n[Kota], [Tanggal]\nKetua Kelompok KKN\n\n\n\n(Nama Ketua Kelompok)\nNIM. ..............` },
             { id: 't34', category: 'Administrasi', title: '34. Presensi Peserta KKL 2026 (Sengkubang)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nPRESENSI PESERTA KKL 2026\nKelompok   : SENGKUBANG\n\n| NO. | NIM      | NAMA                      | L/P | PRODI | HARI KE-1 |\n| --- | -------- | ------------------------- | --- | ----- | --------- |\n| 1.  | 12301031 | IRHAD PRASETYA            | L   | PAI   |           |\n| 2.  | 12301100 | SASENA                    | P   | PAI   |           |\n| 3.  | 12301152 | KHAIRUDIN                 | L   | PAI   |           |` },
             { id: 't35', category: 'Jurnal Harian', title: '35. Jurnal Bimbingan KKL 2026 (Sengkubang)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nJURNAL BIMBINGAN KKL 2026\nKelompok   : SENGKUBANG\n\n| NO. | Hari/Tgl. | Materi Bimbingan/Kegiatan | Hasil/Komentar Pembimbing |\n| --- | --------- | ------------------------- | ------------------------- |\n| 1.  |           |                           |                           |\n| 2.  |           |                           |                           |` },
             { id: 't36', category: 'Administrasi', title: '36. Jaket KKL 2026 (Tanjung 1)', content: `PANITIA KULIAH KERJA LAPANGAN (KKL) TAHUN 2026\nLEMBAGA PENELITIAN DAN PENGABDIAN MASYARAKAT (LP2M)\n\nDAFTAR PENERIMAAN JAKET PESERTA KKL 2026\nKelompok   : TANJUNG 1\nPembimbing : NELLY S.Pd.I, M.S.I\nPanitia    : FATHANIAH, S.Pd.I\n\n| NO. | NIM      | NAMA                       | L/P | UKURAN | TANDA TANGAN |\n| --- | -------- | -------------------------- | --- | ------ | ------------ |\n| 1   | 12301093 | HERASTI RISNA AYUNDA       | P   | M      |              |\n| 2   | 12301110 | ZURIAT ROMADHAN            | L   | XL     |              |\n| 3   | 12302051 | FITRIA NINGSIH             | P   | L      |              |\n| 4   | 12303066 | MONICA VIKA                | P   | M      |              |\n| 5   | 12303080 | WATI                       | P   | XL     |              |\n| 6   | 12303115 | DEDI AHMAD                 | L   | L      |              |\n| 7   | 12305064 | Azizah                     | P   | S      |              |\n| 8   | 12307046 | Effa Nagetha               | P   | L      |              |\n| 9   | 12307050 | ALIYA SAFITRI              | P   | M      |              |\n| 10  | 12307056 | SYARIFAH ARDILLA RAHMAWATI | P   | L      |              |\n| 11  | 12309056 | SAYYIDAH FADHILATUNNISA    | P   | XL     |              |\n| 12  | 12310074 | TIFARA ANDRIANI            | P   | M      |              |\n| 13  | 12310084 | PUTRI WAHYU SHAFIYYAH      | P   | XXL    |              |\n| 14  | 12314080 | Artiya Maharani            | P   | L      |              |\n| 15  | 12314083 | OLIVIA SALSABILLA          | L   | M      |              |\n| 16  | 12314086 | Ariyansyah                 | L   | XL     |              |\n| 17  | 12315092 | fajrul muwahid             | L   | L      |              |\n| 18  | 12315095 | MUHAMMAD VICKY WIZARD      | L   | XL     |              |\n| 19  | 12315110 | KHAIRUNNISA CITRA RAHAYU   | P   | S      |              |` },
@@ -602,6 +676,7 @@
             { id: 't43', category: 'Jurnal Harian', title: '43. Format Logbook Harian', content: `LOGBOOK HARIAN DAN MINGGUAN KKL\n\n| No | Hari/Tanggal | Waktu & Durasi | Uraian Kegiatan (Sesuai RAD) | Target Peserta/Mitra | Kendala yang Dihadapi | Solusi / Tindak Lanjut | Rencana Esok Hari |\n| -- | ------------ | -------------- | ---------------------------- | -------------------- | --------------------- | ---------------------- | ----------------- |\n| 1  | Senin, ...   | 08.00-12.00    | Observasi partisipatif       | Kepala Desa          | Jadwal bentrok        | Menyesuaikan waktu     | Wawancara tokoh   |\n| 2  |              |                |                              |                      |                       |                        |                   |` }
         ];
         
+        // PENGELOLAAN EXPORT/IMPORT CACHE & URL
         let state = {
             theme: localStorage.getItem('kknku_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'),
             activeTab: 'notes',
@@ -611,6 +686,7 @@
             keuangan: JSON.parse(localStorage.getItem('kknku_keuangan')) || [],
             agenda: JSON.parse(localStorage.getItem('kknku_agenda')) || [],
             templates: JSON.parse(localStorage.getItem('kknku_templates')) || rawTemplates,
+            customLinks: JSON.parse(localStorage.getItem('kknku_customLinks')) || [],
             editingNoteId: null,
             editingType: 'note',
             viewingDoc: null,
@@ -618,6 +694,7 @@
             deleteTarget: null,
             editingJournalId: null
         };
+        
         let recognition = null;
         let isRecording = false;
         
@@ -635,7 +712,9 @@
             localStorage.setItem('kknku_keuangan', JSON.stringify(state.keuangan));
             localStorage.setItem('kknku_agenda', JSON.stringify(state.agenda));
             localStorage.setItem('kknku_templates', JSON.stringify(state.templates));
+            localStorage.setItem('kknku_customLinks', JSON.stringify(state.customLinks));
             updateDashboardStats();
+            renderCustomLinksSidebar();
         }
         
         function updateDashboardStats() {
@@ -644,6 +723,45 @@
             document.getElementById('stat-absensi').textContent = state.absensi.length;
             document.getElementById('stat-agenda').textContent = state.agenda.length;
             document.getElementById('stat-templates').textContent = state.templates.length;
+        }
+
+        // FUNGSI EKSPOR IMPOR CACHE PENUH
+        function exportAllData() {
+            const allData = {
+                profile: JSON.parse(localStorage.getItem('kknku_profile')),
+                state: state
+            };
+            const blob = new Blob([JSON.stringify(allData)], {type: "application/json"});
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Backup-KKNKU-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            customAlert("Seluruh data berhasil diekspor sebagai JSON.", "Ekspor Berhasil", "success");
+        }
+
+        function importAllData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if(data.profile) localStorage.setItem('kknku_profile', JSON.stringify(data.profile));
+                    if(data.state) {
+                        state = data.state;
+                        saveData();
+                    }
+                    loadProfile();
+                    renderContent();
+                    customAlert("Seluruh cache/data berhasil dipulihkan dari file JSON.", "Pemulihan Berhasil", "success");
+                } catch(err) {
+                    customAlert("File JSON korup atau tidak valid.", "Pemulihan Gagal", "error");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // reset
         }
         
         function applyTheme() {
@@ -669,6 +787,50 @@
                 overlay.classList.remove('hidden');
             }
         }
+
+        // MANAJEMEN TAUTAN CUSTOM DI SIDEBAR
+        function addCustomLink(e) {
+            e.preventDefault();
+            const name = document.getElementById('input-custom-name').value;
+            const url = document.getElementById('input-custom-url').value;
+            state.customLinks.push({ id: 'cl-' + Date.now(), name, url });
+            saveData();
+            document.getElementById('form-custom-link').reset();
+        }
+
+        function deleteCustomLink(id) {
+            state.customLinks = state.customLinks.filter(l => l.id !== id);
+            saveData();
+        }
+
+        function renderCustomLinksSidebar() {
+            const container = document.getElementById('custom-links-container');
+            container.innerHTML = '';
+            state.customLinks.forEach(link => {
+                const wrap = document.createElement('div');
+                wrap.className = "flex items-center justify-between px-6 py-3 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800 group";
+                
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.target = "_blank";
+                a.rel = "noopener noreferrer";
+                a.className = "flex items-center gap-3 text-slate-600 dark:text-slate-400 flex-1 min-w-0";
+                a.innerHTML = `<i data-lucide="link" class="w-5 h-5 shrink-0"></i><span class="text-sm font-semibold truncate">${link.name}</span>`;
+                
+                const btnDel = document.createElement('button');
+                btnDel.onclick = () => deleteCustomLink(link.id);
+                btnDel.className = "text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity p-1";
+                btnDel.innerHTML = `<i data-lucide="trash-2" class="w-4 h-4"></i>`;
+
+                wrap.appendChild(a);
+                wrap.appendChild(btnDel);
+                container.appendChild(wrap);
+            });
+            lucide.createIcons({ root: container });
+        }
+        
+        document.getElementById('form-custom-link').addEventListener('submit', addCustomLink);
+        renderCustomLinksSidebar();
         
         const tabNames = {
             'notes': 'Arsip Notulensi',
@@ -826,15 +988,25 @@
             insertToEditor(html, true);
         }
 
+        // ANIMASI SCROLL HEADER & KONTEN TENGGELAM/MUNCUL
         let virtualStore = {};
         let itemObserver = null;
         let lastScrollY = 0;
         let scrollDirection = 'down';
         const scrollContainer = document.getElementById('scroll-container');
+        const mainHeader = document.getElementById('main-header');
         
         scrollContainer.addEventListener('scroll', (e) => {
             const currentY = e.target.scrollTop;
             scrollDirection = currentY > lastScrollY ? 'down' : 'up';
+            
+            // Animasi Header (Sembunyi jika turun, muncul jika naik)
+            if (currentY > 100 && scrollDirection === 'down') {
+                mainHeader.classList.add('header-hidden');
+            } else {
+                mainHeader.classList.remove('header-hidden');
+            }
+
             lastScrollY = currentY;
         }, { passive: true });
         
@@ -845,26 +1017,26 @@
             itemObserver = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     const el = entry.target;
+                    
+                    // 1. Lazy-Load Struktural: Injeksi DOM dipertahankan untuk mencegah layout thrashing
+                    if (el.innerHTML === '') {
+                        el.innerHTML = virtualStore[el.id];
+                        lucide.createIcons({ root: el });
+                    }
+
+                    const child = el.firstElementChild;
+                    if (!child) return;
+
+                    // 2. Render Visual Berbasis GPU: Rotasi kelas tanpa menghancurkan node DOM
                     if (entry.isIntersecting) {
-                        if (el.innerHTML === '') {
-                            el.innerHTML = virtualStore[el.id];
-                            lucide.createIcons({ root: el });
-                            const child = el.firstElementChild;
-                            if (child && child.classList.contains('opacity-0')) {
-                                child.classList.remove('opacity-0');
-                                child.classList.add('will-change-transform', scrollDirection === 'down' ? 'scroll-enter-up' : 'scroll-enter-down');
-                                child.onanimationend = () => { child.classList.remove('scroll-enter-up', 'scroll-enter-down', 'will-change-transform'); };
-                            }
-                        }
-                        el.style.minHeight = 'auto'; 
+                        child.classList.remove('opacity-0', 'scroll-exit-up', 'scroll-exit-down');
+                        child.classList.add('will-change-transform', scrollDirection === 'down' ? 'scroll-enter-up' : 'scroll-enter-down');
                     } else {
-                        if (el.innerHTML !== '') {
-                            el.style.minHeight = el.getBoundingClientRect().height + 'px';
-                            el.innerHTML = ''; 
-                        }
+                        child.classList.remove('scroll-enter-up', 'scroll-enter-down');
+                        child.classList.add('opacity-0', 'will-change-transform', scrollDirection === 'down' ? 'scroll-exit-up' : 'scroll-exit-down');
                     }
                 });
-            }, { root: scrollContainer, rootMargin: '100px 0px' });
+            }, { root: scrollContainer, rootMargin: '-15px 0px' });
             
             const container = document.getElementById('content-area');
             let html = '';
@@ -939,11 +1111,12 @@
                             <div class="flex-1 min-w-0 pr-4">
                                 <p class="text-[15px] ${textClass} truncate">${task.text}</p>
                             </div>
-                            <div class="w-48 shrink-0">
+                            <div class="w-32 md:w-48 shrink-0">
                                 <span class="text-[11px] font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-3 py-1.5 rounded-md uppercase tracking-wider border border-slate-200 dark:border-slate-700">${task.pic}</span>
                             </div>
-                            <div class="w-20 text-right shrink-0">
-                                <button onclick="event.stopPropagation(); triggerDelete('${task.id}', 'task')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                            <div class="w-auto flex items-center justify-end gap-1 shrink-0">
+                                <button onclick="event.stopPropagation(); editTaskPrompt('${task.id}')" class="p-2 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-colors" title="Edit Tugas"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                                <button onclick="event.stopPropagation(); triggerDelete('${task.id}', 'task')" class="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors" title="Hapus Tugas"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                             </div>
                         </div>
                     `;
@@ -1005,7 +1178,7 @@
                                     <details class="text-sm group/details">
                                         <summary class="font-bold text-slate-500 cursor-pointer hover:text-rose-500 select-none flex items-center gap-1 mb-2 outline-none"><i data-lucide="chevron-right" class="w-4 h-4 transition-transform group-open/details:rotate-90"></i> Lihat Rincian Absensi</summary>
                                         <div class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 pl-5">
-                                            ${STUDENTS_DATA.map(student => `
+                                            ${stateStudents.map(student => `
                                                 <div class="flex items-center gap-2 ${ab.attendance[student.nim] ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-slate-400 line-through'}">
                                                     <i data-lucide="${ab.attendance[student.nim] ? 'check' : 'x'}" class="w-4 h-4 shrink-0"></i>
                                                     <span class="truncate" title="${student.name}">${student.name}</span>
@@ -1071,7 +1244,7 @@
                     <div class="relative border-l-[3px] border-slate-200 dark:border-slate-700 ml-4 pl-6 space-y-6">`;
                 
                 if (state.agenda.length === 0) html += `<p class="text-slate-400 text-sm italic">Belum ada agenda diset.</p>`;
-                state.agenda.forEach(ag => {
+                state.agenda.sort((a,b) => new Date(a.date) - new Date(b.date)).forEach(ag => {
                     const vId = 'vitem-' + ag.id;
                     const isDone = ag.done;
                     const statusClass = isDone ? 'bg-slate-50 dark:bg-slate-900/50 opacity-60' : 'bg-white dark:bg-siska-panel';
@@ -1089,7 +1262,10 @@
                                     <h3 class="font-bold text-[17px] ${textClass} leading-snug mb-2">${ag.text}</h3>
                                     <p class="text-xs text-slate-500 font-medium flex items-center gap-1.5"><i data-lucide="map-pin" class="w-4 h-4"></i> ${ag.location || 'Lokasi Belum Ditentukan'}</p>
                                 </div>
-                                <button onclick="event.stopPropagation(); triggerDelete('${ag.id}', 'agenda')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors shrink-0"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                                <div class="flex flex-col gap-2 shrink-0">
+                                    <button onclick="event.stopPropagation(); editAgendaPrompt('${ag.id}')" class="p-2.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-colors" title="Edit Agenda"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
+                                    <button onclick="event.stopPropagation(); triggerDelete('${ag.id}', 'agenda')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors" title="Hapus Agenda"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -1117,6 +1293,7 @@
                                 </div>
                             </div>
                             <div class="flex items-center gap-2 shrink-0">
+                                <button onclick="event.stopPropagation(); openEditor('${template.id}', null, 'template')" class="p-2.5 text-slate-400 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/30 rounded-xl transition-colors"><i data-lucide="edit-3" class="w-5 h-5"></i></button>
                                 <button onclick="event.stopPropagation(); triggerDelete('${template.id}', 'template')" class="p-2.5 text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-xl transition-colors"><i data-lucide="trash-2" class="w-5 h-5"></i></button>
                             </div>
                         </div>
@@ -1126,7 +1303,7 @@
                 html += `</div></div>`;
             }
             
-            // MODUL KKL (FULL 1:1 DARI PDF & PPT)
+            // MODUL-MODUL PDF/TEKS
             else if (state.activeTab === 'modul_kkl') {
                 html += `
                 <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
@@ -1242,7 +1419,6 @@
                 </div>
                 `;
             }
-
             else if (state.activeTab === 'modul_sihalal') {
                 html += `
                 <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
@@ -1282,7 +1458,6 @@
                 </div>
                 `;
             }
-
             else if (state.activeTab === 'modul_materi') {
                 html += `
                 <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
@@ -1380,7 +1555,6 @@
                 </div>
                 `;
             }
-
             else if (state.activeTab === 'modul_pks') {
                 html += `
                 <div class="bg-white dark:bg-siska-panel rounded-2xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 mb-10 max-w-5xl mx-auto modul-content">
@@ -1464,9 +1638,22 @@
                 };
                 html += `
                 <div class="bg-white dark:bg-siska-panel rounded-2xl border border-slate-200 dark:border-slate-800 shadow-sm p-6 md:p-8 max-w-3xl mx-auto mb-10">
-                    <div class="mb-8 border-b border-slate-200 dark:border-slate-800 pb-5">
-                        <h2 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2"><i data-lucide="settings" class="w-6 h-6 text-slate-500"></i> Pengaturan Sistem & Profil</h2>
-                        <p class="text-[15px] text-slate-500 mt-2">Ubah identitas aplikasi dan profil pengguna yang tampil di dasbor.</p>
+                    <div class="mb-8 border-b border-slate-200 dark:border-slate-800 pb-5 flex flex-col md:flex-row justify-between md:items-end gap-4">
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-800 dark:text-white flex items-center gap-2"><i data-lucide="settings" class="w-6 h-6 text-slate-500"></i> Pengaturan Sistem & Profil</h2>
+                            <p class="text-[15px] text-slate-500 mt-2">Ubah identitas aplikasi dan profil pengguna yang tampil di dasbor.</p>
+                        </div>
+                        
+                        <div class="flex flex-col gap-2.5 shrink-0 min-w-[200px] border-l-0 md:border-l-2 border-slate-200 dark:border-slate-700 pl-0 md:pl-5">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1 hidden md:block">Manajemen Database</span>
+                            <button type="button" onclick="exportAllData()" class="w-full justify-center px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white font-bold text-[13px] rounded-xl transition-all shadow-[0_4px_10px_rgba(16,185,129,0.3)] active:scale-95 flex items-center gap-2">
+                                <i data-lucide="download" class="w-4 h-4"></i> Backup Data (Ekspor)
+                            </button>
+                            <label class="w-full justify-center px-4 py-2.5 bg-gradient-to-r from-rose-500 to-orange-500 hover:from-rose-600 hover:to-orange-600 text-white font-bold text-[13px] rounded-xl transition-all shadow-[0_4px_10px_rgba(244,63,94,0.3)] active:scale-95 flex items-center gap-2 cursor-pointer">
+                                <i data-lucide="upload" class="w-4 h-4"></i> Pulihkan (Impor)
+                                <input type="file" accept=".json" class="hidden" onchange="importAllData(event)" />
+                            </label>
+                        </div>
                     </div>
                     <form id="form-settings" class="space-y-6">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -1520,18 +1707,33 @@
             if(state.activeTab === 'absensi') {
                 const checkCont = document.getElementById('absen-checkbox-container');
                 let chkHtml = '';
-                STUDENTS_DATA.forEach(s => {
+                stateStudents.forEach(s => {
                     chkHtml += `
-                        <label class="flex items-center gap-3.5 cursor-pointer p-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors">
-                            <input type="checkbox" id="absen-chk-${s.nim}" class="custom-checkbox cb-absen-item" checked />
-                            <div class="flex flex-col min-w-0">
-                                <span class="text-[15px] font-semibold text-slate-800 dark:text-slate-200 truncate">${s.name}</span>
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${s.nim} • ${s.prodi}</span>
+                        <div class="flex items-center justify-between p-2.5 hover:bg-slate-50 dark:hover:bg-slate-800 rounded-xl transition-colors group/absen">
+                            <label class="flex items-center gap-3.5 cursor-pointer flex-1 min-w-0">
+                                <input type="checkbox" id="absen-chk-${s.nim}" class="custom-checkbox cb-absen-item" checked />
+                                <div class="flex flex-col min-w-0">
+                                    <span class="text-[15px] font-semibold text-slate-800 dark:text-slate-200 truncate pr-2">${s.name}</span>
+                                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-0.5">${s.nim} • ${s.prodi}</span>
+                                </div>
+                            </label>
+                            <div class="flex items-center gap-1 opacity-100 md:opacity-0 group-hover/absen:opacity-100 transition-opacity shrink-0">
+                                <button type="button" onclick="editStudentPrompt('${s.nim}')" class="p-2 text-slate-400 hover:text-blue-500 rounded-lg transition-colors"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                                <button type="button" onclick="deleteStudentPrompt('${s.nim}')" class="p-2 text-slate-400 hover:text-red-500 rounded-lg transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
                             </div>
-                        </label>
+                        </div>
                     `;
                 });
+                // Tombol tambah mahasiswa baru
+                chkHtml += `
+                    <div class="col-span-1 md:col-span-2 mt-2 pt-3 border-t border-slate-200 dark:border-slate-700">
+                        <button type="button" onclick="addStudentPrompt()" class="w-full py-2 flex items-center justify-center gap-2 text-sm font-bold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/40 transition-colors">
+                            <i data-lucide="plus" class="w-4 h-4"></i> Tambah Anggota Baru
+                        </button>
+                    </div>
+                `;
                 if(checkCont) checkCont.innerHTML = chkHtml;
+                lucide.createIcons({ root: checkCont });
             }
             
             if(document.getElementById('form-task')) {
@@ -1584,11 +1786,12 @@
             const allChecked = Array.from(boxes).every(cb => cb.checked);
             boxes.forEach(cb => cb.checked = !allChecked);
         }
+
         function addAbsensi() {
             const date = document.getElementById('input-absen-date').value;
             const text = document.getElementById('input-absen-text').value;
             const attendance = {};
-            STUDENTS_DATA.forEach(s => {
+            stateStudents.forEach(s => {
                 const isChecked = document.getElementById(`absen-chk-${s.nim}`).checked;
                 attendance[s.nim] = isChecked;
             });
@@ -1613,6 +1816,7 @@
             }
             document.body.removeChild(ta);
         }
+        
         function openEditJournalModal(id) {
             const ab = state.absensi.find(item => item.id === id);
             if (!ab) return;
@@ -1699,10 +1903,161 @@
             else if (type === 'absensi') state.absensi = state.absensi.filter(t => t.id !== id);
             else if (type === 'agenda') state.agenda = state.agenda.filter(a => a.id !== id);
             else if (type === 'template') state.templates = state.templates.filter(t => t.id !== id);
+            else if (type === 'student') {
+                stateStudents = stateStudents.filter(s => s.nim !== id);
+                saveStudents();
+            }
             
             saveData(); closeModal(); renderContent();
         });
         
+      // ================= SISTEM CUSTOM PROMPT =================
+        let promptCallback = null;
+
+        function openCustomPrompt(title, fields, onConfirm) {
+            document.getElementById('prompt-title').textContent = title;
+            const container = document.getElementById('prompt-inputs-container');
+            container.innerHTML = '';
+            
+            fields.forEach((field, index) => {
+                const wrapper = document.createElement('div');
+                wrapper.innerHTML = `
+                    <label class="block text-[11px] font-bold text-slate-500 uppercase tracking-widest mb-1">${field.label}</label>
+                    <input type="${field.type || 'text'}" id="prompt-input-${index}" value="${field.value || ''}" placeholder="${field.placeholder || ''}" class="w-full bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-sm outline-none text-slate-900 dark:text-white focus:border-indigo-500" />
+                `;
+                container.appendChild(wrapper);
+            });
+
+            promptCallback = () => {
+                const results = fields.map((f, i) => document.getElementById(`prompt-input-${i}`).value);
+                // Validasi data kosong
+                if (results.some(r => r.trim() === '')) {
+                    customAlert("Semua kolom harus diisi!", "Peringatan", "warning");
+                    return;
+                }
+                onConfirm(results);
+                closeCustomPrompt();
+            };
+
+            document.getElementById('prompt-confirm-btn').onclick = promptCallback;
+            document.getElementById('custom-prompt-modal').classList.remove('hidden');
+            
+            // Auto focus pada input pertama
+            setTimeout(() => { document.getElementById('prompt-input-0').focus(); }, 100);
+        }
+
+        function closeCustomPrompt() {
+            document.getElementById('custom-prompt-modal').classList.add('hidden');
+            promptCallback = null;
+        }
+
+        // PENGGUNAAN CUSTOM PROMPT PADA FITUR YANG ADA
+
+        function editTaskPrompt(id) {
+            const task = state.tasks.find(t => t.id === id);
+            if (!task) return;
+            openCustomPrompt("Edit Uraian Tugas", [
+                { label: "Uraian Tugas", value: task.text },
+                { label: "Delegasi / PIC", value: task.pic }
+            ], (results) => {
+                task.text = results[0].trim();
+                task.pic = results[1].trim();
+                saveData(); renderContent();
+                customAlert("Data delegasi tugas diperbarui.", "Berhasil", "success");
+            });
+        }
+
+        function editAgendaPrompt(id) {
+            const ag = state.agenda.find(a => a.id === id);
+            if (!ag) return;
+            openCustomPrompt("Edit Jadwal Agenda", [
+                { label: "Nama Kegiatan", value: ag.text },
+                { label: "Tanggal Kegiatan", value: ag.date, type: "date" },
+                { label: "Lokasi", value: ag.location }
+            ], (results) => {
+                ag.text = results[0].trim();
+                ag.date = results[1].trim();
+                ag.location = results[2].trim();
+                saveData(); renderContent();
+                customAlert("Data kalender diperbarui.", "Berhasil", "success");
+            });
+        }
+
+        function editStudentPrompt(nim) {
+            const student = stateStudents.find(s => s.nim === nim);
+            if (!student) return;
+            openCustomPrompt("Edit Data Anggota", [
+                { label: "NIM Anggota", value: student.nim },
+                { label: "Nama Lengkap", value: student.name },
+                { label: "Program Studi", value: student.prodi }
+            ], (results) => {
+                const newNim = results[0].trim();
+                // Validasi agar tidak bentrok dengan NIM orang lain jika diubah
+                if (newNim !== student.nim && stateStudents.some(s => s.nim === newNim)) {
+                    customAlert("NIM tersebut sudah terdaftar pada anggota lain!", "Peringatan", "warning");
+                    return;
+                }
+                
+                // Update rekam absensi lama agar tersinkronisasi dengan NIM baru
+                state.absensi.forEach(ab => {
+                    if (ab.attendance.hasOwnProperty(student.nim)) {
+                        ab.attendance[newNim] = ab.attendance[student.nim];
+                        if (newNim !== student.nim) delete ab.attendance[student.nim];
+                    }
+                });
+                
+                student.nim = newNim;
+                student.name = results[1].trim().toUpperCase();
+                student.prodi = results[2].trim().toUpperCase();
+                
+                saveData(); // Simpan absensi yang terupdate
+                saveStudents(); // Simpan data mahasiswa
+                renderContent();
+            });
+        }
+
+        function addStudentPrompt() {
+            openCustomPrompt("Tambah Anggota Baru", [
+                { label: "NIM Lengkap", placeholder: "Misal: 123456" },
+                { label: "Nama Lengkap", placeholder: "Nama Sesuai KTP" },
+                { label: "Program Studi (Singkatan)", placeholder: "Misal: PAI / MBS" }
+            ], (results) => {
+                const nim = results[0].trim();
+                if (stateStudents.some(s => s.nim === nim)) {
+                    customAlert("Anggota dengan NIM tersebut sudah ada!", "Duplikat", "error");
+                    return;
+                }
+                stateStudents.push({
+                    no: stateStudents.length + 1,
+                    nim: nim,
+                    name: results[1].trim().toUpperCase(),
+                    prodi: results[2].trim().toUpperCase(),
+                    gender: 'L' // Default
+                });
+                saveStudents(); renderContent();
+            });
+        }
+
+        function deleteStudentPrompt(nim) {
+            triggerDelete(nim, 'student');
+        }
+
+        function triggerSiskaRedirect() {
+            const loader = document.getElementById('siska-loader');
+            loader.classList.remove('hidden');
+            setTimeout(() => {
+                window.location.href = 'https://siska.iainptk.ac.id/home.html';
+            }, 400);
+            
+            // Fallback (bfcache reset)
+            window.addEventListener('pageshow', (e) => {
+                if (e.persisted) loader.classList.add('hidden');
+            });
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') loader.classList.add('hidden');
+            });
+        }
+
         function customAlert(message, title = 'Informasi', type = 'info') {
             document.getElementById('alert-modal-title').textContent = title;
             document.getElementById('alert-modal-desc').textContent = message;
@@ -1776,9 +2131,27 @@
                 contentDiv.innerHTML = '';
                 dateInput.value = toDatetimeLocal(new Date().toISOString());
             }
+            
+            // Logika untuk memberikan kemampuan edit semua teks via atribut DOM yang dinamis
+            const editAllBtn = document.createElement('button');
+            editAllBtn.id = "btn-free-edit";
+            editAllBtn.className = "flex items-center gap-2 p-2.5 ml-2 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-xl hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors shadow-sm font-bold text-sm active:scale-95";
+            editAllBtn.innerHTML = `<i data-lucide="edit" class="w-4 h-4"></i> Edit Semua Format Teks`;
+            editAllBtn.onclick = () => {
+                const allElements = contentDiv.querySelectorAll('*');
+                allElements.forEach(el => el.setAttribute('contenteditable', 'true'));
+                customAlert("Mode Edit Bebas Aktif. Anda sekarang dapat mengubah teks yang terkunci di dalam tabel atau format HTML lainnya.", "Akses Edit Dibuka", "info");
+            };
+            
+            const btnContainer = document.querySelector('#view-editor .flex.items-center.gap-2');
+            if (!document.getElementById('btn-free-edit')) {
+                btnContainer.insertBefore(editAllBtn, btnContainer.firstChild);
+            }
+            
             document.getElementById('editor-type-label').textContent = type === 'template' ? 'Editor Pustaka Surat' : 'Editor Arsip Notulensi';
             renderQuickInsertBar();
             document.getElementById('view-editor').classList.remove('hidden');
+            lucide.createIcons();
         }
         
         function renderQuickInsertBar() {
@@ -2011,7 +2384,6 @@
             }, 50);
         }
         
-        // Inisialisasi logika drag
         initDragToolbar();
         
         function openViewer(docId, isTemplate = false) {
