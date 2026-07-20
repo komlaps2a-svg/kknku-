@@ -1144,9 +1144,14 @@ if ('serviceWorker' in navigator) {
             else if (state.activeTab === 'absensi') {
                 html += `
                     <div class="bg-rose-50 dark:bg-rose-900/10 p-5 md:p-6 rounded-2xl border border-rose-200 dark:border-rose-900/30 shadow-sm mb-6">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="font-bold text-rose-800 dark:text-rose-400 flex items-center gap-2"><i data-lucide="users" class="w-6 h-6"></i> Catat Jurnal & Absensi KKL</h2>
-                            <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 px-2.5 py-1.5 rounded-md">Kelompok Sengkubang</span>
+                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 mb-4">
+                            <h2 class="font-bold text-rose-800 dark:text-rose-400 flex items-center gap-2">
+                                <i data-lucide="users" class="w-6 h-6"></i> ${localStorage.getItem('kknku_absenTitle') || 'Catat Jurnal & Absensi KKL'}
+                            </h2>
+                            <div class="flex items-center gap-2 self-start md:self-auto">
+                                <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 px-2.5 py-1.5 rounded-md">${localStorage.getItem('kknku_groupName') || 'KELOMPOK SENGKUBANG'}</span>
+                                <button type="button" onclick="editAbsenHeaderPrompt()" class="p-1.5 text-rose-400 hover:text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-900/40 rounded-lg transition-colors" title="Edit Judul & Nama Kelompok"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                            </div>
                         </div>
                         <form id="form-absensi" class="flex flex-col gap-4">
                             <div class="flex flex-col md:flex-row gap-3">
@@ -2057,6 +2062,20 @@ if ('serviceWorker' in navigator) {
 
         function deleteStudentPrompt(nim) {
             triggerDelete(nim, 'student');
+        }
+
+function editAbsenHeaderPrompt() {
+            const currentTitle = localStorage.getItem('kknku_absenTitle') || 'Catat Jurnal & Absensi KKL';
+            const currentGroup = localStorage.getItem('kknku_groupName') || 'KELOMPOK SENGKUBANG';
+            
+            openCustomPrompt("Edit Identitas Absensi", [
+                { label: "Judul Absensi", value: currentTitle },
+                { label: "Nama Kelompok", value: currentGroup }
+            ], (results) => {
+                localStorage.setItem('kknku_absenTitle', results[0].trim());
+                localStorage.setItem('kknku_groupName', results[1].trim().toUpperCase());
+                renderContent();
+            });
         }
 
         function triggerSiskaRedirect() {
