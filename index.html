@@ -1144,14 +1144,16 @@ if ('serviceWorker' in navigator) {
             else if (state.activeTab === 'absensi') {
                 html += `
                     <div class="bg-rose-50 dark:bg-rose-900/10 p-5 md:p-6 rounded-2xl border border-rose-200 dark:border-rose-900/30 shadow-sm mb-6">
-                        <div class="flex flex-col md:flex-row justify-between md:items-center gap-3 mb-4">
-                            <h2 class="font-bold text-rose-800 dark:text-rose-400 flex items-center gap-2">
-                                <i data-lucide="users" class="w-6 h-6"></i> ${localStorage.getItem('kknku_absenTitle') || 'Catat Jurnal & Absensi KKL'}
-                            </h2>
-                            <div class="flex items-center gap-2 self-start md:self-auto">
-                                <span class="text-[10px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 px-2.5 py-1.5 rounded-md">${localStorage.getItem('kknku_groupName') || 'KELOMPOK SENGKUBANG'}</span>
-                                <button type="button" onclick="editAbsenHeaderPrompt()" class="p-1.5 text-rose-400 hover:text-rose-600 hover:bg-rose-100 dark:hover:bg-rose-900/40 rounded-lg transition-colors" title="Edit Judul & Nama Kelompok"><i data-lucide="edit-3" class="w-4 h-4"></i></button>
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5 border-b border-rose-200 dark:border-rose-800/50 pb-4">
+                            <div class="flex-1">
+                                <h2 class="font-bold text-lg md:text-xl text-rose-800 dark:text-rose-400 flex items-center gap-2 mb-2">
+                                    <i data-lucide="users" class="w-6 h-6"></i> ${localStorage.getItem('kknku_absenTitle') || 'Catat Jurnal & Absensi KKL'}
+                                </h2>
+                                <span class="inline-block text-[11px] font-bold text-rose-600 dark:text-rose-400 uppercase tracking-widest bg-rose-100 dark:bg-rose-900/30 px-3 py-1.5 rounded-lg">${localStorage.getItem('kknku_groupName') || 'KELOMPOK SENGKUBANG'}</span>
                             </div>
+                            <button type="button" onclick="editAbsenHeaderPrompt()" class="shrink-0 w-full sm:w-auto p-2.5 bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 hover:bg-rose-200 dark:hover:bg-rose-900/60 rounded-xl transition-all shadow-sm active:scale-95 flex items-center justify-center gap-2">
+                                <i data-lucide="edit-3" class="w-4 h-4"></i> <span class="text-sm font-bold sm:hidden">Edit Profil Absensi</span>
+                            </button>
                         </div>
                         <form id="form-absensi" class="flex flex-col gap-4">
                             <div class="flex flex-col md:flex-row gap-3">
