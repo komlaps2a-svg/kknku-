@@ -1,5 +1,5 @@
 // Ganti angka ini setiap kali Anda merilis update/perbaikan pada index.html atau aset lainnya
-const APP_VERSION = '4'; 
+const APP_VERSION = '5'; 
 const CACHE_NAME = `kknku-pro-v${APP_VERSION}`;
 
 const CORE_ASSETS = [
